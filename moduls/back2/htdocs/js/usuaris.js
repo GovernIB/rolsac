@@ -365,6 +365,10 @@ function CDetall() {
 			jQuery("#item_check_gestion_comunes").attr("checked", jQuery(this).is(":checked"));
 		});
 
+		jQuery("#item_check_publicar_inventario").change(function(){
+			jQuery("#item_check_publicar_inventario").attr("checked", jQuery(this).is(":checked"));
+		});
+
 	};
 
 	this.nou = function() {
@@ -379,6 +383,7 @@ function CDetall() {
 		$("#modulPrincipal :input, #modulPrincipal select").each(limpiarCampo);
 		$("#item_check_permis_modificacio_normativa").val("on");
 		$("#item_check_gestion_comunes").val("off");
+		$("#item_check_publicar_inventario").val("off");
 
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
@@ -422,6 +427,13 @@ function CDetall() {
 			jQuery("#item_check_gestion_comunes").change();
 		} else {
 			jQuery("#item_check_gestion_comunes").prop('checked', false);
+		}
+
+		if (dada_node.item_check_publicar_inventario != undefined) {
+			jQuery("#item_check_publicar_inventario").prop('checked', dada_node.item_check_publicar_inventario);
+			jQuery("#item_check_publicar_inventario").change();
+		} else {
+			jQuery("#item_check_publicar_inventario").prop('checked', false);
 		}
 
 		marcarOpcionSelect("item_perfil", dada_node.item_perfil);

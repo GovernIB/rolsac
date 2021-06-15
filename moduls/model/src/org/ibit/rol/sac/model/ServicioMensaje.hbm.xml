@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.sac.model.ServicioMensaje" table="RSC_SERMSJ" >
+
+        <cache usage="read-write"/>
+
+        <id name="id" unsaved-value="null" column="SMN_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_SMN</param>
+            </generator>
+        </id>
+
+
+        <property name="usuario" length="100" column="SMN_USUARIO"/>
+        <property name="usuarioLectura" length="100" column="SMN_USULEC"/>
+        <property name="texto" length="256" column="SMN_TEXTO"/>
+        <property name="fechaCreacion" column="SMN_FECCRE"/>
+        <property name="fechaLectura" column="SMN_FECLEC"/>
+        <property name="gestor" column="SMN_GESTOR"/>
+        <property name="leido" column="SMN_LEIDO"/>
+        <many-to-one name="servicio" cascade="none" outer-join="false" column="SMN_SERCODI" foreign-key="RSC_SERMSJ_FK"/>
+
+
+    </class>
+
+</hibernate-mapping>

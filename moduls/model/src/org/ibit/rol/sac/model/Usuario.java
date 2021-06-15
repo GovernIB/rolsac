@@ -9,6 +9,7 @@ public class Usuario implements ValueObject {
 
 	public static String PERMISO_MODIFICACION_NORMATIVA = "P_MOD_NOR";
 	public static String PERMISO_GESTION_COMUNES = "P_MOD_COM";
+	public static String PERMISO_PUBLICAR_INVENTARIO = "P_PUB_INV";
 	public static String PERMISO_SEPARADOR = ",";
 
 	public Long getId() {
@@ -125,7 +126,7 @@ public class Usuario implements ValueObject {
 	/**
 	 * Recupera true si un usuario tiene un permiso determinado definido a nivel de
 	 * aplicacion
-	 * 
+	 *
 	 * @param permiso
 	 * @return true si tiene el permiso
 	 */
@@ -143,7 +144,7 @@ public class Usuario implements ValueObject {
 
 	/**
 	 * actualiza el permiso indicado en la lista de permisos facilitada.
-	 * 
+	 *
 	 * @param permisos
 	 *            lista de permisos separada por comas
 	 * @param permiso

@@ -52,6 +52,8 @@
 	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
 	var lopdPlantilla = '<c:out value="${lopdPlantilla}"/>';
 	var lopdPlantillaESP = '<c:out value="${lopdPlantillaESP}"/>';
+	var tienePermisoPublicar = '<c:out value="${permisoPublicar}"/>';
+	var tienePermisoEdicion = true;
 
     var pagLlistat = '<c:url value="/catalegServeis/llistat.do" />';
     var pagExportar = '<c:url value="/catalegServeis/exportar.do" />';
@@ -533,6 +535,47 @@
                                         <c:forEach items="${llistaPlataformas}" var="plataforma">
                                             <option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
                                         </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="fila">
+                        	<div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_pdtValidar"><spring:message code='camp.cerca_pdt_validar'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_pdtValidar" name="enPlazo" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_mensajePorLeer"><spring:message code='camp.cerca_mensajePorLeer'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_mensajePorLeer" name="telematico" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
+                                    </select>
+                                </div>
+                            </div>
+
+							<div class="element t12">
+                                <div class="etiqueta">
+                                    <label for="cerca_estado"><spring:message code='camp.cerca_estado'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_estado" name="telematico" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
                             </div>

@@ -35,7 +35,7 @@
         <property name="comun" 				 			column="SER_COMUN" />
         <property name="parametros"			 			column="SER_PARAMS" />
 		<property name="lopdActivo" 				 	column="SER_CLOPD" />
-
+		<property name="pendienteValidar" 				column="SER_PDTVAL" />
 
         <many-to-one name="organoInstructor" 	cascade="none" column="SER_INSTRU" foreign-key="RSC_SER_INSTRU_FK"/>
         <many-to-one name="servicioResponsable" cascade="none" column="SER_SERRSP" foreign-key="RSC_SET_SERRSP_FK"/>

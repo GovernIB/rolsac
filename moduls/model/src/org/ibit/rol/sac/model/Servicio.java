@@ -35,6 +35,8 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	private String codigo;
 	/** Organo instructor. **/
 	private UnidadAdministrativa organoInstructor;
+	/** Pendiente validar. **/
+	private boolean pendienteValidar;
 
 	/************ SECCION DADES. *********************/
 	/** Servicio responsable. **/
@@ -917,6 +919,21 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 */
 	public void setLopdActivo(final boolean lopdActivo) {
 		this.lopdActivo = lopdActivo;
+	}
+
+	/**
+	 * @return the pendienteValidar
+	 */
+	public boolean isPendienteValidar() {
+		return pendienteValidar;
+	}
+
+	/**
+	 * @param pendienteValidar
+	 *            the pendienteValidar to set
+	 */
+	public void setPendienteValidar(final boolean pendienteValidar) {
+		this.pendienteValidar = pendienteValidar;
 	}
 
 }

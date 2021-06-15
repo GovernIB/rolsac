@@ -956,6 +956,16 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 				where.append(" and servicio.comun = " + ApiRestUtils.intToBool(bc.getComun()) + " ");
 			}
 
+			if (bc.getPdtValidar() != null) {
+				where.append(" and procedimiento.pdtValidar = :pdtValidar ");
+			}
+			if (bc.getMensajePorLeer() != null) {
+				where.append(" and procedimiento.mensajePorLeer = :pdtValidar ");
+			}
+			if (bc.getEstado() != null) {
+				where.append(" and procedimiento.estado = :estado ");
+			}
+
 			if (bc.getIdMateria() != null) {
 				if (bc.getIdMateria() == -1) {
 					where.append(

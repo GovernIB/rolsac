@@ -38,6 +38,7 @@
         <property name="estadoSIA" length="1" column="PRO_ESTSIA"/>
         <property name="fechaSIA"  column="PRO_FECSIA"/>
         <property name="comun" 		column="PRO_COMUN" />
+        <property name="pendienteValidar" 		column="PRO_PDTVAL" />
 
 
         <many-to-one name="organResolutori" 	 column="PRO_CODUNA_RESOL" cascade="none" foreign-key="RSC_PRO_CODUNA_RESOL_FK"/>

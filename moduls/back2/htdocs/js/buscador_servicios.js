@@ -34,6 +34,9 @@ function BuscadorServicio() {
 			criteria.servicio.silencio.id = $("#cerca_silenci").val();
 			criteria.servicio.codigoSIA = $("#cerca_sia").val();
 			criteria.servicio.estadoSIA = $("#cerca_bolcat_sia").val();
+			criteria.pdtValidar = parseInt( $("#cerca_pdtValidar").val() );
+			criteria.mensajePorLeer = parseInt( $("#cerca_mensajePorLeer").val() );
+			criteria.estado = parseInt( $("#cerca_estado").val() );
 
 
 			switch ( $("#cerca_indicador").val() ) {

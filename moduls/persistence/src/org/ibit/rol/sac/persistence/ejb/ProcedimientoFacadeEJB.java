@@ -1364,6 +1364,16 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						" and procedimiento.id IN ( select tra.procedimiento from Tramite as tra where tra.plataforma.id = :idPlataforma ) ");
 			}
 
+			if (bc.getPdtValidar() != null) {
+				where.append(" and procedimiento.pdtValidar = :pdtValidar ");
+			}
+			if (bc.getMensajePorLeer() != null) {
+				where.append(" and procedimiento.mensajePorLeer = :pdtValidar ");
+			}
+			if (bc.getEstado() != null) {
+				where.append(" and procedimiento.estado = :estado ");
+			}
+
 			if (bc.getComun() != null) {
 				where.append(" and procedimiento.comun = " + ApiRestUtils.intToBool(bc.getComun()) + " ");
 			}

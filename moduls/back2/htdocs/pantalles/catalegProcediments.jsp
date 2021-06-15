@@ -33,6 +33,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_formularis_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_mensajes.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/buscador_procedimientos.js'/>"></script>
 
 <script type="text/javascript">
@@ -56,6 +57,8 @@
 	var lopdResponsableNOComun = '';
 	var lopdResponsableNOComunESP = '';
 	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
+	var tienePermisoPublicar = '<c:out value="${permisoPublicar}"/>';
+	var tienePermisoEdicion = true;
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';
@@ -90,6 +93,8 @@
     var pagLopdResponsable = '<c:url value="/catalegProcediments/getLopdResponsable.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegProcediments/modulos.do" />';
+    var pagUrlMensajes = '<c:url value="/catalegProcediments/obtenerMensajes.do" />';
+
 
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -660,6 +665,77 @@
 -->
 </script>
 
+
+<style>
+ /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.closeModal {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.closeModal:hover,
+.closeModal:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+		<span class="closeModal">&times;</span>
+			<p>Some text in the Modal..</p>
+		</div>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("closeModal")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+
 <div id="escriptori_contingut">
     <ul id="opcions">
         <li class="opcio L actiu">
@@ -901,6 +977,47 @@
                                         <c:forEach items="${llistaPlataformas}" var="plataforma">
                                             <option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
                                         </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="fila">
+                        	<div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_pdtValidar"><spring:message code='camp.cerca_pdt_validar'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_pdtValidar" name="enPlazo" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_mensajePorLeer"><spring:message code='camp.cerca_mensajePorLeer'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_mensajePorLeer" name="telematico" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
+                                    </select>
+                                </div>
+                            </div>
+
+							<div class="element t12">
+                                <div class="etiqueta">
+                                    <label for="cerca_estado"><spring:message code='camp.cerca_estado'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_estado" name="telematico" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
                             </div>

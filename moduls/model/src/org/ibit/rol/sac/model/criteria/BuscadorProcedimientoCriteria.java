@@ -24,15 +24,19 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	private Boolean soloId = false;
 	private Integer comun;
 	private Long idPlataforma;
+	private Long pdtValidar;
+	private Long mensajePorLeer;
+	private Long estado;
 
 	public BuscadorProcedimientoCriteria() {
-
+		// Constructor vacio
 	}
 
 	public BuscadorProcedimientoCriteria(final ProcedimientoLocal procedimiento, final PaginacionCriteria paginacion,
 			final Long idMateria, final Long idPublicoObjetivo, final Long idHechoVital, final int visibilidad,
 			final Boolean enPlazo, final Boolean telematico, final Boolean uaPropias, final Boolean uaHijas,
-			final Integer comun, final Long idPlataforma) {
+			final Integer comun, final Long idPlataforma, final Long pdtValidar, final Long mensajePorLeer,
+			final Long estado) {
 
 		this.procedimiento = procedimiento;
 		this.paginacion = paginacion;
@@ -46,6 +50,9 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 		this.uaHijas = uaHijas;
 		this.comun = comun;
 		this.idPlataforma = idPlataforma;
+		this.pdtValidar = pdtValidar;
+		this.mensajePorLeer = mensajePorLeer;
+		this.estado = estado;
 	}
 
 	public ProcedimientoLocal getProcedimiento() {
@@ -187,6 +194,51 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	 */
 	public void setIdPlataforma(final Long idPlataforma) {
 		this.idPlataforma = idPlataforma;
+	}
+
+	/**
+	 * @return the pdtValidar
+	 */
+	public Long getPdtValidar() {
+		return pdtValidar;
+	}
+
+	/**
+	 * @param pdtValidar
+	 *            the pdtValidar to set
+	 */
+	public void setPdtValidar(final Long pdtValidar) {
+		this.pdtValidar = pdtValidar;
+	}
+
+	/**
+	 * @return the mensajePorLeer
+	 */
+	public Long getMensajePorLeer() {
+		return mensajePorLeer;
+	}
+
+	/**
+	 * @param mensajePorLeer
+	 *            the mensajePorLeer to set
+	 */
+	public void setMensajePorLeer(final Long mensajePorLeer) {
+		this.mensajePorLeer = mensajePorLeer;
+	}
+
+	/**
+	 * @return the estado
+	 */
+	public Long getEstado() {
+		return estado;
+	}
+
+	/**
+	 * @param estado
+	 *            the estado to set
+	 */
+	public void setEstado(final Long estado) {
+		this.estado = estado;
 	}
 
 }

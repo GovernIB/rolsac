@@ -187,6 +187,7 @@ public class UsuarisController extends PantallaBaseController {
 			resultats.put("item_check_permis_modificacio_normativa",
 					usuari.tienePermiso(Usuario.PERMISO_MODIFICACION_NORMATIVA));
 			resultats.put("item_check_gestion_comunes", usuari.tienePermiso(Usuario.PERMISO_GESTION_COMUNES));
+			resultats.put("item_check_publicar_inventario", usuari.tienePermiso(Usuario.PERMISO_PUBLICAR_INVENTARIO));
 
 		} catch (final DelegateException dEx) {
 
@@ -326,6 +327,9 @@ public class UsuarisController extends PantallaBaseController {
 			usuari.setPermiso(Usuario.PERMISO_GESTION_COMUNES,
 					request.getParameter("item_check_gestion_comunes") != null
 							&& !"".equals(request.getParameter("item_check_gestion_comunes")));
+			usuari.setPermiso(Usuario.PERMISO_PUBLICAR_INVENTARIO,
+					request.getParameter("item_check_publicar_inventario") != null
+							&& !"".equals(request.getParameter("item_check_publicar_inventario")));
 
 			usuarioDelegate.grabarUsuario(usuari);
 

@@ -356,7 +356,7 @@
                             </div>
                         </div>
                         <div class="fila">
-                            <div class="element t50p">
+                            <div class="element t25p">
                                 <div class="etiqueta">
                                     <label for="item_perfil"><spring:message code='camp.rol'/></label>
                                 </div>
@@ -389,6 +389,17 @@
 								<div class="control">
 									<input id="item_check_gestion_comunes"
 										name="item_check_gestion_comunes" type="checkbox"
+										class="nou" />
+								</div>
+							 </div>
+							 <div class="element t25p">
+								<div class="etiqueta">
+									<label for="item_check_publicar_inventario"><spring:message
+											code='camp.permisPublicarInventario' /></label>
+								</div>
+								<div class="control">
+									<input id="item_check_publicar_inventario"
+										name="item_check_publicar_inventario" type="checkbox"
 										class="nou" />
 								</div>
 							 </div>

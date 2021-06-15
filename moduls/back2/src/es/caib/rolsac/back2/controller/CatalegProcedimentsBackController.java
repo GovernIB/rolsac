@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -50,6 +51,7 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Plataforma;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.Tipo;
@@ -192,6 +194,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("comunesUA", RolsacPropertiesUtil.getUAComun(true));
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
 		}
+		// Tiene permiso supervisor (permiso publicar)
+		model.put("permisoPublicar", Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES) ? "S" : "N");
 
 		// Ponemos los dos idiomas para lopd
 		model.put("lopdFinalidad", RolsacPropertiesUtil.getLopdFinalidad(true));
@@ -611,6 +615,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		retorno.append("DATA_ACTUALITZACIO_SIA;");
 		retorno.append("ESTAT_PROCEDIMENT;");
 		retorno.append("VISIBILITAT_PROCEDIMENT;");
+		retorno.append("PENDENT_VALIDAR;");
 		retorno.append("NOM_PROCEDIMENT_CA;");
 		retorno.append("NOM_PROCEDIMENT_ES;");
 		retorno.append("OBJECTE_CA;");
@@ -795,6 +800,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 														// DECODE(PRO_VALIDA,1,'PUBLIC',2,'INTERN','RESERVA')
 			retorno.append(CSVUtil.limpiar(procedimiento.isVisible())); // VISIBILITAT_PROCEDIMENT
 																		// (ESTAT+DATA_PUB+DATA_CAD + UA_VISIBLE)
+			retorno.append(CSVUtil.limpiar(procedimiento.isPendienteValidar())); // PENDENT_VISIBILITAT
 			retorno.append(CSVUtil.limpiar(nomCa)); // NOM_PROCEDIMENT_CA,
 			retorno.append(CSVUtil.limpiar(nomEs)); // NOM_PROCEDIMENT_ES,
 			retorno.append(CSVUtil.limpiar(objecte)); // OBJECTE_CA
@@ -1010,6 +1016,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("boto_sia_no_activo", "N");
 			}
 
+			// Indica los flags de permisos
+			prepararFlags(resultats);
+
 		} catch (final DelegateException dEx) {
 
 			logException(log, dEx);
@@ -1026,6 +1035,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		return resultats;
+
+	}
+
+	/**
+	 * Se encarga de añadir los flags de permisos
+	 *
+	 * @param resultats
+	 */
+	private void prepararFlags(final Map<String, Object> resultats) {
 
 	}
 
@@ -1147,6 +1165,91 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			else
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 
+		}
+
+		return resultats;
+
+	}
+
+	@RequestMapping(value = "/obtenerMensajes.do")
+	public @ResponseBody Map<String, Object> obtenerMensajes(final Long id, final HttpServletRequest request) {
+
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+
+			final Calendar calendar = Calendar.getInstance();
+			final List<ProcedimientoMensaje> mensajes = new ArrayList<ProcedimientoMensaje>();
+			final ProcedimientoMensaje mensaje1 = new ProcedimientoMensaje();
+			final ProcedimientoMensaje mensaje2 = new ProcedimientoMensaje();
+			final ProcedimientoMensaje mensaje3 = new ProcedimientoMensaje();
+			final ProcedimientoMensaje mensaje4 = new ProcedimientoMensaje();
+			mensaje1.setTexto("Se ha actualizado los datos del procedimiento, principalmente la lopd.");
+			mensaje1.setLeido(true);
+			mensaje1.setUsuario("Usuario gestor1");
+			mensaje1.setUsuarioLectura("Usuario supervisor");
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
+			calendar.set(Calendar.MONTH, 1);
+			calendar.set(Calendar.HOUR, 11);
+			calendar.set(Calendar.MINUTE, 2);
+			mensaje1.setFechaCreacion(calendar.getTime());
+			calendar.set(Calendar.DAY_OF_MONTH, 2);
+			calendar.set(Calendar.MONTH, 1);
+			calendar.set(Calendar.HOUR, 10);
+			calendar.set(Calendar.MINUTE, 3);
+			mensaje1.setFechaLectura(calendar.getTime());
+			mensaje1.setGestor(true);
+
+			mensaje2.setTexto("Se dan pro buenos los datos de la lopd y se ha puesto ");
+			mensaje2.setLeido(true);
+			mensaje2.setUsuario("Usuario supervisor");
+			mensaje2.setUsuarioLectura("Usuario gestor1");
+			calendar.set(Calendar.DAY_OF_MONTH, 2);
+			calendar.set(Calendar.MONTH, 3);
+			calendar.set(Calendar.HOUR, 5);
+			calendar.set(Calendar.MINUTE, 2);
+			mensaje2.setFechaCreacion(calendar.getTime());
+			calendar.set(Calendar.DAY_OF_MONTH, 2);
+			calendar.set(Calendar.MONTH, 3);
+			calendar.set(Calendar.HOUR, 6);
+			calendar.set(Calendar.MINUTE, 3);
+			mensaje2.setFechaLectura(calendar.getTime());
+			mensaje2.setGestor(false);
+
+			mensaje3.setTexto("Se ha actualizado la descripción.");
+			mensaje3.setLeido(true);
+			mensaje3.setUsuario("Usuario gestor2");
+			mensaje3.setUsuarioLectura("Usuario supervisor");
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
+			calendar.set(Calendar.MONTH, 1);
+			calendar.set(Calendar.HOUR, 11);
+			calendar.set(Calendar.MINUTE, 2);
+			mensaje3.setFechaCreacion(calendar.getTime());
+			calendar.set(Calendar.DAY_OF_MONTH, 2);
+			calendar.set(Calendar.MONTH, 1);
+			calendar.set(Calendar.HOUR, 10);
+			calendar.set(Calendar.MINUTE, 3);
+			mensaje3.setFechaLectura(calendar.getTime());
+			mensaje3.setGestor(true);
+
+			mensaje4.setTexto("No está correcto la descripción.");
+			mensaje4.setLeido(false);
+			mensaje4.setUsuario("Usuario supervisor");
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
+			calendar.set(Calendar.MONTH, 1);
+			calendar.set(Calendar.HOUR, 11);
+			calendar.set(Calendar.MINUTE, 2);
+			mensaje4.setFechaCreacion(calendar.getTime());
+			mensaje4.setGestor(false);
+
+			mensajes.add(mensaje1);
+			mensajes.add(mensaje2);
+			mensajes.add(mensaje3);
+			mensajes.add(mensaje4);
+			resultats.put("mensajes", mensajes);
+
+		} catch (final Exception dEx) {
+			log.error(ExceptionUtils.getStackTrace(dEx));
 		}
 
 		return resultats;

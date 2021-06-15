@@ -1,6 +1,8 @@
 //CATALEG PROCEDIMENTS
 var hechosVitalesAsignados = null;
 
+
+
 function actualizarLopdResponsable(idResponsable) {
 
 	dataVars = "id=" + idResponsable;
@@ -446,6 +448,7 @@ function CLlistat() {
 			if (comunActivo == 'true') {
 				codi_cap4 = "<div class=\"th comun "+ ordre_c4 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"comun\">" + txtComun + "</a></div>";
 			}
+			codi_cap3 = "<div class=\"th mensaje\" role=\"columnheader\">&nbsp;</div>";
 
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -491,6 +494,8 @@ function CLlistat() {
 					}
 					codi_taula += "<div class=\"td comun\" role=\"gridcell\">" + txtValorComun + "</div>";
 				}
+
+				codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><a onclick=\"abrirMensaje('"+dada_node.id+"')\">MEN</a></div>";
 
 				codi_taula += "</div>";
 

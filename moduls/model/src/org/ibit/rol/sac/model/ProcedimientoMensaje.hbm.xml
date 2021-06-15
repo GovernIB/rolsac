@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.sac.model.ProcedimientoMensaje" table="RSC_PROMSJ" >
+
+        <cache usage="read-write"/>
+
+        <id name="id" unsaved-value="null" column="PMN_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_PMN</param>
+            </generator>
+        </id>
+
+
+        <property name="usuario" length="100" column="PMN_USUARIO"/>
+        <property name="usuarioLectura" length="100" column="PMN_USULEC"/>
+        <property name="texto" length="256" column="PMN_TEXTO"/>
+        <property name="fechaCreacion" column="PMN_FECCRE"/>
+        <property name="fechaLectura" column="PMN_FECLEC"/>
+        <property name="gestor" column="PMN_GESTOR"/>
+        <property name="leido" column="PMN_LEIDO"/>
+        <many-to-one name="procedimiento" cascade="none" outer-join="false" column="PMN_PROCODI" foreign-key="RSC_PROMSJ_FK"/>
+
+
+    </class>
+
+</hibernate-mapping>

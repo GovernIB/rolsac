@@ -54,6 +54,7 @@ public class ProcedimientoLocal extends Classificable
 	private String estadoSIA;
 	private SilencioAdm silencio;
 	private boolean comun;
+	private boolean pendienteValidar;
 
 	// ---------------------------------------------
 	// Campos especiales para optimizar la búsqueda
@@ -658,6 +659,21 @@ public class ProcedimientoLocal extends Classificable
 	 */
 	public void setLopdInfoAdicional(final Archivo lopdInfoAdicional) {
 		this.lopdInfoAdicional = lopdInfoAdicional;
+	}
+
+	/**
+	 * @return the pendienteValidar
+	 */
+	public boolean isPendienteValidar() {
+		return pendienteValidar;
+	}
+
+	/**
+	 * @param pendienteValidar
+	 *            the pendienteValidar to set
+	 */
+	public void setPendienteValidar(final boolean pendienteValidar) {
+		this.pendienteValidar = pendienteValidar;
 	}
 
 	/**
