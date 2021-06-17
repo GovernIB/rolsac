@@ -715,6 +715,33 @@
 		</div>
 </div>
 
+<div id="myModalChat" class="chatbox">
+	<div class="chatcabecera">
+		<div>
+			<p class="cabezerah2" align="center">Mensajes sobre el
+				procedimiento</p>
+		</div>
+		<div class="usuariomod">
+			<label class="cabezerah2">Supervisor</label><label
+				class="cabezerah2 derecha">Gestor </label>
+		</div>
+		 <hr>
+
+	</div>
+	<div class="chatmsg" id="chatmsg"></div>
+	<div class="chat-form">
+		<textarea></textarea>
+		<button>Enviar</button>
+	</div>
+ <hr>
+	<div class="chat-cerrar">
+
+		<button onclick="ocultarModal();">Cerrar</button>
+	</div>
+
+</div>
+
+
 <script>
 // Get the modal
 var modal = document.getElementById("myModal");
