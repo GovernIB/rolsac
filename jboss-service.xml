@@ -153,6 +153,15 @@ es.caib.rolsac.subscripcions
 		-->
 	   	es.caib.rolsac.A04003003.correo.normativas=simplificacio@caib.es
 
+		<!--  Estados de proc/servs  -->
+		es.caib.rolsac.procServ.estado.publicar.es=Se solicita enviar el dato a publicar
+		es.caib.rolsac.procServ.estado.publicar.ca=Se sol·licita enviar la dada a publicar
+		es.caib.rolsac.procServ.estado.republicar.es=Se solicita enviar el dato a republicar
+		es.caib.rolsac.procServ.estado.republicar.ca=Se sol·licita enviar la dada a republicar
+		es.caib.rolsac.procServ.estado.eliminar.es=Se solicita eliminar el dato
+		es.caib.rolsac.procServ.estado.eliminar.ca=Se sol·licita eliminar la dada a publicar
+		es.caib.rolsac.procServ.estado.cerrar.es=Se solicita cerrar el dato
+		es.caib.rolsac.procServ.estado.cerrar.ca=Se sol·licita tancar la dada
     </attribute>
 
 </mbean>

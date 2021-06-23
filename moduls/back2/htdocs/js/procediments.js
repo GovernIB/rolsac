@@ -162,6 +162,13 @@ $(document).ready(function() {
 
 	});
 
+	jQuery("#btnMensajes").click(function() {
+		var id = $('#item_id').val();
+		abrirMensaje(id);
+	});
+
+
+
 	/*
 	 * amartin: casos de guardado de listas de elementos donde su gestión se ha implementado con checkboxes.
 	 * Es necesario hacerlo vía eventos personalizados, ya que el DOM es diferente y no podemos tirar de los
@@ -842,6 +849,9 @@ function CDetall() {
 		jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").change(function(){
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val( jQuery(this).val() );
 		});
+		jQuery("#item_pdt_validar,#item_pdt_validar_es,#item_pdt_validar_en").change(function(){
+			jQuery("#item_pdt_validar,#item_pdt_validar_es,#item_pdt_validar_en").val( jQuery(this).val() );
+		});
 		//#366 se añade SIA
 		jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").change(function(){
 			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
@@ -1121,6 +1131,15 @@ function CDetall() {
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val("");
 		}
 
+		if (dada_node.item_pendiente_validar != undefined) {
+			jQuery('#item_pdt_validar').attr('checked', dada_node.item_pendiente_validar);
+			jQuery("#item_pdt_validar").change();
+		}
+
+		if (tienePermisoPublicar != 'S') {
+			jQuery("#item_pdt_validar").prop( "disabled", true );
+		}
+
 		//#366 se añade SIA
 		if (dada_node.item_codigo_sia != undefined) {
 			jQuery("#item_codigo_sia").val(dada_node.item_codigo_sia);
@@ -1148,7 +1167,6 @@ function CDetall() {
 			} else {
 				jQuery("#item_estado_sia").val(dada_node.item_estado_sia);
 			}
-
 
 			jQuery("#item_estado_sia").change();
 		} else {
@@ -1293,6 +1311,19 @@ function CDetall() {
 			$("#liEnvioSiaNoActivo").show();
 		} else {
 			$("#liEnvioSiaNoActivo").hide();
+		}
+
+		//Acciones
+		$("#item_accion").empty();
+		if (dada_node.acciones != null && dada_node.acciones != undefined) {
+			var i = 0;
+			for (var i = 0 ; i < dada_node.acciones.length ; i++) {
+				var o = new Option(dada_node.acciones[i].nom, dada_node.acciones.id);
+				/// jquerify the DOM object 'o' so we can use the html method
+				$(o).html(dada_node.acciones[i].nom);
+				$(o).val(dada_node.acciones[i].id);
+				$("#item_accion").append(o);
+			}
 		}
 
 		this.modificado(false);

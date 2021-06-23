@@ -2,6 +2,7 @@ package org.ibit.rol.sac.persistence.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Validacion;
 
 public class RolsacPropertiesUtil {
 
@@ -112,6 +113,24 @@ public class RolsacPropertiesUtil {
 			texto = getProperty("es.caib.rolsac.comun.ua.es");
 		}
 		return texto;
+	}
+
+	/** Devuelve el texto de UA para procedimientos/servicios comunes. **/
+	public static final String getPropiedadEstado(final Long estado, final boolean catalan) {
+		String literal;
+		final String idioma = catalan ? "ca" : "es";
+		if (estado.compareTo(Validacion.ACCION_PUBLICAR) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.publicar." + idioma;
+		} else if (estado.compareTo(Validacion.ACCION_REPUBLICAR) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.republicar." + idioma;
+		} else if (estado.compareTo(Validacion.ACCION_ELIMINAR) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.eliminar." + idioma;
+		} else if (estado.compareTo(Validacion.ACCION_CERRAR) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.cerrar." + idioma;
+		} else {
+			literal = null;
+		}
+		return getProperty(literal);
 	}
 
 	public static final int getAltoIcono() {

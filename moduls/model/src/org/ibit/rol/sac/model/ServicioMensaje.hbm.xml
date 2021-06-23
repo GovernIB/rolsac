@@ -23,7 +23,7 @@
         <property name="fechaLectura" column="SMN_FECLEC"/>
         <property name="gestor" column="SMN_GESTOR"/>
         <property name="leido" column="SMN_LEIDO"/>
-        <many-to-one name="servicio" cascade="none" outer-join="false" column="SMN_SERCODI" foreign-key="RSC_SERMSJ_FK"/>
+        <property name="idServicio" column="SMN_SERCODI"/>
 
 
     </class>

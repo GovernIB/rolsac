@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -195,7 +194,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("comunesUAESP", RolsacPropertiesUtil.getUAComun(false));
 		}
 		// Tiene permiso supervisor (permiso publicar)
-		model.put("permisoPublicar", Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES) ? "S" : "N");
+		model.put("permisoPublicar", Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO) ? "S" : "N");
 
 		// Ponemos los dos idiomas para lopd
 		model.put("lopdFinalidad", RolsacPropertiesUtil.getLopdFinalidad(true));
@@ -1016,6 +1015,29 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("boto_sia_no_activo", "N");
 			}
 
+			final List<IdNomDTO> acciones = new ArrayList<IdNomDTO>();
+			// acciones
+			if (proc.getValidacion() == Validacion.PUBLICA.intValue()) {
+
+				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
+						messageSource.getMessage("accion.republicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
+						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
+						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
+
+			} else if (proc.getValidacion() == Validacion.INTERNA.intValue()) {
+				acciones.add(new IdNomDTO(null, ""));
+				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
+						messageSource.getMessage("accion.publicar", null, request.getLocale())));
+
+			} else if (proc.getValidacion() == Validacion.RESERVA.intValue()) {
+				// No tiene acciones
+			} else if (proc.getValidacion() == Validacion.BAJA.intValue()) {
+				// No tiene acciones
+			}
+			resultats.put("acciones", acciones);
+
 			// Indica los flags de permisos
 			prepararFlags(resultats);
 
@@ -1171,6 +1193,38 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
+	@RequestMapping(value = "/mensajeLeido.do")
+	public @ResponseBody Map<String, Object> marcarMensajeLeido(final Long id, final HttpServletRequest request)
+			throws DelegateException {
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+		if (id == null) {
+			resultats.put("error", "No se ha podido marcar como leido");
+		} else {
+			final String usuario = "";
+			DelegateUtil.getMensajeDelegate().marcarMensajeLeidoProc(id, usuario);
+		}
+		return resultats;
+	}
+
+	@RequestMapping(value = "/enviarMensaje.do")
+	public @ResponseBody Map<String, Object> enviarMensaje(final String texto, final Long idEntidad,
+			final HttpServletRequest request) throws DelegateException {
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+		if (texto == null || texto.isEmpty() || idEntidad == null) {
+			resultats.put("error", "No se ha podido marcar como leido");
+		} else {
+
+			final String permisos = getPermisosUsuario(request);
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			String username = request.getRemoteUser();
+			if (StringUtils.isEmpty(username)) {
+				username = (String) request.getSession().getAttribute("username");
+			}
+			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor);
+		}
+		return resultats;
+	}
+
 	@RequestMapping(value = "/obtenerMensajes.do")
 	public @ResponseBody Map<String, Object> obtenerMensajes(final Long id, final HttpServletRequest request) {
 
@@ -1178,74 +1232,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		try {
 
-			final Calendar calendar = Calendar.getInstance();
-			final List<ProcedimientoMensaje> mensajes = new ArrayList<ProcedimientoMensaje>();
-			final ProcedimientoMensaje mensaje1 = new ProcedimientoMensaje();
-			final ProcedimientoMensaje mensaje2 = new ProcedimientoMensaje();
-			final ProcedimientoMensaje mensaje3 = new ProcedimientoMensaje();
-			final ProcedimientoMensaje mensaje4 = new ProcedimientoMensaje();
-			mensaje1.setTexto("Se ha actualizado los datos del procedimiento, principalmente la lopd.");
-			mensaje1.setLeido(true);
-			mensaje1.setUsuario("Usuario gestor1");
-			mensaje1.setUsuarioLectura("Usuario supervisor");
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			calendar.set(Calendar.MONTH, 1);
-			calendar.set(Calendar.HOUR, 11);
-			calendar.set(Calendar.MINUTE, 2);
-			mensaje1.setFechaCreacion(calendar.getTime());
-			calendar.set(Calendar.DAY_OF_MONTH, 2);
-			calendar.set(Calendar.MONTH, 1);
-			calendar.set(Calendar.HOUR, 10);
-			calendar.set(Calendar.MINUTE, 3);
-			mensaje1.setFechaLectura(calendar.getTime());
-			mensaje1.setGestor(true);
-
-			mensaje2.setTexto("Se dan pro buenos los datos de la lopd y se ha puesto ");
-			mensaje2.setLeido(true);
-			mensaje2.setUsuario("Usuario supervisor");
-			mensaje2.setUsuarioLectura("Usuario gestor1");
-			calendar.set(Calendar.DAY_OF_MONTH, 2);
-			calendar.set(Calendar.MONTH, 3);
-			calendar.set(Calendar.HOUR, 5);
-			calendar.set(Calendar.MINUTE, 2);
-			mensaje2.setFechaCreacion(calendar.getTime());
-			calendar.set(Calendar.DAY_OF_MONTH, 2);
-			calendar.set(Calendar.MONTH, 3);
-			calendar.set(Calendar.HOUR, 6);
-			calendar.set(Calendar.MINUTE, 3);
-			mensaje2.setFechaLectura(calendar.getTime());
-			mensaje2.setGestor(false);
-
-			mensaje3.setTexto("Se ha actualizado la descripción.");
-			mensaje3.setLeido(true);
-			mensaje3.setUsuario("Usuario gestor2");
-			mensaje3.setUsuarioLectura("Usuario supervisor");
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			calendar.set(Calendar.MONTH, 1);
-			calendar.set(Calendar.HOUR, 11);
-			calendar.set(Calendar.MINUTE, 2);
-			mensaje3.setFechaCreacion(calendar.getTime());
-			calendar.set(Calendar.DAY_OF_MONTH, 2);
-			calendar.set(Calendar.MONTH, 1);
-			calendar.set(Calendar.HOUR, 10);
-			calendar.set(Calendar.MINUTE, 3);
-			mensaje3.setFechaLectura(calendar.getTime());
-			mensaje3.setGestor(true);
-
-			mensaje4.setTexto("No está correcto la descripción.");
-			mensaje4.setLeido(false);
-			mensaje4.setUsuario("Usuario supervisor");
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			calendar.set(Calendar.MONTH, 1);
-			calendar.set(Calendar.HOUR, 11);
-			calendar.set(Calendar.MINUTE, 2);
-			mensaje4.setFechaCreacion(calendar.getTime());
-			mensaje4.setGestor(false);
-
-			mensajes.add(mensaje1);
-			mensajes.add(mensaje2);
-			mensajes.add(mensaje3);
-			mensajes.add(mensaje4);
+			final List<ProcedimientoMensaje> mensajes = DelegateUtil.getMensajeDelegate().getMensajesProcedimiento(id);
 			resultats.put("mensajes", mensajes);
 
 		} catch (final Exception dEx) {
@@ -1637,6 +1624,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				return result = new IdNomDTO(-3l, error);
 			}
 
+			ProcedimientoMensaje procedimientoMensaje = null;
+			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
+				final String iaccion = request.getParameter("item_accion").toString();
+				if (iaccion != null && !iaccion.isEmpty()) {
+					final Long accion = Long.parseLong(iaccion);
+					procedimientoMensaje = new ProcedimientoMensaje();
+					final String literal = RolsacPropertiesUtil.getPropiedadEstado(accion,
+							request.getLocale().getLanguage().contains("ca"));
+					procedimientoMensaje.setTexto(literal);
+					procedimientoMensaje.setFechaCreacion(new Date());
+					final String permisos = getPermisosUsuario(request);
+					procedimientoMensaje
+							.setGestor(!Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO));
+					procedimientoMensaje.setLeido(false);
+					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+				}
+			}
+
 			final ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procediment = new ProcedimientoLocal();
 			ProcedimientoLocal procedimentOld;
@@ -1816,7 +1821,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			}
 
-			final Long procId = guardarGrabar(procediment, listaTramitesParaBorrar, listaIdsTramitesParaActualizar);
+			final Long procId = guardarGrabar(procediment, listaTramitesParaBorrar, listaIdsTramitesParaActualizar,
+					procedimientoMensaje);
 
 			final String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(procId, ok);
@@ -2408,7 +2414,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Función de grabar() procedimiento
 	 */
-	private Long guardarGrabar(final ProcedimientoLocal procediment) throws DelegateException {
+	private Long guardarGrabar(final ProcedimientoLocal procediment, final ProcedimientoMensaje procedimientoMensaje)
+			throws DelegateException {
 
 		/* XXX: NOTA IMPORTANTE PARA EL RENDIMIENTO */
 		procediment.setDocumentos(null);
@@ -2416,7 +2423,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		/* FIN NOTA */
 
 		final Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procediment,
-				procediment.getUnidadAdministrativa().getId());
+				procediment.getUnidadAdministrativa().getId(), procedimientoMensaje);
 
 		// Actualiza estadísticas
 		// DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
@@ -2426,12 +2433,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	private Long guardarGrabar(final ProcedimientoLocal procediment, final List<Tramite> listaTramitesParaBorrar,
-			final List<Long> listaIdsTramitesParaActualizar) throws DelegateException {
+			final List<Long> listaIdsTramitesParaActualizar, final ProcedimientoMensaje procedimientoMensaje)
+			throws DelegateException {
 
 		// Si no hay trámites que procesar, invocamos guardado normal.
 		if (listaTramitesParaBorrar == null && listaIdsTramitesParaActualizar == null) {
 
-			return guardarGrabar(procediment);
+			return guardarGrabar(procediment, procedimientoMensaje);
 
 			// Si no, procesamos con la actualización de los trámites.
 		} else {
@@ -2442,7 +2450,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			final Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimientoConTramites(procediment,
 					procediment.getUnidadAdministrativa().getId(), listaTramitesParaBorrar,
-					listaIdsTramitesParaActualizar);
+					listaIdsTramitesParaActualizar, procedimientoMensaje);
 
 			// Actualiza estadísticas
 			// DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
@@ -2877,7 +2885,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			}
 
-			guardarGrabar(procedimiento);
+			guardarGrabar(procedimiento, null);
 
 			result = new IdNomDTO(procedimiento.getId(),
 					messageSource.getMessage("proc.guardat.fetsVitals.correcte", null, request.getLocale()));
@@ -2943,7 +2951,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			}
 			procedimiento.setMaterias(materias);
-			guardarGrabar(procedimiento);
+			guardarGrabar(procedimiento, null);
 			result = new IdNomDTO(procedimiento.getId(),
 					messageSource.getMessage("proc.guardat.materies.correcte", null, request.getLocale()));
 
@@ -3008,7 +3016,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				}
 
-				guardarGrabar(procedimiento);
+				guardarGrabar(procedimiento, null);
 
 				result = new IdNomDTO(procedimiento.getId(),
 						messageSource.getMessage("proc.guardat.normatives.correcte", null, request.getLocale()));

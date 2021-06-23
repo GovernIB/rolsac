@@ -71,11 +71,16 @@ public class ProcedimientoLocal extends Classificable
 	private String lopdDerechos;
 	private Archivo lopdInfoAdicional;
 
+	/** Mensajes no leidos, no se guarda **/
+	private Integer mensajesNoLeidosGestor;
+	private Integer mensajesNoLeidosSupervisor;
+
 	// Constructor para búsqueda optimizada
 	public ProcedimientoLocal(final Long id, final String nombreProcedimiento, final Integer validacion,
 			final Date fechaActualizacion, final boolean comun, final String lopdFinalidad,
 			final String lopdDestinatario, final String lopdDerechos, final LopdLegitimacion lopdLegitimacion,
-			final Archivo lopdInfoAdicional, final Date fechaCaducidad, final Date fechaPublicacion,
+			final Archivo lopdInfoAdicional, final Integer mensajesNoLeidosGestor,
+			final Integer mensajesNoLeidosSupervisor, final Date fechaCaducidad, final Date fechaPublicacion,
 			final String nombreFamilia, final String idioma, final UnidadAdministrativa ua) {
 
 		super();
@@ -95,6 +100,8 @@ public class ProcedimientoLocal extends Classificable
 		this.lopdDerechos = lopdDerechos;
 		this.lopdLegitimacion = lopdLegitimacion;
 		this.lopdInfoAdicional = lopdInfoAdicional;
+		this.setMensajesNoLeidosGestor(mensajesNoLeidosGestor);
+		this.setMensajesNoLeidosSupervisor(mensajesNoLeidosSupervisor);
 	}
 
 	// ---------------------------------------------
@@ -674,6 +681,36 @@ public class ProcedimientoLocal extends Classificable
 	 */
 	public void setPendienteValidar(final boolean pendienteValidar) {
 		this.pendienteValidar = pendienteValidar;
+	}
+
+	/**
+	 * @return the mensajesNoLeidosGestor
+	 */
+	public Integer getMensajesNoLeidosGestor() {
+		return mensajesNoLeidosGestor;
+	}
+
+	/**
+	 * @param mensajesNoLeidosGestor
+	 *            the mensajesNoLeidosGestor to set
+	 */
+	public void setMensajesNoLeidosGestor(final Integer mensajesNoLeidosGestor) {
+		this.mensajesNoLeidosGestor = mensajesNoLeidosGestor;
+	}
+
+	/**
+	 * @return the mensajesNoLeidosSupervisor
+	 */
+	public Integer getMensajesNoLeidosSupervisor() {
+		return mensajesNoLeidosSupervisor;
+	}
+
+	/**
+	 * @param mensajesNoLeidosSupervisor
+	 *            the mensajesNoLeidosSupervisor to set
+	 */
+	public void setMensajesNoLeidosSupervisor(final Integer mensajesNoLeidosSupervisor) {
+		this.mensajesNoLeidosSupervisor = mensajesNoLeidosSupervisor;
 	}
 
 	/**

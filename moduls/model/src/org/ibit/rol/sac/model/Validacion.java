@@ -4,9 +4,14 @@ package org.ibit.rol.sac.model;
 
 public class Validacion {
 
-    public final static Integer PUBLICA = 1;
-    public final static Integer INTERNA = 2;
-    public final static Integer RESERVA = 3;
-    public final static Integer BAJA = 4;
-    
+	public final static Integer PUBLICA = 1;
+	public final static Integer INTERNA = 2;
+	public final static Integer RESERVA = 3;
+	public final static Integer BAJA = 4;
+
+	public final static Long ACCION_PUBLICAR = 1l;
+	public final static Long ACCION_REPUBLICAR = 2l;
+	public final static Long ACCION_ELIMINAR = 3l;
+	public final static Long ACCION_CERRAR = 4l;
+
 }

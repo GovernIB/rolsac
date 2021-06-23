@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
@@ -80,14 +81,16 @@ public class ProcedimientoDelegate {
 		impl.eliminarTramite(tramiteId, procId);
 	}
 
-	public Long grabarProcedimiento(final ProcedimientoLocal procedimiento, final Long idUA) throws DelegateException {
-		return impl.grabarProcedimiento(procedimiento, idUA);
+	public Long grabarProcedimiento(final ProcedimientoLocal procedimiento, final Long idUA,
+			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException {
+		return impl.grabarProcedimiento(procedimiento, idUA, procedimientoMensaje);
 	}
 
 	public Long grabarProcedimientoConTramites(final ProcedimientoLocal procedimiento, final Long idUA,
-			final List listaTramitesParaBorrar, final List listaIdsTramitesParaActualizar) throws DelegateException {
+			final List listaTramitesParaBorrar, final List listaIdsTramitesParaActualizar,
+			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException {
 		return impl.grabarProcedimientoConTramites(procedimiento, idUA, listaTramitesParaBorrar,
-				listaIdsTramitesParaActualizar);
+				listaIdsTramitesParaActualizar, procedimientoMensaje);
 	}
 
 	/** @deprecated Se usa desde API v1 */

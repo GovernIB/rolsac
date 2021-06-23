@@ -23,8 +23,7 @@
         <property name="fechaLectura" column="PMN_FECLEC"/>
         <property name="gestor" column="PMN_GESTOR"/>
         <property name="leido" column="PMN_LEIDO"/>
-        <many-to-one name="procedimiento" cascade="none" outer-join="false" column="PMN_PROCODI" foreign-key="RSC_PROMSJ_FK"/>
-
+        <property name="idProcedimiento" column="PMN_PROCODI"/>
 
     </class>
 

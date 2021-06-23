@@ -29,6 +29,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.SolrPendiente;
@@ -261,12 +262,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @param idUA
 	 *            Identificador de la unidad administrativa a la que es asiganda el
 	 *            nuevo procedimiento.
+	 * @param procedimientoMensaje
 	 *
 	 * @return Devuelve el identificador del procedimiento guardado.
 	 * @throws DelegateException
 	 */
 	@Override
-	public Long grabarProcedimiento(final ProcedimientoLocal procedimiento, final Long idUA) throws DelegateException {
+	public Long grabarProcedimiento(final ProcedimientoLocal procedimiento, final Long idUA,
+			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException {
 
 		final Session session = getSession();
 
@@ -328,6 +331,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (procedimiento.isComun() && procedimiento.getId() != null) {
 				actualizarTramiteComun(session, procedimiento.getId(), procedimiento.getOrganResolutori());
 
+			}
+
+			// Generamos el mensaje procedimiento
+			if (procedimientoMensaje != null) {
+				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
+				session.save(procedimientoMensaje);
+				session.flush();
 			}
 
 			Hibernate.initialize(procedimiento.getTramites());
@@ -499,12 +509,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 *            nuevo procedimiento.
 	 * @param listaTramitesParaBorrar
 	 * @param listaIdsTramitesParaActualizar
+	 * @param procedimientoMensaje
 	 *
 	 * @return Devuelve el identificador del procedimiento guardado.
 	 */
 	@Override
 	public Long grabarProcedimientoConTramites(final ProcedimientoLocal procedimiento, final Long idUA,
-			final List listaTramitesParaBorrar, final List listaIdsTramitesParaActualizar) {
+			final List listaTramitesParaBorrar, final List listaIdsTramitesParaActualizar,
+			final ProcedimientoMensaje procedimientoMensaje) {
 
 		final Session session = getSession();
 
@@ -590,6 +602,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			session.flush();
 			if (procedimiento.isComun()) {
 				actualizarTramiteComun(session, procedimiento.getId(), procedimiento.getOrganResolutori());
+			}
+
+			// Generamos el mensaje procedimiento
+			if (procedimientoMensaje != null) {
+				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
+				session.save(procedimientoMensaje);
+				session.flush();
 			}
 
 			Hibernate.initialize(procedimiento.getTramites());
@@ -1319,9 +1338,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			} else {
 				consulta = new StringBuilder(
 						"select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, procedimiento.comun,"
-								+ " trad.lopdFinalidad, trad.lopdDestinatario, trad.lopdDerechos, leg, infoAdicional, ");
-				// trad.lopdInfoAdicional,
-				// ");
+								+ " trad.lopdFinalidad, trad.lopdDestinatario, trad.lopdDerechos, leg, infoAdicional, procedimiento.mensajesNoLeidosGestor,  procedimiento.mensajesNoLeidosGestor,  ");
+				// procedimiento.mensajesNoLeidosSupervisor, ");
 
 				if (bc.getProcedimiento().getFamilia().getId() == null
 						|| bc.getProcedimiento().getFamilia().getId() != -1) {
@@ -1365,13 +1383,31 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			if (bc.getPdtValidar() != null) {
-				where.append(" and procedimiento.pdtValidar = :pdtValidar ");
+				where.append(" and procedimiento.pendienteValidar = :pdtValidar ");
 			}
 			if (bc.getMensajePorLeer() != null) {
-				where.append(" and procedimiento.mensajePorLeer = :pdtValidar ");
+
+				// Las opciones en catalegProcedimientos:
+				// <option value="0"><spring:message code='txt.mensajesPdtSin'/></option>
+				// <option value="1"><spring:message code='txt.mensajesPdt'/></option>
+				// <option value="2"><spring:message code='txt.mensajesPdtSupervisor'/></option>
+				// <option value="3"><spring:message code='txt.mensajesPdtGestor'/></option>
+				if (bc.getMensajePorLeer() == 0) {
+					where.append(
+							" and procedimiento.id  not in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0) ");
+				} else if (bc.getMensajePorLeer() == 1) {
+					where.append(
+							" and procedimiento.id in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0) ");
+				} else if (bc.getMensajePorLeer() == 2) {
+					where.append(
+							" and procedimiento.id  in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 0) ");
+				} else if (bc.getMensajePorLeer() == 3) {
+					where.append(
+							" and procedimiento.id  in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 1) ");
+				}
 			}
 			if (bc.getEstado() != null) {
-				where.append(" and procedimiento.estado = :estado ");
+				where.append(" and procedimiento.validacion = :estado ");
 			}
 
 			if (bc.getComun() != null) {
@@ -1534,6 +1570,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			if (bc.getIdPlataforma() != null) {
 				query.setParameter("idPlataforma", bc.getIdPlataforma());
+			}
+
+			if (bc.getPdtValidar() != null) {
+				query.setParameter("pdtValidar", bc.getPdtValidar());
+			}
+			if (bc.getEstado() != null) {
+				query.setParameter("estado", bc.getEstado());
 			}
 
 			if (bc.getProcedimiento().getIniciacion().getId() != null

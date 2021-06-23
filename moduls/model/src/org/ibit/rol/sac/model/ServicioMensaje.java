@@ -20,7 +20,7 @@ public class ServicioMensaje implements ValueObject {
 	private Date fechaLectura;
 	private boolean gestor;
 	private boolean leido;
-	private Servicio servicio;
+	private Long idServicio;
 
 	/**
 	 * @return the id
@@ -128,18 +128,18 @@ public class ServicioMensaje implements ValueObject {
 	}
 
 	/**
-	 * @return the servicio
+	 * @return the idServicio
 	 */
-	public Servicio getServicio() {
-		return servicio;
+	public Long getIdServicio() {
+		return idServicio;
 	}
 
 	/**
-	 * @param servicio
-	 *            the servicio to set
+	 * @param idServicio
+	 *            the idServicio to set
 	 */
-	public void setServicio(final Servicio servicio) {
-		this.servicio = servicio;
+	public void setIdServicio(final Long servicio) {
+		this.idServicio = servicio;
 	}
 
 	/**

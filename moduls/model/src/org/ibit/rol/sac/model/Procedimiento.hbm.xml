@@ -39,7 +39,21 @@
         <property name="fechaSIA"  column="PRO_FECSIA"/>
         <property name="comun" 		column="PRO_COMUN" />
         <property name="pendienteValidar" 		column="PRO_PDTVAL" />
+        <property name="mensajesNoLeidosGestor"  column="PRO_MENGES" />
+        <property name="mensajesNoLeidosSupervisor" column="PRO_MENSUP" />
 
+
+		<!--
+		<property name="mensajesNoLeidosGestor"
+        formula="( select COUNT(*) from org.ibit.rol.sac.model.ProcedimientoMensaje procMen  ) "
+        type="integer" />
+ 		-->
+
+        <!--
+        <property name="mensajesNoLeidosSupervisor"
+        formula="( select COUNT(*)  from org.ibit.rol.sac.model.ProcedimientoMensaje procMen  where procMen.idProcedimiento = id and procMensa.gestor = true and procMensa.leido = false ) "
+        type="integer"  />
+		-->
 
         <many-to-one name="organResolutori" 	 column="PRO_CODUNA_RESOL" cascade="none" foreign-key="RSC_PRO_CODUNA_RESOL_FK"/>
         <many-to-one name="unidadAdministrativa" column="PRO_CODUNA" foreign-key="RSC_PROUNA_FK"/>
@@ -48,6 +62,8 @@
         <many-to-one name="servicioResponsable"  column="PRO_CODUNA_SERV" foreign-key="RSC_PRO_CODUNA_SERV_FK"/>
         <many-to-one name="silencio" 			 column="PRO_CODSIL" class="org.ibit.rol.sac.model.SilencioAdm" foreign-key="RSC_PRO_CODSIL_FK"/>
 		<many-to-one name="lopdLegitimacion" 	 column="PRO_CODLEG" class="org.ibit.rol.sac.model.LopdLegitimacion" cascade="none"  foreign-key="RSC_PRO_CODLEG_FK"/>
+
+
 
         <set name="normativas" cascade="none" table="RSC_PRONOR" lazy="true">
             <cache usage="read-write"/>

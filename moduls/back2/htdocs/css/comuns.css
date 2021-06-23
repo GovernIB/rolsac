@@ -1212,6 +1212,9 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall .grupoModulosFormulario .t75p{
     width: 74.9%;
 }
+.escriptori_detall .grupoModulosFormulario .t90p{
+    width: 89.9%;
+}
 .escriptori_detall .grupoModulosFormulario .t99p{
     width: 99.9%;
 }
@@ -1899,6 +1902,7 @@ input[type=text]:disabled{
     margin: 20px auto;
     border-style: ridge;
     box-shadow: 0 3px #ccc;
+    z-index: 10000;
 }
 
 .chatmsg {
@@ -1938,6 +1942,11 @@ input[type=text]:disabled{
     white-space: normal;
     background: #ffff998c;
     border-radius: 20%;
+    cursor: pointer;
+}
+
+.chat-leido:hover {
+	 background: #eeee998c;
 }
 
 .chat .chat-mensaje {

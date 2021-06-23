@@ -75,6 +75,9 @@
     var pagNormativaVigentes = '<c:url value="/catalegServeis/checkNormativaVigente.do" />';
     var urlPrevisualizarServicio = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegServeis/modulos.do" />';
+    var pagUrlMensajes = '<c:url value="/catalegServeis/obtenerMensajes.do" />';
+    var pagUrlMensajeLeido = '<c:url value="/catalegServeis/mensajeLeido.do" />';
+    var pagUrlEnviarMensaje = '<c:url value="/catalegServeis/enviarMensaje.do" />';
 
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.servei_esborrat_correcte'/>";
@@ -1204,6 +1207,9 @@
                               </li>
                               <li id="liEnvioSiaNoActivo" class="btnPrevisualizar par">
 	                                 <a id="btnEnvioSiaNoActivo" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.envio_sia_no_activo'/></span></span></a>
+	                          </li>
+	                          <li id="liMensajes" class="btnPrevisualizar par">
+	                                 <a id="btnMensajes" href="javascript:;" class="btn mensajes"><span><span><spring:message code='boto.mensajes'/></span></span></a>
 	                          </li>
                           </ul>
                         </div>

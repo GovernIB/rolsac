@@ -294,6 +294,13 @@ public final class DelegateUtil {
 		return del;
 	}
 
+	public static MensajeDelegate getMensajeDelegate() {
+		final MensajeDelegateI impl = (MensajeDelegateImpl) DelegateFactory.getDelegate(MensajeDelegateImpl.class);
+		final MensajeDelegate del = new MensajeDelegate();
+		del.setImpl(impl);
+		return del;
+	}
+
 	public static UnidadNormativaDelegate getUnidadNormativaDelegate() {
 		return (UnidadNormativaDelegate) DelegateFactory.getDelegate(UnidadNormativaDelegate.class);
 	}

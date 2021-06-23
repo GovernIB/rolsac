@@ -94,7 +94,8 @@
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
     var modulos = '<c:url value="/catalegProcediments/modulos.do" />';
     var pagUrlMensajes = '<c:url value="/catalegProcediments/obtenerMensajes.do" />';
-
+    var pagUrlMensajeLeido = '<c:url value="/catalegProcediments/mensajeLeido.do" />';
+    var pagUrlEnviarMensaje = '<c:url value="/catalegProcediments/enviarMensaje.do" />';
 
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -730,8 +731,8 @@
 	</div>
 	<div class="chatmsg" id="chatmsg"></div>
 	<div class="chat-form">
-		<textarea></textarea>
-		<button>Enviar</button>
+		<textarea id="textChat"></textarea>
+		<button onClick="enviarChat()">Enviar</button>
 	</div>
  <hr>
 	<div class="chat-cerrar">
@@ -1030,8 +1031,10 @@ window.onclick = function(event) {
                                 <div class="control">
                                     <select id="cerca_mensajePorLeer" name="telematico" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0"><spring:message code='txt.no'/></option>
-                                        <option value="1"><spring:message code='txt.si'/></option>
+                                        <option value="0"><spring:message code='txt.mensajesPdtSin'/></option>
+                                        <option value="1"><spring:message code='txt.mensajesPdt'/></option>
+                                        <option value="2"><spring:message code='txt.mensajesPdtSupervisor'/></option>
+                                        <option value="3"><spring:message code='txt.mensajesPdtGestor'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -1043,8 +1046,9 @@ window.onclick = function(event) {
                                 <div class="control">
                                     <select id="cerca_estado" name="telematico" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0"><spring:message code='txt.no'/></option>
-                                        <option value="1"><spring:message code='txt.si'/></option>
+                                        <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                        <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                        <option value="3"><spring:message code='txt.validacio.reserva'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -1133,6 +1137,12 @@ window.onclick = function(event) {
 								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
                                 <!-- Camps per cada idioma -->
                                 <div class="idioma <c:out value="${lang}" />">
+                                	<div class="fila">
+										<div class="element t90p" style="padding:20px;border-radius: 25px; border: 1px solid #C7DDEB;">
+											<input id="item_pdt_validar" name="item_pdt_validar" type="checkbox" value="on" class="nou">
+											<label for="item_pdt_validar">Pendiente validar</label>
+										 </div>
+                                	</div>
                                     <div class="fila">
                                         <div class="element t45p">
                                             <div class="etiqueta">
@@ -1600,6 +1610,15 @@ window.onclick = function(event) {
                                     </select>
                                 </div>
                             </div>
+                             <div class="element right">
+                                <div class="etiqueta">
+                                    <label for="item_accion"><spring:message code='camp.accion'/></label>
+                                </div>
+                                <div class="control">
+                                      <select id="item_accion" name="item_accion">
+                                      </select>
+                                </div>
+                            </div>
                         </div>
                         <!-- /fila -->
 
@@ -1641,6 +1660,9 @@ window.onclick = function(event) {
                               </li>
                               <li id="liEnvioSiaNoActivo" class="btnPrevisualizar par">
 	                                 <a id="btnEnvioSiaNoActivo" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.envio_sia_no_activo'/></span></span></a>
+	                          </li>
+	                          <li id="liMensajes" class="btnPrevisualizar par">
+	                                 <a id="btnMensajes" href="javascript:;" class="btn mensajes"><span><span><spring:message code='boto.mensajes'/></span></span></a>
 	                          </li>
                           </ul>
                         </div>

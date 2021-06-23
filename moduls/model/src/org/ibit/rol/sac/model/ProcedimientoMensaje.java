@@ -20,7 +20,7 @@ public class ProcedimientoMensaje implements ValueObject {
 	private Date fechaLectura;
 	private boolean gestor;
 	private boolean leido;
-	private ProcedimientoLocal procedimiento;
+	private Long idProcedimiento;
 
 	/**
 	 * @return the id
@@ -128,21 +128,6 @@ public class ProcedimientoMensaje implements ValueObject {
 	}
 
 	/**
-	 * @return the procedimiento
-	 */
-	public ProcedimientoLocal getProcedimiento() {
-		return procedimiento;
-	}
-
-	/**
-	 * @param procedimiento
-	 *            the procedimiento to set
-	 */
-	public void setProcedimiento(final ProcedimientoLocal procedimiento) {
-		this.procedimiento = procedimiento;
-	}
-
-	/**
 	 * @return the usuarioLectura
 	 */
 	public String getUsuarioLectura() {
@@ -155,6 +140,21 @@ public class ProcedimientoMensaje implements ValueObject {
 	 */
 	public void setUsuarioLectura(final String usuarioLectura) {
 		this.usuarioLectura = usuarioLectura;
+	}
+
+	/**
+	 * @return the idProcedimiento
+	 */
+	public Long getIdProcedimiento() {
+		return idProcedimiento;
+	}
+
+	/**
+	 * @param idProcedimiento
+	 *            the idProcedimiento to set
+	 */
+	public void setIdProcedimiento(final Long idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
 
 }

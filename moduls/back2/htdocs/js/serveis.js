@@ -143,6 +143,11 @@ $(document).ready(function() {
 
 	});
 
+	jQuery("#btnMensajes").click(function() {
+		var id = $('#item_id').val();
+		abrirMensaje(id);
+	});
+
 	/*
 	 * amartin: casos de guardado de listas de elementos donde su gestión se ha implementado con checkboxes.
 	 * Es necesario hacerlo vía eventos personalizados, ya que el DOM es diferente y no podemos tirar de los
