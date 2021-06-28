@@ -1896,9 +1896,9 @@ input[type=text]:disabled{
     top:25%;
     position: fixed;
     min-width: 390px;
-    height: 550px;
+    height: 580px;
     background: #fff;
-    padding: 25px;
+/*     padding: 25px; */
     margin: 20px auto;
     border-style: ridge;
     box-shadow: 0 3px #ccc;
@@ -1915,6 +1915,8 @@ input[type=text]:disabled{
 
 .chatcabecera{
  width: 100%;
+ padding: 10px 0px 0px 0px;
+ background: url(../img/cap/destello.jpg) #e57700  0 0 no-repeat;
 
 
 }
@@ -1940,20 +1942,20 @@ input[type=text]:disabled{
     height: 60px;
     /* word-wrap: break-word; */
     white-space: normal;
-    background: #ffff998c;
+    background: #eeeeeed6;
     border-radius: 20%;
     cursor: pointer;
 }
 
 .chat-leido:hover {
-	 background: #eeee998c;
+	 background: #aaaaaa;
 }
 
 .chat .chat-mensaje {
     width: 70%;
     padding: 15px 15px 22px 15px;
     margin: 5px 10px 0;
-    background: #1ddced;
+    background-color: #ECF6FC;
     color: black;
     font-size: 14px;
 }
@@ -1961,7 +1963,7 @@ input[type=text]:disabled{
     width: 70%;
     padding: 15px 15px 0px 15px;
     margin: 0px 10px 0;
-    background: #1ddced;
+    background-color: #ECF6FC;
     color: black;
     text-align: right;
     font-size: 11px;
@@ -1981,21 +1983,21 @@ input[type=text]:disabled{
 	 margin-left: 300px;
 }
 .supervisor .chat-mensaje {
-    background: #1add322e;
+   background-color: #ECF6FC;
 }
 
 .gestor .chat-mensaje {
- background: #1add322e;
+ background-color: #ECF6FC;
  order: -1;
 
 }
 
 .supervisor .chat-usuario {
-    background: #1add322e;
+    background-color: #ECF6FC;
 }
 
 .gestor .chat-usuario {
- background: #1add322e;
+ background-color: #ECF6FC;
  order: -1;
 
 }
@@ -2012,19 +2014,20 @@ input[type=text]:disabled{
 }
 
 .chat-form textarea {
- background: #fbfbfb;
+ background-color: #ECF6FC;
  width: 75%;
- height: 15px;
+ height: 45px;
  border: 2px solid #eee;
  border-radius: 3px;
  resize: none;
  padding: 10px;
  font-size: 18px;
  color: #333;
+ margin-left: 10px;
 }
 
 .chat-form textarea:focus {
- background: #fff;
+ background-color: #ECF6FC;
 }
 
 .chat-form textarea::-webkit-scrollbar {
@@ -2037,16 +2040,19 @@ input[type=text]:disabled{
 }
 
 .chat-form button {
- background: #20ed1d;
+/*  background: #E57700; */
  padding: 5px 15px;
  font-size: 15px;
+ height: 60px;
  color: #fff;
+ font: 16px/38px Impact, Arial, Helvetica, Sans-serif;
  border: none;
  margin: 0 10px;
  border-radius: 3px;
- box-shadow: 0 3px 0 #20ed1d;
+ box-shadow: 0 3px 0 #E57700;
  cursor: pointer;
-
+ text-transform: uppercase;
+ background: url(../img/cap/destello.jpg) #e57700  0 0 no-repeat;
 
  -webkit-transition: background .2s ease;
  -moz-transition: background .2s ease;
@@ -2055,23 +2061,27 @@ input[type=text]:disabled{
 }
 
 .chat-form button:hover {
- background: #13c8d9;
+/*  background: #13c8d9; */
 }
 .chat-cerrar {
- margin-top: 20px;
+ margin-top: 10px;
 float: right;
 }
 
 .chat-cerrar button {
- background: #aaaaaa94;
+/*  background: #E57700; */
  padding: 5px 15px;
  font-size: 15px;
- color: black;
+ color: #fff;
  border: none;
  margin: 0 10px;
  border-radius: 3px;
- box-shadow: 0 3px 0 #aaaaaa94;
+
  cursor: pointer;
+ background: url(../img/botons/opcion1/izq.gif) 0 0 no-repeat;
+ text-transform: uppercase;
+
+ font: 16px/38px Impact, Arial, Helvetica, Sans-serif;
 
 
  -webkit-transition: background .2s ease;

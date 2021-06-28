@@ -731,7 +731,7 @@
 	</div>
 	<div class="chatmsg" id="chatmsg"></div>
 	<div class="chat-form">
-		<textarea id="textChat"></textarea>
+		<textarea id="textChat" rows="3"></textarea>
 		<button onClick="enviarChat()">Enviar</button>
 	</div>
  <hr>
