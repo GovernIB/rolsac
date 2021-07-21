@@ -115,22 +115,46 @@ public class RolsacPropertiesUtil {
 		return texto;
 	}
 
-	/** Devuelve el texto de UA para procedimientos/servicios comunes. **/
-	public static final String getPropiedadEstado(final Long estado, final boolean catalan) {
+	/** Devuelve el texto segun la acción requerida. **/
+	public static final String getLiteralFlujoAccion(final Long accion, final boolean catalan) {
 		String literal;
 		final String idioma = catalan ? "ca" : "es";
-		if (estado.compareTo(Validacion.ACCION_PUBLICAR) == 0) {
-			literal = "es.caib.rolsac.procServ.estado.publicar." + idioma;
-		} else if (estado.compareTo(Validacion.ACCION_REPUBLICAR) == 0) {
-			literal = "es.caib.rolsac.procServ.estado.republicar." + idioma;
-		} else if (estado.compareTo(Validacion.ACCION_ELIMINAR) == 0) {
-			literal = "es.caib.rolsac.procServ.estado.eliminar." + idioma;
-		} else if (estado.compareTo(Validacion.ACCION_CERRAR) == 0) {
-			literal = "es.caib.rolsac.procServ.estado.cerrar." + idioma;
+		if (accion.compareTo(Validacion.ACCION_PUBLICAR) == 0) {
+			literal = "es.caib.rolsac.procServ.accion.publicar." + idioma;
+		} else if (accion.compareTo(Validacion.ACCION_REPUBLICAR) == 0) {
+			literal = "es.caib.rolsac.procServ.accion.republicar." + idioma;
+		} else if (accion.compareTo(Validacion.ACCION_ELIMINAR) == 0) {
+			literal = "es.caib.rolsac.procServ.accion.eliminar." + idioma;
+		} else if (accion.compareTo(Validacion.ACCION_CERRAR) == 0) {
+			literal = "es.caib.rolsac.procServ.accion.cerrar." + idioma;
 		} else {
 			literal = null;
 		}
 		return getProperty(literal);
+	}
+
+	/** Devuevle el texto **/
+	public static final String getLiteralFlujoEstado(final Integer estado, final boolean catalan) {
+		String literal;
+		final String idioma = catalan ? "ca" : "es";
+		if (estado.compareTo(Validacion.INTERNA) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.interno." + idioma;
+		} else if (estado.compareTo(Validacion.PUBLICA) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.publico." + idioma;
+		} else if (estado.compareTo(Validacion.RESERVA) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.reserva." + idioma;
+		} else if (estado.compareTo(Validacion.BAJA) == 0) {
+			literal = "es.caib.rolsac.procServ.estado.baja." + idioma;
+		} else {
+			literal = null;
+		}
+		return getProperty(literal);
+	}
+
+	/** Devuevle el texto cuando eres supervisor y lo revisas **/
+	public static final String getLiteralFlujoActualizadoSupervisor(final boolean catalan) {
+		final String idioma = catalan ? "ca" : "es";
+		return getProperty("es.caib.rolsac.procServ.revisado." + idioma);
 	}
 
 	public static final int getAltoIcono() {

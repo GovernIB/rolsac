@@ -39,8 +39,6 @@
         <property name="fechaSIA"  column="PRO_FECSIA"/>
         <property name="comun" 		column="PRO_COMUN" />
         <property name="pendienteValidar" 		column="PRO_PDTVAL" />
-        <property name="mensajesNoLeidosGestor"  column="PRO_MENGES" />
-        <property name="mensajesNoLeidosSupervisor" column="PRO_MENSUP" />
 
 
 		<!--

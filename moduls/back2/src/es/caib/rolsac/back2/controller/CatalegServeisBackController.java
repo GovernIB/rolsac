@@ -48,6 +48,7 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Plataforma;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
+import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.model.SilencioAdm;
 import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
@@ -849,7 +850,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		for (final Servicio ser : castList(Servicio.class, resultadoBusqueda.getListaResultados())) {
 
 			final ServicioDTO servicioDTO = new ServicioDTO(ser.getId(), ser.getNombreServicio(), ser.isVisible(),
-					DateUtils.formatDate(ser.getFechaActualizacion()), ser.isComun());
+					DateUtils.formatDate(ser.getFechaActualizacion()), ser.isComun(), ser.isMensajesNoLeidosGestor(),
+					ser.isMensajesNoLeidosSupervisor());
 
 			llistaServicioDTO.add(servicioDTO);
 
@@ -904,6 +906,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			resultats.put("item_check_tramit_telefonico", serv.isTelefonico());
 			resultats.put("item_comun", (serv.isComun() ? true : false));
 			resultats.put("item_lopd_activo", serv.isLopdActivo());
+			resultats.put("item_mensajes_gestor", serv.isMensajesNoLeidosGestor() ? "S" : "N");
+			resultats.put("item_mensajes_supervisor", serv.isMensajesNoLeidosSupervisor() ? "S" : "N");
+
 			if (serv.getLopdLegitimacion() != null) {
 				resultats.put("item_lopd_legitimacion", serv.getLopdLegitimacion().getId());
 			}
@@ -966,6 +971,52 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				resultats.put("item_plataforma_tramit", serv.getPlataforma().getId());
 			}
 			resultats.put("item_parametros", serv.getParametros());
+
+			final List<IdNomDTO> acciones = new ArrayList<IdNomDTO>();
+			// acciones
+			if (serv.getValidacion() == Validacion.PUBLICA.intValue()) {
+
+				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
+						messageSource.getMessage("accion.republicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
+						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
+						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
+
+			} else if (serv.getValidacion() == Validacion.INTERNA.intValue()) {
+				acciones.add(new IdNomDTO(null, ""));
+				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
+						messageSource.getMessage("accion.publicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
+						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
+						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
+
+			} else if (serv.getValidacion() == Validacion.RESERVA.intValue()) {
+				// No tiene acciones
+			} else if (serv.getValidacion() == Validacion.BAJA.intValue()) {
+				// No tiene acciones
+			}
+			resultats.put("acciones", acciones);
+			resultats.put("item_pdt_validar", serv.isPendienteValidar());
+
+			// PermiteGuardar
+			// Si es gestor y está en estado validación, no permite guardar
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			if (gestor && (serv.getValidacion() == Validacion.RESERVA.intValue()
+					|| (serv.isPendienteValidar() && serv.getValidacion() == Validacion.INTERNA.intValue()))) {
+				resultats.put("permiteGuardar", "N");
+			} else {
+				resultats.put("permiteGuardar", "S");
+			}
+
+			// PermitirEliminar
+			// No se permitirá eliminar al gestor
+			if (gestor) { // && proc.getValidacion() == Validacion.RESERVA.intValue()) {
+				resultats.put("permiteEliminar", "N");
+			} else {
+				resultats.put("permiteEliminar", "S");
+			}
 
 		} catch (final DelegateException dEx) {
 
@@ -1366,6 +1417,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			final ServicioDelegate servicioDelegate = DelegateUtil.getServicioDelegate();
 			Servicio servicio = new Servicio();
 			Servicio servicioOld;
+			final String permisos = getPermisosUsuario(request);
 
 			boolean edicion;
 			try {
@@ -1383,6 +1435,72 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				return result = new IdNomDTO(-4l, error);
 			}
 
+			/***
+			 * Cuando eres gestor, se crea mensaje si:
+			 * <ul>
+			 * <li>El Procedimiento / Servicio está en estado interno: i. Se indica en el
+			 * desplegable de acciones una acción diferente de guardar y se pulsa el botón
+			 * guardar</li>
+			 * <li>b. El Procedimiento / Servicio está en estado publico i. Se pulsa el
+			 * botón guardar (independientemente de la acción seleccionada)</li>
+			 * </ul>
+			 *
+			 * Cuando eres supervisor si:
+			 * <ul>
+			 * <li>Si pasa de pendiente_validacion de true a false.</li>
+			 * </ul>
+			 */
+			ServicioMensaje servicioMensaje = null;
+			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
+
+				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
+						&& servicioOld.isPendienteValidar()) {
+
+					servicioMensaje = new ServicioMensaje();
+					final String literal = RolsacPropertiesUtil
+							.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
+					servicioMensaje.setTexto(literal);
+					servicioMensaje.setFechaCreacion(new Date());
+					servicioMensaje.setGestor(false);
+					servicioMensaje.setLeido(false);
+					servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+
+				}
+
+			} else {
+
+				// Opcion 1. Interno y hay una accion
+				if (servicioOld != null && servicioOld.getValidacion().compareTo(Validacion.INTERNA) == 0
+						&& request.getParameter("item_accion") != null
+						&& !request.getParameter("item_accion").isEmpty()) {
+					final String iaccion = request.getParameter("item_accion").toString();
+					if (iaccion != null && !iaccion.isEmpty()) {
+
+						final Long accion = Long.parseLong(iaccion);
+						servicioMensaje = new ServicioMensaje();
+						final String literal = RolsacPropertiesUtil.getLiteralFlujoAccion(accion,
+								request.getLocale().getLanguage().contains("ca"));
+						servicioMensaje.setTexto(literal);
+						servicioMensaje.setFechaCreacion(new Date());
+						servicioMensaje.setGestor(true);
+						servicioMensaje.setLeido(false);
+						servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					} else if (servicioOld != null && servicioOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
+
+						final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
+						servicioMensaje = new ServicioMensaje();
+						final String literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
+								request.getLocale().getLanguage().contains("ca"));
+						servicioMensaje.setTexto(literal);
+						servicioMensaje.setFechaCreacion(new Date());
+						servicioMensaje.setGestor(true);
+						servicioMensaje.setLeido(false);
+						servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					}
+
+				}
+			}
+
 			servicio = guardarPublicoObjetivo(request, servicio, servicioOld); // Procesar Público Objectivo
 			/// Actualizamos lo que viene de pantalla para servicio Publico Objetivo en
 			/// servicioOld para que
@@ -1398,6 +1516,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio = guardarOrganInstructor(request, servicio, error); // Organ Resolutori
 			servicio = guardarServeiResponsable(request, servicio, error); // Servei Responsable
 			servicio = guardarLopd(request, servicio, error); // Servei Responsable
+			servicio = guardarPdtValidacion(request, servicio, error); // Pdt validacion
 
 			// Cargamos los datos básicos
 			servicio.setNombreResponsable(request.getParameter("item_responsable_nombre")); // Responsable
@@ -1426,7 +1545,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			}
 
 			// Si no tiene el permiso de comunes, no puede estar activo.
-			final String permisos = getPermisosUsuario(request);
 			if (servicio.isComun() && !Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES)) {
 				error = messageSource.getMessage("error.permisos.serv.comun", null, request.getLocale());
 				return new IdNomDTO(-1l, error);
@@ -1504,7 +1622,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			}
 
-			final Long servId = guardarGrabar(servicio);
+			final Long servId = guardarGrabar(servicio, servicioMensaje);
 
 			final String ok = messageSource.getMessage("serv.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(servId, ok);
@@ -1549,6 +1667,30 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		}
 
 		return result;
+
+	}
+
+	/**
+	 * Si el usuario es gestor o supervisor: - Si es gestor, si ha realizado algun
+	 * acción, pasa pendiente_validar a true - Si es supervisor, si ha des/checkeado
+	 * el "item_pdt_validar", se coge el valor
+	 *
+	 * @param request
+	 * @param servicio
+	 * @param error
+	 * @return
+	 */
+	private Servicio guardarPdtValidacion(final HttpServletRequest request, final Servicio servicio,
+			final String error) {
+		final String permisos = getPermisosUsuario(request);
+		if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
+			servicio.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
+		} else {
+			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
+				servicio.setPendienteValidar(true);
+			}
+		}
+		return servicio;
 
 	}
 
@@ -1812,14 +1954,15 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	/*
 	 * Función de grabar() servicio
 	 */
-	private Long guardarGrabar(final Servicio servicio) throws DelegateException {
+	private Long guardarGrabar(final Servicio servicio, final ServicioMensaje servicioMensaje)
+			throws DelegateException {
 
 		/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
 		servicio.setDocumentos(null);
 		/* FIN NOTA */
 
 		final Long servId = DelegateUtil.getServicioDelegate().grabarServicio(servicio,
-				servicio.getOrganoInstructor().getId());
+				servicio.getOrganoInstructor().getId(), servicioMensaje);
 
 		return servId;
 
@@ -2009,7 +2152,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			}
 
-			guardarGrabar(servicio);
+			final ServicioMensaje servicioMensaje = null;
+			guardarGrabar(servicio, servicioMensaje);
 
 			result = new IdNomDTO(servicio.getId(),
 					messageSource.getMessage("serv.guardat.fetsVitals.correcte", null, request.getLocale()));
@@ -2075,7 +2219,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			}
 			servicio.setMaterias(materias);
-			guardarGrabar(servicio);
+			final ServicioMensaje servicioMensaje = null;
+			guardarGrabar(servicio, servicioMensaje);
 			result = new IdNomDTO(servicio.getId(),
 					messageSource.getMessage("serv.guardat.materies.correcte", null, request.getLocale()));
 
@@ -2132,7 +2277,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 				servicio.setNormativas(normativas);
 
-				guardarGrabar(servicio);
+				final ServicioMensaje servicioMensaje = null;
+				guardarGrabar(servicio, servicioMensaje);
 
 				result = new IdNomDTO(servicio.getId(),
 						messageSource.getMessage("serv.guardat.normatives.correcte", null, request.getLocale()));

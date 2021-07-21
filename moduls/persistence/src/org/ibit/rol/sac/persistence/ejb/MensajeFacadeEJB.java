@@ -56,6 +56,9 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			Hibernate.initialize(mensaje);
 			mensaje.setFechaLectura(new Date());
 			mensaje.setUsuarioLectura(usuario);
+			mensaje.setLeido(true);
+			session.update(mensaje);
+			session.flush();
 
 		} catch (final Exception he) {
 			throw new EJBException(he);
@@ -87,7 +90,9 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			Hibernate.initialize(mensaje);
 			mensaje.setFechaLectura(new Date());
 			mensaje.setUsuarioLectura(usuario);
-
+			mensaje.setLeido(true);
+			session.update(mensaje);
+			session.flush();
 		} catch (final Exception he) {
 			throw new EJBException(he);
 

@@ -333,7 +333,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			}
 
-			// Generamos el mensaje procedimiento
+			// Generamos el mensaje procedimiento y revisamos los mensajes pendientes
 			if (procedimientoMensaje != null) {
 				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
 				session.save(procedimientoMensaje);
@@ -1338,8 +1338,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			} else {
 				consulta = new StringBuilder(
 						"select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, procedimiento.fechaActualizacion, procedimiento.comun,"
-								+ " trad.lopdFinalidad, trad.lopdDestinatario, trad.lopdDerechos, leg, infoAdicional, procedimiento.mensajesNoLeidosGestor,  procedimiento.mensajesNoLeidosGestor,  ");
-				// procedimiento.mensajesNoLeidosSupervisor, ");
+								+ " trad.lopdFinalidad, trad.lopdDestinatario, trad.lopdDerechos, leg, infoAdicional, ");
 
 				if (bc.getProcedimiento().getFamilia().getId() == null
 						|| bc.getProcedimiento().getFamilia().getId() != -1) {
@@ -1622,6 +1621,45 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			resultadoBusqueda.setTotalResultados(query.list().size());
 
 			resultadoBusqueda = PaginatedHibernateEJB.obtenerListadoPaginado(query, paginacion);
+
+			if (resultadoBusqueda.getListaResultados() != null) {
+
+				try {
+					final StringBuilder idProced = new StringBuilder();
+					for (final Object proc : resultadoBusqueda.getListaResultados()) {
+						final Long idProc = ((ProcedimientoLocal) proc).getId();
+						idProced.append(idProc);
+						idProced.append(" , ");
+					}
+
+					String idProcedimientos = idProced.toString();
+					idProcedimientos = idProcedimientos.substring(0, idProcedimientos.length() - 2);
+
+					final String hql = "select proMensa.idProcedimiento, proMensa.gestor from ProcedimientoMensaje proMensa where proMensa.leido = false and proMensa.idProcedimiento in ("
+							+ idProcedimientos + ")";
+					final Query queryMensas = session.createQuery(hql);
+					// queryMensas.setParameterList("idProcs", idProcs);
+					final List<Object[]> resultados = queryMensas.list();
+					if (resultados != null) {
+						for (final Object[] resultado : resultados) {
+							for (final Object proc : resultadoBusqueda.getListaResultados()) {
+								final String idProc = ((ProcedimientoLocal) proc).getId().toString();
+								if (resultado[0].toString().equals(idProc)) {
+									final boolean gestor = Boolean.valueOf(resultado[1].toString());
+									if (gestor) {
+										((ProcedimientoLocal) proc).setMensajesNoLeidosGestor(true);
+									} else {
+										((ProcedimientoLocal) proc).setMensajesNoLeidosSupervisor(true);
+									}
+									break;
+								}
+							}
+						}
+					}
+				} catch (final Exception ex) {
+					log.error("Error calculando el total de mensajes", ex);
+				}
+			}
 
 		} catch (final HibernateException e) {
 

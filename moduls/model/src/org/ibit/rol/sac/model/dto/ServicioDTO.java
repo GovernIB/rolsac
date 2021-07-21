@@ -34,6 +34,9 @@ public class ServicioDTO implements ValueObject {
 	private String fechaActualizacion;
 	/** Comun. **/
 	private Boolean comun;
+	/** Si tiene mensajes de gestor o supervisor pendientes de leer **/
+	private Boolean mensajes_gestor;
+	private Boolean mensajes_supervisor;
 
 	/**
 	 * Servicio DTO.
@@ -93,13 +96,15 @@ public class ServicioDTO implements ValueObject {
 	 * @param familia
 	 */
 	public ServicioDTO(final long id, final String nombre, final Boolean caducat, final String fechaActualizacion,
-			final Boolean comun) {
+			final Boolean comun, final Boolean mensajesGestor, final Boolean mensajesSupervisor) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.caducat = caducat;
 		this.fechaActualizacion = fechaActualizacion;
 		this.comun = comun;
+		this.mensajes_gestor = mensajesGestor;
+		this.mensajes_supervisor = mensajesSupervisor;
 	}
 
 	/**
@@ -265,5 +270,35 @@ public class ServicioDTO implements ValueObject {
 	 */
 	public void setComun(final Boolean comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the mensajes_gestor
+	 */
+	public Boolean getMensajes_gestor() {
+		return mensajes_gestor;
+	}
+
+	/**
+	 * @param mensajes_gestor
+	 *            the mensajes_gestor to set
+	 */
+	public void setMensajes_gestor(final Boolean mensajes_gestor) {
+		this.mensajes_gestor = mensajes_gestor;
+	}
+
+	/**
+	 * @return the mensajes_supervisor
+	 */
+	public Boolean getMensajes_supervisor() {
+		return mensajes_supervisor;
+	}
+
+	/**
+	 * @param mensajes_supervisor
+	 *            the mensajes_supervisor to set
+	 */
+	public void setMensajes_supervisor(final Boolean mensajes_supervisor) {
+		this.mensajes_supervisor = mensajes_supervisor;
 	}
 }

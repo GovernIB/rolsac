@@ -107,6 +107,10 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	/** Parametros si es un tramtie telematico y necesita parametros. **/
 	private String parametros;
 
+	/** Mensajes no leidos **/
+	private boolean mensajesNoLeidosGestor;
+	private boolean mensajesNoLeidosSupervisor;
+
 	/**
 	 * Constructor para busqueda optimizada.
 	 *
@@ -934,6 +938,36 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 */
 	public void setPendienteValidar(final boolean pendienteValidar) {
 		this.pendienteValidar = pendienteValidar;
+	}
+
+	/**
+	 * @return the mensajesNoLeidosGestor
+	 */
+	public boolean isMensajesNoLeidosGestor() {
+		return mensajesNoLeidosGestor;
+	}
+
+	/**
+	 * @param mensajesNoLeidosGestor
+	 *            the mensajesNoLeidosGestor to set
+	 */
+	public void setMensajesNoLeidosGestor(final boolean mensajesNoLeidosGestor) {
+		this.mensajesNoLeidosGestor = mensajesNoLeidosGestor;
+	}
+
+	/**
+	 * @return the mensajesNoLeidosSupervisor
+	 */
+	public boolean isMensajesNoLeidosSupervisor() {
+		return mensajesNoLeidosSupervisor;
+	}
+
+	/**
+	 * @param mensajesNoLeidosSupervisor
+	 *            the mensajesNoLeidosSupervisor to set
+	 */
+	public void setMensajesNoLeidosSupervisor(final boolean mensajesNoLeidosSupervisor) {
+		this.mensajesNoLeidosSupervisor = mensajesNoLeidosSupervisor;
 	}
 
 }

@@ -455,7 +455,7 @@ function CLlistat() {
 			if (comunActivo == 'true') {
 				codi_cap4 = "<div class=\"th comun "+ ordre_c4 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"comun\">" + txtComun + "</a></div>";
 			}
-			codi_cap3 = "<div class=\"th mensaje\" role=\"columnheader\">&nbsp;</div>";
+			codi_cap5 = "<div class=\"th mensaje\" role=\"columnheader\">&nbsp;</div>";
 
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -463,7 +463,7 @@ function CLlistat() {
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4 + codi_cap5;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -502,7 +502,20 @@ function CLlistat() {
 					codi_taula += "<div class=\"td comun\" role=\"gridcell\">" + txtValorComun + "</div>";
 				}
 
-				codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><a onclick=\"abrirMensaje('"+dada_node.id+"')\">MEN</a></div>";
+				if (dada_node.mensajes_gestor == true) {
+					if (dada_node.mensajes_supervisor == true) {
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_GS.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+					} else {
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_G.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+					}
+				} else {
+					if (dada_node.mensajes_supervisor == true) {
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_S.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+					} else {
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+					}
+				}
+
 
 				codi_taula += "</div>";
 
@@ -1062,6 +1075,10 @@ function CDetall() {
 			});
 		});
 
+		$("#item_accion").hide();
+		$("#lbl_item_accion").hide();
+		$("#item_pdt_validar").prop( "disabled", true );
+
 		this.actualizaEventos();
 
 		this.modificado(false);
@@ -1131,8 +1148,8 @@ function CDetall() {
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val("");
 		}
 
-		if (dada_node.item_pendiente_validar != undefined) {
-			jQuery('#item_pdt_validar').attr('checked', dada_node.item_pendiente_validar);
+		if (dada_node.item_pdt_validar != undefined) {
+			jQuery('#item_pdt_validar').attr('checked', dada_node.item_pdt_validar);
 			jQuery("#item_pdt_validar").change();
 		}
 
@@ -1324,12 +1341,73 @@ function CDetall() {
 				$(o).val(dada_node.acciones[i].id);
 				$("#item_accion").append(o);
 			}
+			$("#item_accion").show();
+			$("#lbl_item_accion").show();
+		} else {
+			$("#item_accion").hide();
+			$("#lbl_item_accion").hide();
+		}
+
+		if ('N' == tienePermisoPublicar) {
+			$("#item_accion").show();
+			$("#lbl_item_accion").show();
+			$("#item_pdt_validar").prop( "disabled", true );
+			$("#item_estat").prop( "disabled", true );
+		} else {
+			$("#item_accion").hide();
+			$("#lbl_item_accion").hide();
+			$("#item_pdt_validar").prop( "disabled", false );
+			$("#item_estat").prop( "disabled", false );
 		}
 
 		this.modificado(false);
 
+		//noPermiteGuardar
+		this.actualizarBotonesGuardar(dada_node.permiteGuardar);
+		//noPermiteEliminar
+		this.actualizarBotonesEliminar(dada_node.permiteEliminar);
 	};
 
+	this.actualizarBotonesGuardar = function(permite) {
+		var disabled = "false";
+		if (permite == 'S') {
+			$("li:has(> a#btnGuardar)").show();
+			$("li:has(> a#btnGuardar_normatives)").show();
+			$("li:has(> a#btnGuardar_documents)").show();
+			$("li:has(> a#btnGuardar_documents_lopd)").show();
+			$("li:has(> a#btnGuardarTramit)").show();
+			$("li:has(> a#btnGuardar_taxes_tramit)").show();
+			$("li:has(> a#btnGuardar_formularis_tramit)").show();
+			$("li:has(> a#btnGuardar_documents_tramit)").show();
+
+
+		} else {
+			$("li:has(> a#btnGuardar)").hide();
+			$("li:has(> a#btnGuardar_normatives)").hide();
+			$("li:has(> a#btnGuardar_documents)").hide();
+			$("li:has(> a#btnGuardar_documents_lopd)").hide();
+			$("li:has(> a#btnGuardarTramit)").hide();
+			$("li:has(> a#btnGuardar_taxes_tramit)").hide();
+			$("li:has(> a#btnGuardar_formularis_tramit)").hide();
+			$("li:has(> a#btnGuardar_documents_tramit)").hide();
+
+		}
+	};
+
+	this.actualizarBotonesEliminar = function(permite) {
+
+		var disabled = "false";
+		if (permite == 'S') {
+			$("li:has(> a#btnEliminar)").show();
+			$("li:has(> a.btnEliminar)").show();
+
+
+		} else {
+			$("li:has(> a#btnEliminar)").hide();
+			$("li:has(> a.btnEliminar)").hide();
+		}
+
+	};
 	this.elimina = function() {
 
 		// missatge

@@ -15,6 +15,8 @@ function abrirMensaje(idDato) {
 			console.error("No se ha podido cargar la info del chat");
 		},
 		success: function(data) {
+
+			$('#modalID').val(idDato);
 			$
             .each(
                 data.mensajes,
@@ -76,17 +78,17 @@ function abrirMensaje(idDato) {
 		   }
 
 		  if(gestor==true && leido==true){
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+','+idDato+')" /><p class="chat-mensaje">' + texto + '</p></div>');
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+','+idDato+')" /><p class="chat-usuario">' + chatLeido + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)" /><p class="chat-mensaje">' + texto + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)" /><p class="chat-usuario">' + chatLeido + '</p></div>');
 
 		  }
 		  if(gestor==true && leido==false){
 			  if (tienePermisoPublicar != 'S') {
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+','+idDato+')"  /><p class="chat-mensaje">' + texto + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)"  /><p class="chat-mensaje">' + texto + '</p></div>');
 			  }else{
-				  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+','+idDato+')"  /><p class="chat-mensaje">' + texto + '</p></div>');
+				  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)"  /><p class="chat-mensaje">' + texto + '</p></div>');
 			  }
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-usuario" onClick="marcarComoLeido('+id+','+idDato+')" >' + chatCreado + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-usuario" onClick="marcarComoLeido('+id+',this)" >' + chatCreado + '</p></div>');
 		  }
 
 
@@ -138,7 +140,7 @@ function enviarChat() {
 		console.error("Texto del mensaje a enviar vacío");
 		return;
 	}
-	var id = $('#item_id').val();
+	var id = $('#modalID').val();
 	dataVars = "texto=" + texto +"&idEntidad="+id;
 
 	$.ajax({
@@ -152,7 +154,6 @@ function enviarChat() {
 		success: function(data) {
 			if (data.error != null && data.error != undefined) {
 				Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: data.error, text: "<p>" + txtIntenteho + "</p>"});
-				$("#textChat").val('');
 
 			} else {
 				$("#textChat").val('');

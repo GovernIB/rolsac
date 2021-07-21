@@ -732,6 +732,7 @@
 	<div class="chatmsg" id="chatmsg"></div>
 	<div class="chat-form">
 		<textarea id="textChat" rows="3"></textarea>
+		<input id="modalID" name="modalID" type="hidden" type="hidden" value="">
 		<button onClick="enviarChat()">Enviar</button>
 	</div>
  <hr>
@@ -1140,7 +1141,7 @@ window.onclick = function(event) {
                                 	<div class="fila">
 										<div class="element t90p" style="padding:20px;border-radius: 25px; border: 1px solid #C7DDEB;">
 											<input id="item_pdt_validar" name="item_pdt_validar" type="checkbox" value="on" class="nou">
-											<label for="item_pdt_validar">Pendiente validar</label>
+											<label for="item_pdt_validar"><spring:message code='camp.cerca_pdt_validar' /></label>
 										 </div>
                                 	</div>
                                     <div class="fila">
@@ -1612,7 +1613,7 @@ window.onclick = function(event) {
                             </div>
                              <div class="element right">
                                 <div class="etiqueta">
-                                    <label for="item_accion"><spring:message code='camp.accion'/></label>
+                                    <label id="lbl_item_accion" for="item_accion"><spring:message code='camp.accion'/></label>
                                 </div>
                                 <div class="control">
                                       <select id="item_accion" name="item_accion">
@@ -1652,7 +1653,7 @@ window.onclick = function(event) {
                               <li class="btnGuardar par">
                                   <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
                               </li>
-                              <li class="btnEliminar impar" style="display:none;">
+                              <li id="liBtnEliminar" class="btnEliminar impar" style="display:none;">
                                   <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
                               </li>
                               <li class="btnPrevisualizar par">

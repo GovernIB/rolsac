@@ -3,8 +3,8 @@
 /* llistats table */
 
 
-div.llistat div.nom { 
-    width: 400px;   
+div.llistat div.nom {
+    width: 400px;
     padding-left: 21px;
 }
 div.llistat div.th.servicio{
@@ -17,11 +17,14 @@ div.llistat div.familia{
 div.llistat div.fechaActualizacion{
     width: 200px;
 }
-div.llistat div.publicacio{ 
+div.llistat div.comun  {
+   width: 70px;
+}
+div.llistat div.publicacio{
     width: 200px;
     padding: 0 12px;
 }
-div.llistat div.caducitat  { 
+div.llistat div.caducitat  {
     width: 200px;
     padding: 0 12px;
 }
@@ -67,5 +70,5 @@ div.llistat div.tbody div.servei {
     margin-right: 17px;
 }
 .inputGris {
-	color: #666 !important;	
+	color: #666 !important;
 }

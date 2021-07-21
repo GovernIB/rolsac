@@ -11,6 +11,7 @@ import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Servicio;
+import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TraduccionServicio;
@@ -46,9 +47,10 @@ public class ServicioDelegate implements StatelessDelegate {
 	 * org.ibit.rol.sac.persistence.delegate.ServicioDelegateI#grabarServicio(org.
 	 * ibit.rol.sac.model.Servicio, java.lang.Long)
 	 */
-	public Long grabarServicio(final Servicio servicio, final Long idUA) throws DelegateException {
+	public Long grabarServicio(final Servicio servicio, final Long idUA, final ServicioMensaje servicioMensaje)
+			throws DelegateException {
 		try {
-			return getFacade().grabarServicio(servicio, idUA);
+			return getFacade().grabarServicio(servicio, idUA, servicioMensaje);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}

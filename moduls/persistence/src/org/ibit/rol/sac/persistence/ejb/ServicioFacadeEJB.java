@@ -27,6 +27,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
+import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.model.ServicioRemoto;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
@@ -205,7 +206,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	 * @return Devuelve el identificador del servicio guardado.
 	 * @throws DelegateException
 	 */
-	public Long grabarServicio(final Servicio servicio, final Long idUA) throws DelegateException {
+	public Long grabarServicio(final Servicio servicio, final Long idUA, final ServicioMensaje servicioMensaje)
+			throws DelegateException {
 
 		final Session session = getSession();
 
@@ -261,6 +263,15 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 
 			}
 
+			// Generamos el mensaje procedimiento y revisamos los mensajes pendientes
+			if (servicioMensaje != null) {
+				servicioMensaje.setIdServicio(servicio.getId());
+				session.save(servicioMensaje);
+				session.flush();
+
+				calculamosMensajesPendiente(servicio.getId());
+			}
+
 			Hibernate.initialize(servicio.getMaterias());
 			Hibernate.initialize(servicio.getHechosVitalesServicios());
 
@@ -283,6 +294,34 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			close(session);
 
 		}
+
+	}
+
+	private void calculamosMensajesPendiente(final Long id) throws HibernateException {
+		boolean pdtGestor = false;
+		boolean pdtSupervisor = false;
+
+		final Session session = getSession();
+		final Query query = session
+				.createQuery("from ServicioMensaje sm where sm.idProcedimiento = :id and sm.leido = false");
+		query.setLong("id", id);
+
+		final List<ServicioMensaje> mensas = query.list();
+		if (mensas != null) {
+			for (final ServicioMensaje mensa : mensas) {
+				if (mensa.isGestor()) {
+					pdtSupervisor = true;
+				} else {
+					pdtGestor = true;
+				}
+			}
+		}
+
+		final Servicio servicio = (Servicio) session.load(Servicio.class, id);
+		servicio.setMensajesNoLeidosGestor(pdtGestor);
+		servicio.setMensajesNoLeidosSupervisor(pdtSupervisor);
+		session.save(servicio);
+		session.flush();
 
 	}
 

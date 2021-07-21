@@ -17,6 +17,9 @@ div.llistat div.familia{
 div.llistat div.fechaActualizacion{
     width: 200px;
 }
+div.llistat div.comun  {
+   width: 70px;
+}
 div.llistat div.publicacio{
     width: 200px;
     padding: 0 12px;

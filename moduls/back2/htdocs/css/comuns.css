@@ -2093,3 +2093,9 @@ float: right;
 .ocultar{
 	visibility:hidden;
 }
+
+.imgMensaje {
+	width: 50px;
+	padding-top: 5px;
+	cursor: pointer;
+}

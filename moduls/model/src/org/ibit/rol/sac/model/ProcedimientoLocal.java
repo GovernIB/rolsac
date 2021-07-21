@@ -71,16 +71,15 @@ public class ProcedimientoLocal extends Classificable
 	private String lopdDerechos;
 	private Archivo lopdInfoAdicional;
 
-	/** Mensajes no leidos, no se guarda **/
-	private Integer mensajesNoLeidosGestor;
-	private Integer mensajesNoLeidosSupervisor;
+	/** Mensajes no leidos **/
+	private boolean mensajesNoLeidosGestor = false;
+	private boolean mensajesNoLeidosSupervisor = false;
 
 	// Constructor para búsqueda optimizada
 	public ProcedimientoLocal(final Long id, final String nombreProcedimiento, final Integer validacion,
 			final Date fechaActualizacion, final boolean comun, final String lopdFinalidad,
 			final String lopdDestinatario, final String lopdDerechos, final LopdLegitimacion lopdLegitimacion,
-			final Archivo lopdInfoAdicional, final Integer mensajesNoLeidosGestor,
-			final Integer mensajesNoLeidosSupervisor, final Date fechaCaducidad, final Date fechaPublicacion,
+			final Archivo lopdInfoAdicional, final Date fechaCaducidad, final Date fechaPublicacion,
 			final String nombreFamilia, final String idioma, final UnidadAdministrativa ua) {
 
 		super();
@@ -100,8 +99,6 @@ public class ProcedimientoLocal extends Classificable
 		this.lopdDerechos = lopdDerechos;
 		this.lopdLegitimacion = lopdLegitimacion;
 		this.lopdInfoAdicional = lopdInfoAdicional;
-		this.setMensajesNoLeidosGestor(mensajesNoLeidosGestor);
-		this.setMensajesNoLeidosSupervisor(mensajesNoLeidosSupervisor);
 	}
 
 	// ---------------------------------------------
@@ -684,36 +681,6 @@ public class ProcedimientoLocal extends Classificable
 	}
 
 	/**
-	 * @return the mensajesNoLeidosGestor
-	 */
-	public Integer getMensajesNoLeidosGestor() {
-		return mensajesNoLeidosGestor;
-	}
-
-	/**
-	 * @param mensajesNoLeidosGestor
-	 *            the mensajesNoLeidosGestor to set
-	 */
-	public void setMensajesNoLeidosGestor(final Integer mensajesNoLeidosGestor) {
-		this.mensajesNoLeidosGestor = mensajesNoLeidosGestor;
-	}
-
-	/**
-	 * @return the mensajesNoLeidosSupervisor
-	 */
-	public Integer getMensajesNoLeidosSupervisor() {
-		return mensajesNoLeidosSupervisor;
-	}
-
-	/**
-	 * @param mensajesNoLeidosSupervisor
-	 *            the mensajesNoLeidosSupervisor to set
-	 */
-	public void setMensajesNoLeidosSupervisor(final Integer mensajesNoLeidosSupervisor) {
-		this.mensajesNoLeidosSupervisor = mensajesNoLeidosSupervisor;
-	}
-
-	/**
 	 * Para la cache añadir normativas.
 	 */
 	public void addNormativa(final Normativa normativa) {
@@ -807,6 +774,36 @@ public class ProcedimientoLocal extends Classificable
 			this.addNormativa(norm);
 		}
 
+	}
+
+	/**
+	 * @return the mensajesNoLeidosGestor
+	 */
+	public boolean isMensajesNoLeidosGestor() {
+		return mensajesNoLeidosGestor;
+	}
+
+	/**
+	 * @param mensajesNoLeidosGestor
+	 *            the mensajesNoLeidosGestor to set
+	 */
+	public void setMensajesNoLeidosGestor(final boolean mensajesNoLeidosGestor) {
+		this.mensajesNoLeidosGestor = mensajesNoLeidosGestor;
+	}
+
+	/**
+	 * @return the mensajesNoLeidosSupervisor
+	 */
+	public boolean isMensajesNoLeidosSupervisor() {
+		return mensajesNoLeidosSupervisor;
+	}
+
+	/**
+	 * @param mensajesNoLeidosSupervisor
+	 *            the mensajesNoLeidosSupervisor to set
+	 */
+	public void setMensajesNoLeidosSupervisor(final boolean mensajesNoLeidosSupervisor) {
+		this.mensajesNoLeidosSupervisor = mensajesNoLeidosSupervisor;
 	}
 
 }

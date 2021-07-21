@@ -21,6 +21,8 @@ public class ProcedimientoLocalDTO implements ValueObject {
 	private String fechaActualizacion;
 	private String familia;
 	private Boolean comun;
+	private Boolean mensajes_gestor;
+	private Boolean mensajes_supervisor;
 
 	public ProcedimientoLocalDTO(final long id, final Long idProcedimiento, final String nombre,
 			final String publicacio, final String caducitat, final Boolean caducat, final Integer orden) {
@@ -48,7 +50,8 @@ public class ProcedimientoLocalDTO implements ValueObject {
 	}
 
 	public ProcedimientoLocalDTO(final long id, final String nombre, final Boolean caducat,
-			final String fechaActualizacion, final String familia, final Boolean comun) {
+			final String fechaActualizacion, final String familia, final Boolean comun, final Boolean mensajesGestor,
+			final Boolean mensajesSupervisor) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -56,6 +59,8 @@ public class ProcedimientoLocalDTO implements ValueObject {
 		this.fechaActualizacion = fechaActualizacion;
 		this.familia = familia;
 		this.comun = comun;
+		this.mensajes_gestor = mensajesGestor;
+		this.mensajes_supervisor = mensajesSupervisor;
 	}
 
 	public long getId() {
@@ -159,6 +164,36 @@ public class ProcedimientoLocalDTO implements ValueObject {
 	 */
 	public void setComun(final Boolean comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the mensajes_gestor
+	 */
+	public Boolean getMensajes_gestor() {
+		return mensajes_gestor;
+	}
+
+	/**
+	 * @param mensajes_gestor
+	 *            the mensajes_gestor to set
+	 */
+	public void setMensajes_gestor(final Boolean mensajes_gestor) {
+		this.mensajes_gestor = mensajes_gestor;
+	}
+
+	/**
+	 * @return the mensajes_supervisor
+	 */
+	public Boolean getMensajes_supervisor() {
+		return mensajes_supervisor;
+	}
+
+	/**
+	 * @param mensajes_supervisor
+	 *            the mensajes_supervisor to set
+	 */
+	public void setMensajes_supervisor(final Boolean mensajes_supervisor) {
+		this.mensajes_supervisor = mensajes_supervisor;
 	}
 
 }

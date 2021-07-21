@@ -876,7 +876,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			final ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(pl.getId(),
 					HtmlUtils.html2text(pl.getNombreProcedimiento()), pl.isVisible(),
-					DateUtils.formatDate(pl.getFechaActualizacion()), pl.getNombreFamilia(), pl.isComun());
+					DateUtils.formatDate(pl.getFechaActualizacion()), pl.getNombreFamilia(), pl.isComun(),
+					pl.isMensajesNoLeidosGestor(), pl.isMensajesNoLeidosSupervisor());
 
 			llistaProcedimientoLocalDTO.add(procLocalDTO);
 
@@ -929,6 +930,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null ? "" : (proc.getIndicador()));
 			resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
+			resultats.put("item_mensajes_gestor", proc.isMensajesNoLeidosGestor() ? "S" : "N");
+			resultats.put("item_mensajes_supervisor", proc.isMensajesNoLeidosSupervisor() ? "S" : "N");
 
 			resultats.put("item_comun", (proc.isComun() ? true : false));
 			if (proc.getLopdLegitimacion() != null) {
@@ -1030,6 +1033,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				acciones.add(new IdNomDTO(null, ""));
 				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
 						messageSource.getMessage("accion.publicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
+						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
+						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
 
 			} else if (proc.getValidacion() == Validacion.RESERVA.intValue()) {
 				// No tiene acciones
@@ -1037,6 +1044,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				// No tiene acciones
 			}
 			resultats.put("acciones", acciones);
+			resultats.put("item_pdt_validar", proc.isPendienteValidar());
+
+			// PermiteGuardar
+			// No se permitirá guardar sólo si es gestor y se cumple: <br />
+			// <ul>
+			// <li>Estado de reserva </li>
+			// <li>Estado interno y con el check pendiente validar </li></ul>
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			if (gestor && (proc.getValidacion() == Validacion.RESERVA.intValue()
+					|| (proc.isPendienteValidar() && proc.getValidacion() == Validacion.INTERNA.intValue()))) {
+				resultats.put("permiteGuardar", "N");
+			} else {
+				resultats.put("permiteGuardar", "S");
+			}
+
+			// PermitirEliminar
+			// No se permitirá eliminar al gestor
+			if (gestor) { // && proc.getValidacion() == Validacion.RESERVA.intValue()) {
+				resultats.put("permiteEliminar", "N");
+			} else {
+				resultats.put("permiteEliminar", "S");
+			}
 
 			// Indica los flags de permisos
 			prepararFlags(resultats);
@@ -1624,23 +1653,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				return result = new IdNomDTO(-3l, error);
 			}
 
-			ProcedimientoMensaje procedimientoMensaje = null;
-			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
-				final String iaccion = request.getParameter("item_accion").toString();
-				if (iaccion != null && !iaccion.isEmpty()) {
-					final Long accion = Long.parseLong(iaccion);
-					procedimientoMensaje = new ProcedimientoMensaje();
-					final String literal = RolsacPropertiesUtil.getPropiedadEstado(accion,
-							request.getLocale().getLanguage().contains("ca"));
-					procedimientoMensaje.setTexto(literal);
-					procedimientoMensaje.setFechaCreacion(new Date());
-					final String permisos = getPermisosUsuario(request);
-					procedimientoMensaje
-							.setGestor(!Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO));
-					procedimientoMensaje.setLeido(false);
-					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
-				}
-			}
+			final String permisos = getPermisosUsuario(request);
 
 			final ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procediment = new ProcedimientoLocal();
@@ -1660,6 +1673,71 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (edicion && (request.getParameter("materies") == null || request.getParameter("materies").equals(""))) {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
+			}
+
+			/***
+			 * Cuando eres gestor, se crea mensaje si:
+			 * <ul>
+			 * <li>El Procedimiento / Servicio está en estado interno: i. Se indica en el
+			 * desplegable de acciones una acción diferente de guardar y se pulsa el botón
+			 * guardar</li>
+			 * <li>b. El Procedimiento / Servicio está en estado publico i. Se pulsa el
+			 * botón guardar (independientemente de la acción seleccionada)</li>
+			 * </ul>
+			 *
+			 * Cuando eres supervisor si:
+			 * <ul>
+			 * <li>Si pasa de pendiente_validacion de true a false.</li>
+			 * </ul>
+			 */
+			ProcedimientoMensaje procedimientoMensaje = null;
+			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
+
+				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
+						&& procedimentOld.isPendienteValidar()) {
+
+					procedimientoMensaje = new ProcedimientoMensaje();
+					final String literal = RolsacPropertiesUtil
+							.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
+					procedimientoMensaje.setTexto(literal);
+					procedimientoMensaje.setFechaCreacion(new Date());
+					procedimientoMensaje.setGestor(false);
+					procedimientoMensaje.setLeido(false);
+					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+
+				}
+
+			} else {
+				// Opcion 1. Interno y hay una accion
+				if (procedimentOld != null && procedimentOld.getValidacion().compareTo(Validacion.INTERNA) == 0
+						&& request.getParameter("item_accion") != null
+						&& !request.getParameter("item_accion").isEmpty()) {
+					final String iaccion = request.getParameter("item_accion").toString();
+					if (iaccion != null && !iaccion.isEmpty()) {
+
+						final Long accion = Long.parseLong(iaccion);
+						procedimientoMensaje = new ProcedimientoMensaje();
+						final String literal = RolsacPropertiesUtil.getLiteralFlujoAccion(accion,
+								request.getLocale().getLanguage().contains("ca"));
+						procedimientoMensaje.setTexto(literal);
+						procedimientoMensaje.setFechaCreacion(new Date());
+						procedimientoMensaje.setGestor(true);
+						procedimientoMensaje.setLeido(false);
+						procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					} else if (procedimentOld != null && procedimentOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
+
+						final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
+						procedimientoMensaje = new ProcedimientoMensaje();
+						final String literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
+								request.getLocale().getLanguage().contains("ca"));
+						procedimientoMensaje.setTexto(literal);
+						procedimientoMensaje.setFechaCreacion(new Date());
+						procedimientoMensaje.setGestor(true);
+						procedimientoMensaje.setLeido(false);
+						procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					}
+
+				}
 			}
 
 			procediment = guardarVersion(request, procediment, procedimentOld, error); // Versión
@@ -1685,6 +1763,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setSignatura(request.getParameter("item_codigo_pro")); // Signatura
 			procediment = guardarSilencio(request, procediment, error); // Silencio
 			procediment = guardarLopd(request, procediment, error); // Servei Responsable
+			procediment = guardarPdtValidacion(request, procediment, error);
 
 			// #351 cambio info por dir electronica
 			// procediment.setInfo(request.getParameter("item_notes")); // Info
@@ -1695,6 +1774,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setVentanillaUnica(
 					"on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0"); // Ventanilla
 																										// Única
+
 			if (request.getParameter("item_comun") == null) {
 				procediment.setComun(false);
 			} else {
@@ -1706,7 +1786,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				}
 			}
 
-			final String permisos = getPermisosUsuario(request);
 			if (procediment.isComun() && !Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES)) {
 				error = messageSource.getMessage("error.permisos.proc.comun", null, request.getLocale());
 				return new IdNomDTO(-1l, error);
@@ -2013,6 +2092,30 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		return procediment;
+	}
+
+	/**
+	 * Si el usuario es gestor o supervisor: - Si es gestor, si ha realizado algun
+	 * acción, pasa pendiente_validar a true - Si es supervisor, si ha des/checkeado
+	 * el "item_pdt_validar", se coge el valor
+	 *
+	 * @param request
+	 * @param procediment
+	 * @param error
+	 * @return
+	 */
+	private ProcedimientoLocal guardarPdtValidacion(final HttpServletRequest request,
+			final ProcedimientoLocal procediment, final String error) {
+		final String permisos = getPermisosUsuario(request);
+		if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
+			procediment.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
+		} else {
+			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
+				procediment.setPendienteValidar(true);
+			}
+		}
+		return procediment;
+
 	}
 
 	private ProcedimientoLocal guardarSilencio(final HttpServletRequest request, final ProcedimientoLocal procediment,
