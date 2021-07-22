@@ -1348,7 +1348,7 @@ function CDetall() {
 
 		//Acciones
 		$("#item_accion").empty();
-		if (dada_node.acciones != null && dada_node.acciones != undefined) {
+		if (dada_node.acciones != null && dada_node.acciones != undefined && dada_node.acciones.length > 0) {
 			var i = 0;
 			for (var i = 0 ; i < dada_node.acciones.length ; i++) {
 				var o = new Option(dada_node.acciones[i].nom, dada_node.acciones.id);
@@ -1370,16 +1370,30 @@ function CDetall() {
 		}
 
 		if ('N' == tienePermisoPublicar) {
-			$("#item_accion").show();
-			$("#lbl_item_accion").show();
+			//$("#item_accion").show();
+			//$("#lbl_item_accion").show();
 			$("#item_pdt_validar").prop( "disabled", true );
-			$("#item_estat").prop( "disabled", true );
+			$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
+			if (dada_node.item_estat == 1) {
+				$("#item_estat option[value=1]").show();
+				$("#item_estat option[value=2]").hide();
+				$("#item_estat option[value=3]").hide();
+			}
+
+			if (dada_node.item_estat == 2) {
+				$("#item_estat option[value=1]").hide();
+				$("#item_estat option[value=2]").show();
+				$("#item_estat option[value=3]").hide();
+			}
+			if (dada_node.item_estat == 3) {
+				$("#item_estat option[value=1]").hide();
+				$("#item_estat option[value=2]").hide();
+				$("#item_estat option[value=3]").show();
+			}
 		} else {
-			$("#item_accion").hide();
-			$("#lbl_item_accion").hide();
-		 // if ('N' != tienePermisoPublicar) {
+			//$("#item_accion").hide();
+			//$("#lbl_item_accion").hide();
 			$("#item_pdt_validar").prop( "disabled", false );
-			$("#item_estat").prop( "disabled", false );
 		}
 
 		this.modificado(false);
