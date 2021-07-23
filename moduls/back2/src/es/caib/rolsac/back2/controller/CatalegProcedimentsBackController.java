@@ -1022,6 +1022,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// acciones
 			if (proc.getValidacion() == Validacion.PUBLICA.intValue()) {
 
+				acciones.add(new IdNomDTO(null, ""));
 				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
 						messageSource.getMessage("accion.republicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
@@ -1724,7 +1725,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						procedimientoMensaje.setGestor(true);
 						procedimientoMensaje.setLeido(false);
 						procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
-					} else if (procedimentOld != null && procedimentOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
+					} else if (procedimentOld != null
+							&& procedimentOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
 
 						final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
 						procedimientoMensaje = new ProcedimientoMensaje();

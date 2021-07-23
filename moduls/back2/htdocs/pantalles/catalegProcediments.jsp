@@ -1047,7 +1047,7 @@ window.onclick = function(event) {
                                 <div class="control">
                                     <select id="cerca_estado" name="telematico" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                        <option value="1"><spring:message code='txt.validacio.publica'/></option>
                                         <option value="2"><spring:message code='txt.validacio.interna'/></option>
                                         <option value="3"><spring:message code='txt.validacio.reserva'/></option>
                                     </select>

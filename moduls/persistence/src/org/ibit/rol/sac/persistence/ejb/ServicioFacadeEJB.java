@@ -996,13 +996,31 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			}
 
 			if (bc.getPdtValidar() != null) {
-				where.append(" and procedimiento.pdtValidar = :pdtValidar ");
+				where.append(" and servicio.pendienteValidar = :pdtValidar ");
 			}
 			if (bc.getMensajePorLeer() != null) {
-				where.append(" and procedimiento.mensajePorLeer = :pdtValidar ");
+
+				// Las opciones en catalegProcedimientos:
+				// <option value="0"><spring:message code='txt.mensajesPdtSin'/></option>
+				// <option value="1"><spring:message code='txt.mensajesPdt'/></option>
+				// <option value="2"><spring:message code='txt.mensajesPdtSupervisor'/></option>
+				// <option value="3"><spring:message code='txt.mensajesPdtGestor'/></option>
+				if (bc.getMensajePorLeer() == 0) {
+					where.append(
+							" and servicio.id  not in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0) ");
+				} else if (bc.getMensajePorLeer() == 1) {
+					where.append(
+							" and servicio.id in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0) ");
+				} else if (bc.getMensajePorLeer() == 2) {
+					where.append(
+							" and servicio.id  in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0 and servMensa.gestor = 0) ");
+				} else if (bc.getMensajePorLeer() == 3) {
+					where.append(
+							" and servicio.id  in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0 and servMensa.gestor = 1) ");
+				}
 			}
 			if (bc.getEstado() != null) {
-				where.append(" and procedimiento.estado = :estado ");
+				where.append(" and servicio.validacion = :estado ");
 			}
 
 			if (bc.getIdMateria() != null) {
@@ -1135,6 +1153,13 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 				} else {
 					query.setParameter("estadoSIA", bc.getServicio().getEstadoSIA());
 				}
+			}
+
+			if (bc.getPdtValidar() != null) {
+				query.setParameter("pdtValidar", bc.getPdtValidar());
+			}
+			if (bc.getEstado() != null) {
+				query.setParameter("estado", bc.getEstado());
 			}
 
 			resultadoBusqueda.setTotalResultados(query.list().size());

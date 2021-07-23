@@ -976,6 +976,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			// acciones
 			if (serv.getValidacion() == Validacion.PUBLICA.intValue()) {
 
+				acciones.add(new IdNomDTO(null, ""));
 				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
 						messageSource.getMessage("accion.republicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,

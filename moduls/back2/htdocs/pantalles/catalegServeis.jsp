@@ -564,8 +564,10 @@
                                 <div class="control">
                                     <select id="cerca_mensajePorLeer" name="telematico" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0"><spring:message code='txt.no'/></option>
-                                        <option value="1"><spring:message code='txt.si'/></option>
+                                        <option value="0"><spring:message code='txt.mensajesPdtSin'/></option>
+                                        <option value="1"><spring:message code='txt.mensajesPdt'/></option>
+                                        <option value="2"><spring:message code='txt.mensajesPdtSupervisor'/></option>
+                                        <option value="3"><spring:message code='txt.mensajesPdtGestor'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -577,8 +579,9 @@
                                 <div class="control">
                                     <select id="cerca_estado" name="telematico" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0"><spring:message code='txt.no'/></option>
-                                        <option value="1"><spring:message code='txt.si'/></option>
+                                        <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                        <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                        <option value="3"><spring:message code='txt.validacio.reserva'/></option>
                                     </select>
                                 </div>
                             </div>

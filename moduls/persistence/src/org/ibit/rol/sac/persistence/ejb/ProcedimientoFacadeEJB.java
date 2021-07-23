@@ -1393,16 +1393,16 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				// <option value="3"><spring:message code='txt.mensajesPdtGestor'/></option>
 				if (bc.getMensajePorLeer() == 0) {
 					where.append(
-							" and procedimiento.id  not in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0) ");
+							" and procedimiento.id  not in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0) ");
 				} else if (bc.getMensajePorLeer() == 1) {
 					where.append(
-							" and procedimiento.id in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0) ");
+							" and procedimiento.id in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0) ");
 				} else if (bc.getMensajePorLeer() == 2) {
 					where.append(
-							" and procedimiento.id  in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 0) ");
+							" and procedimiento.id  in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 0) ");
 				} else if (bc.getMensajePorLeer() == 3) {
 					where.append(
-							" and procedimiento.id  in ( select procMensa.id from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 1) ");
+							" and procedimiento.id  in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 1) ");
 				}
 			}
 			if (bc.getEstado() != null) {
