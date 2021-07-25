@@ -93,10 +93,10 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	 * reordenarDocumentos(java.lang.Long, java.util.List)
 	 */
 	@Override
-	public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos)
-			throws DelegateException {
+	public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos,
+			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException {
 		try {
-			getFacade().reordenarDocumentos(idProcedimiento, idDocumentos);
+			getFacade().reordenarDocumentos(idProcedimiento, idDocumentos, procedimientoMensaje);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}

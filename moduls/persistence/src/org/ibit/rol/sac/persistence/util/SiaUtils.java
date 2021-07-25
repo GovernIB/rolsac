@@ -632,7 +632,11 @@ public class SiaUtils {
 			tieneNombre = true;
 		} else {
 
-			tieneMaterias = servicio.getMaterias().size() > 0;
+			if (servicio.getMaterias() == null) {
+				tieneMaterias = false;
+			} else {
+				tieneMaterias = servicio.getMaterias().size() > 0;
+			}
 			if (!tieneMaterias && activo) { // Solo mirar si está activo
 				mensajeError.append("No té matèries.");
 			}
