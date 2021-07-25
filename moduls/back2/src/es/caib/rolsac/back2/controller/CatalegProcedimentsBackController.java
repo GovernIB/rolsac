@@ -1979,7 +1979,25 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (elementos == null) {
 				elementos = new Long[0];
 			}
-			DelegateUtil.getFichaDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
+
+			final ProcedimientoLocal procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimiento(id);
+			ProcedimientoMensaje procedimientoMensaje = null;
+
+			final String permisos = getPermisosUsuario(request);
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			if (procedimiento != null && procedimiento.getValidacion().compareTo(Validacion.PUBLICA) == 0 && gestor) {
+				procedimientoMensaje = new ProcedimientoMensaje();
+				procedimientoMensaje.setFechaCreacion(new Date());
+				procedimientoMensaje.setGestor(gestor);
+				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
+				procedimientoMensaje.setLeido(false);
+				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+
+				procedimiento.setPendienteValidar(true);
+			}
+
+			DelegateUtil.getFichaDelegate().reordenarDocumentos(id, Arrays.asList(elementos), procedimientoMensaje,
+					null);
 			result = new IdNomDTO(id,
 					messageSource.getMessage("fitxes.guardat.documents.correcte", null, request.getLocale()));
 			/*
@@ -2835,17 +2853,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (elementos == null) {
 				elementos = new Long[0];
 			}
-			/*
-			 * procedimiento =
-			 * DelegateUtil.getProcedimientoDelegate().obtenerProcedimientoNewBack(id);
-			 *
-			 * List<Documento> documentos =
-			 * GuardadoAjaxUtil.actualizarYOrdenarDocumentosRelacionados(elementos,
-			 * procedimiento, null); procedimiento.setDocumentos(documentos);
-			 *
-			 * guardarGrabar(procedimiento);
-			 */
-			DelegateUtil.getProcedimientoDelegate().reordenarDocumentos(id, Arrays.asList(elementos));
+
+			final ProcedimientoLocal procedimiento = DelegateUtil.getProcedimientoDelegate().obtenerProcedimiento(id);
+			ProcedimientoMensaje procedimientoMensaje = null;
+
+			final String permisos = getPermisosUsuario(request);
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			if (procedimiento != null && procedimiento.getValidacion().compareTo(Validacion.PUBLICA) == 0 && gestor) {
+				procedimientoMensaje = new ProcedimientoMensaje();
+				procedimientoMensaje.setFechaCreacion(new Date());
+				procedimientoMensaje.setGestor(gestor);
+				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
+				procedimientoMensaje.setLeido(false);
+				procedimientoMensaje
+						.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
+				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+				procedimiento.setPendienteValidar(true);
+			}
+
+			DelegateUtil.getProcedimientoDelegate().reordenarDocumentos(id, Arrays.asList(elementos),
+					procedimientoMensaje);
 			result = new IdNomDTO(id,
 					messageSource.getMessage("proc.guardat.documents.correcte", null, request.getLocale()));
 
@@ -2989,7 +3016,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			}
 
-			guardarGrabar(procedimiento, null);
+			ProcedimientoMensaje procedimientoMensaje = null;
+
+			final String permisos = getPermisosUsuario(request);
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			if (procedimiento != null && procedimiento.getValidacion().compareTo(Validacion.PUBLICA) == 0 && gestor) {
+				procedimientoMensaje = new ProcedimientoMensaje();
+				procedimientoMensaje.setFechaCreacion(new Date());
+				procedimientoMensaje.setGestor(gestor);
+				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
+				procedimientoMensaje.setLeido(false);
+				procedimientoMensaje
+						.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
+				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+
+				procedimiento.setPendienteValidar(true);
+			}
+
+			guardarGrabar(procedimiento, procedimientoMensaje);
 
 			result = new IdNomDTO(procedimiento.getId(),
 					messageSource.getMessage("proc.guardat.fetsVitals.correcte", null, request.getLocale()));
@@ -3055,7 +3099,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			}
 			procedimiento.setMaterias(materias);
-			guardarGrabar(procedimiento, null);
+
+			ProcedimientoMensaje procedimientoMensaje = null;
+			final String permisos = getPermisosUsuario(request);
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			if (procedimiento != null && procedimiento.getValidacion().compareTo(Validacion.PUBLICA) == 0 && gestor) {
+				procedimientoMensaje = new ProcedimientoMensaje();
+				procedimientoMensaje.setFechaCreacion(new Date());
+				procedimientoMensaje.setGestor(gestor);
+				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
+				procedimientoMensaje.setLeido(false);
+				procedimientoMensaje
+						.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
+				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+
+				procedimiento.setPendienteValidar(true);
+			}
+
+			guardarGrabar(procedimiento, procedimientoMensaje);
 			result = new IdNomDTO(procedimiento.getId(),
 					messageSource.getMessage("proc.guardat.materies.correcte", null, request.getLocale()));
 
@@ -3120,7 +3181,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				}
 
-				guardarGrabar(procedimiento, null);
+				ProcedimientoMensaje procedimientoMensaje = null;
+				final String permisos = getPermisosUsuario(request);
+				final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+				if (procedimiento != null && procedimiento.getValidacion().compareTo(Validacion.PUBLICA) == 0
+						&& gestor) {
+					procedimientoMensaje = new ProcedimientoMensaje();
+					procedimientoMensaje.setFechaCreacion(new Date());
+					procedimientoMensaje.setGestor(gestor);
+					procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
+					procedimientoMensaje.setLeido(false);
+					procedimientoMensaje
+							.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
+					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+
+					procedimiento.setPendienteValidar(true);
+				}
+
+				guardarGrabar(procedimiento, procedimientoMensaje);
 
 				result = new IdNomDTO(procedimiento.getId(),
 						messageSource.getMessage("proc.guardat.normatives.correcte", null, request.getLocale()));

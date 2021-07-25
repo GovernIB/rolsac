@@ -9,6 +9,8 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.ProcedimientoMensaje;
+import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -87,7 +89,8 @@ public interface FichaDelegateI {
 
 	public abstract Ficha obtenerFichaParaSolr(Long id, Session iSession) throws DelegateException;
 
-	public abstract void reordenarDocumentos(final Long idFicha, List<Long> idDocumentos) throws DelegateException;
+	public abstract void reordenarDocumentos(final Long idFicha, List<Long> idDocumentos,
+			ProcedimientoMensaje procedimientoMensaje, final ServicioMensaje servicioMensaje) throws DelegateException;
 
 	public abstract ResultadoBusqueda consultaFichas(FiltroGenerico filtro) throws DelegateException;
 

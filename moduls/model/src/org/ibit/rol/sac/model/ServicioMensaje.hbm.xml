@@ -18,13 +18,12 @@
 
         <property name="usuario" length="100" column="SMN_USUARIO"/>
         <property name="usuarioLectura" length="100" column="SMN_USULEC"/>
-        <property name="texto" length="256" column="SMN_TEXTO"/>
+        <property name="texto" length="256" column="PMN_TEXTO" />
         <property name="fechaCreacion" column="SMN_FECCRE"/>
         <property name="fechaLectura" column="SMN_FECLEC"/>
         <property name="gestor" column="SMN_GESTOR"/>
         <property name="leido" column="SMN_LEIDO"/>
         <property name="idServicio" column="SMN_SERCODI"/>
-
 
     </class>
 

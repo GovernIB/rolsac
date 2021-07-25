@@ -3047,7 +3047,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.permission unchecked="true"
 	 */
 	@Override
-	public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos) {
+	public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos,
+			final ProcedimientoMensaje procedimientoMensaje) {
 		final Session session = getSession(); // session.beginTransaction()
 		try {
 			// Paso 1. Obtenemos el procedimiento.
@@ -3114,6 +3115,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			procedimiento = obtenerProcedimientoParaSolr(idProcedimiento, session);
 			procedimiento.setFechaActualizacion(new Date());
 			session.update(procedimiento);
+
+			// Paso 6.5 Si procedimientoMensaje relleno, lo guardamos
+			if (procedimientoMensaje != null) {
+				session.save(procedimientoMensaje);
+			}
 
 			// Paso 7. Llamamos al actualizador.
 			Actualizador.actualizar(procedimiento);

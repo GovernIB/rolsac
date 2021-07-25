@@ -506,11 +506,11 @@ function CLlistat() {
 					if (dada_node.mensajes_supervisor == true) {
 						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_GS.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					} else {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_G.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_S.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					}
 				} else {
 					if (dada_node.mensajes_supervisor == true) {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_S.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_G.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					} else {
 						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					}
@@ -869,6 +869,12 @@ function CDetall() {
 		jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").change(function(){
 			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
 		});
+
+		//#486 Pendiente validar
+		jQuery("#item_pdt_validar,#item_pdt_validar_es,#item_pdt_validar_en,#item_pdt_validar_de,#item_pdt_validar_fr").change(function(){
+			jQuery("#item_pdt_validar,#item_pdt_validar_es,#item_pdt_validar_en,#item_pdt_validar_de,#item_pdt_validar_fr").val( jQuery(this).val() );
+		});
+
 
 		jQuery("#item_estado_sia,#item_estado_sia_es,#item_estado_sia_en,#item_estado_sia_de,#item_estado_sia_fr").change(function(){
 			jQuery("#item_estado_sia,#item_estado_sia_es,#item_estado_sia_en,#item_estado_sia_de,#item_estado_sia_fr").val( jQuery(this).val() );

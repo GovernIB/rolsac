@@ -44,7 +44,13 @@ function abrirMensaje(idDato) {
 		  var horaCreado = ((dataCreado.getHours() < 10 ? '0' : '') + dataCreado.getHours());
 		  var minutosCreado = ((dataCreado.getMinutes() < 10 ? '0' : '') + dataCreado.getMinutes());
 		  var fechaCreado =  dataCreado.getDate() + '/' + (dataCreado.getMonth() +1 ) + '/' + dataCreado.getFullYear() +' ' + horaCreado+ ':' + minutosCreado;
-		  var chatCreado = txtCreado +" ("+creado+"):"+fechaCreado;
+		  var chatCreadoPersona = "";
+		  if(gestor) {
+			  chatCreadoPersona = " - Gestor "
+		  } else {
+			  chatCreadoPersona = " - Supervisor "
+		  }
+		  var chatCreado = txtCreado +" ("+creado+chatCreadoPersona+"):"+fechaCreado;
 		  var  dataLeido =  new Date(data.mensajes[i].fechaLectura);
 
 		  if ( dataLeido != null ) {

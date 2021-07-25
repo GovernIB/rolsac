@@ -14,6 +14,8 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.ProcedimientoMensaje;
+import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -49,9 +51,11 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	}
 
 	@Override
-	public void reordenarDocumentos(final Long idFicha, final List<Long> idDocumentos) throws DelegateException {
+	public void reordenarDocumentos(final Long idFicha, final List<Long> idDocumentos,
+			final ProcedimientoMensaje procedimientoMensaje, final ServicioMensaje servicioMensaje)
+			throws DelegateException {
 		try {
-			getFacade().reordenarDocumentos(idFicha, idDocumentos);
+			getFacade().reordenarDocumentos(idFicha, idDocumentos, procedimientoMensaje, servicioMensaje);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}

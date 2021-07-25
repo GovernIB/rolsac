@@ -1137,15 +1137,17 @@ window.onclick = function(event) {
                             </ul>
 
                             <div id="modul_continguts_idiomas" class="idiomes">
+                            	<div class="fila">
+									<div class="element t90p" style="padding:20px;border-radius: 25px; border: 1px solid #C7DDEB;">
+										<input id="item_pdt_validar" name="item_pdt_validar" type="checkbox" value="on" class="nou">
+										<label for="item_pdt_validar"><spring:message code='camp.cerca_pdt_validar' /></label>
+									 </div>
+                               	</div>
+
 								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
                                 <!-- Camps per cada idioma -->
                                 <div class="idioma <c:out value="${lang}" />">
-                                	<div class="fila">
-										<div class="element t90p" style="padding:20px;border-radius: 25px; border: 1px solid #C7DDEB;">
-											<input id="item_pdt_validar" name="item_pdt_validar" type="checkbox" value="on" class="nou">
-											<label for="item_pdt_validar"><spring:message code='camp.cerca_pdt_validar' /></label>
-										 </div>
-                                	</div>
+
                                     <div class="fila">
                                         <div class="element t45p">
                                             <div class="etiqueta">

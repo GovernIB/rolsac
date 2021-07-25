@@ -9,6 +9,8 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.ProcedimientoMensaje;
+import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -192,8 +194,10 @@ public class FichaDelegate implements FichaDelegateI {
 	}
 
 	@Override
-	public void reordenarDocumentos(final Long idFicha, final List<Long> idDocumentos) throws DelegateException {
-		impl.reordenarDocumentos(idFicha, idDocumentos);
+	public void reordenarDocumentos(final Long idFicha, final List<Long> idDocumentos,
+			final ProcedimientoMensaje procedimientoMensaje, final ServicioMensaje servicioMensaje)
+			throws DelegateException {
+		impl.reordenarDocumentos(idFicha, idDocumentos, procedimientoMensaje, servicioMensaje);
 	}
 
 	@Override

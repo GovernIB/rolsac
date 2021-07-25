@@ -140,9 +140,9 @@ public class ProcedimientoDelegate {
 		impl.actualizarOrdenTramites(tramitesId);
 	}
 
-	public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos)
-			throws DelegateException {
-		impl.reordenarDocumentos(idProcedimiento, idDocumentos);
+	public void reordenarDocumentos(final Long idProcedimiento, final List<Long> idDocumentos,
+			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException {
+		impl.reordenarDocumentos(idProcedimiento, idDocumentos, procedimientoMensaje);
 	}
 
 	public int buscarProcedimientosActivos(final List<Long> listaUnidadAdministrativaId, final Date fechaCaducidad)

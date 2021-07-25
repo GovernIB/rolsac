@@ -34,10 +34,12 @@ import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HistoricoFicha;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Remoto;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Servicio;
+import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
 import org.ibit.rol.sac.model.SolrPendienteResultado;
 import org.ibit.rol.sac.model.TraduccionFicha;
@@ -2384,7 +2386,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public void reordenarDocumentos(final Long idFicha, final List<Long> idDocumentos) {
+	public void reordenarDocumentos(final Long idFicha, final List<Long> idDocumentos,
+			final ProcedimientoMensaje procedimientoMensaje, final ServicioMensaje servicioMensaje) {
 		final Session session = getSession(); // session.beginTransaction()
 		try {
 			// Paso 1. Obtenemos el ficha.
@@ -2445,13 +2448,21 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			ficha.setFechaActualizacion(new Date());
 			// session.update(ficha);
 
-			// Paso 7. Llamamos al actualizador.
+			// Paso 7. Mensajes los guardamos si están rellenos.
+			if (procedimientoMensaje != null) {
+				session.save(procedimientoMensaje);
+			}
+			if (servicioMensaje != null) {
+				session.save(servicioMensaje);
+			}
+
+			// Paso 8. Llamamos al actualizador.
 			Actualizador.actualizar(ficha);
 
-			// Paso 8. Actualizamos en solr.
+			// Paso 9. Actualizamos en solr.
 			IndexacionUtil.marcarIndexacionPendiente(EnumCategoria.ROLSAC_FICHA, idFicha, false);
 
-			// Paso 9. Flush.
+			// Paso 10. Flush.
 			session.flush();
 
 		} catch (final Exception he) {
