@@ -144,6 +144,9 @@
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
 	var txtLopdInfoObligatorioTitulo = "<spring:message code='proc.dades.lopd.informacionAdicionalObligatoriaTitulo'/>";
 	var txtLopdInfoObligatorio = "<spring:message code='proc.dades.lopd.informacionAdicionalObligatoria'/>";
+	var txtMarcarComoLeido= "<spring:message code='serv.mensajes.marcarLeido'/>";
+	var txtLeido= "<spring:message code='serv.mensajes.leido'/>";
+	var txtCreado = "<spring:message code='serv.mensajes.creado'/>";
 
     var txtFet = "<spring:message code='txt.fet_vital'/>";
     var txtFets = "<spring:message code='txt.fets_vitals'/>";
@@ -719,12 +722,11 @@
 <div id="myModalChat" class="chatbox">
 	<div class="chatcabecera">
 		<div>
-			<p class="cabezerah2" align="center">Mensajes sobre el
-				procedimiento</p>
+			<p class="cabezerah2" align="center"><spring:message code='proc.mensajes'/></p>
 		</div>
 		<div class="usuariomod">
-			<label class="cabezerah2">Supervisor</label><label
-				class="cabezerah2 derecha">Gestor </label>
+			<label class="cabezerah2">Gestor</label><label
+				class="cabezerah2 derecha">Supervisor </label>
 		</div>
 		 <hr>
 

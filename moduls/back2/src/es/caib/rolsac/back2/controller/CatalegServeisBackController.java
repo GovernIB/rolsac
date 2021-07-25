@@ -861,6 +861,56 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 	}
 
+	@RequestMapping(value = "/mensajeLeido.do")
+	public @ResponseBody Map<String, Object> marcarMensajeLeido(final Long id, final HttpServletRequest request)
+			throws DelegateException {
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+		if (id == null) {
+			resultats.put("error", "No se ha podido marcar como leido");
+		} else {
+			final String username = request.getRemoteUser();
+			DelegateUtil.getMensajeDelegate().marcarMensajeLeidoServ(id, username);
+		}
+		return resultats;
+	}
+
+	@RequestMapping(value = "/enviarMensaje.do")
+	public @ResponseBody Map<String, Object> enviarMensaje(final String texto, final Long idEntidad,
+			final HttpServletRequest request) throws DelegateException {
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+		if (texto == null || texto.isEmpty() || idEntidad == null) {
+			resultats.put("error", "No se ha podido marcar como leido");
+		} else {
+
+			final String permisos = getPermisosUsuario(request);
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			String username = request.getRemoteUser();
+			if (StringUtils.isEmpty(username)) {
+				username = (String) request.getSession().getAttribute("username");
+			}
+			DelegateUtil.getMensajeDelegate().enviarMensajeServ(texto, idEntidad, username, gestor);
+		}
+		return resultats;
+	}
+
+	@RequestMapping(value = "/obtenerMensajes.do")
+	public @ResponseBody Map<String, Object> obtenerMensajes(final Long id, final HttpServletRequest request) {
+
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+
+			final List<ServicioMensaje> mensajes = DelegateUtil.getMensajeDelegate().getMensajesServicio(id);
+			resultats.put("mensajes", mensajes);
+
+		} catch (final Exception dEx) {
+			log.error(ExceptionUtils.getStackTrace(dEx));
+		}
+
+		return resultats;
+
+	}
+
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(final Long id, final HttpSession session,
 			final HttpServletRequest request) {
@@ -976,16 +1026,15 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			// acciones
 			if (serv.getValidacion() == Validacion.PUBLICA.intValue()) {
 
-				acciones.add(new IdNomDTO(null, ""));
-				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
-						messageSource.getMessage("accion.republicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
+						messageSource.getMessage("accion.publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
 						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
 
 			} else if (serv.getValidacion() == Validacion.INTERNA.intValue()) {
-				acciones.add(new IdNomDTO(null, ""));
+				acciones.add(new IdNomDTO(null, messageSource.getMessage("accion.guardar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
 						messageSource.getMessage("accion.publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,

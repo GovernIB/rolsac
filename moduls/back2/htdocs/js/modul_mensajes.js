@@ -44,51 +44,42 @@ function abrirMensaje(idDato) {
 		  var horaCreado = ((dataCreado.getHours() < 10 ? '0' : '') + dataCreado.getHours());
 		  var minutosCreado = ((dataCreado.getMinutes() < 10 ? '0' : '') + dataCreado.getMinutes());
 		  var fechaCreado =  dataCreado.getDate() + '/' + (dataCreado.getMonth() +1 ) + '/' + dataCreado.getFullYear() +' ' + horaCreado+ ':' + minutosCreado;
-		  var chatCreado = "Creado ("+creado+"):"+fechaCreado;
+		  var chatCreado = txtCreado +" ("+creado+"):"+fechaCreado;
 		  var  dataLeido =  new Date(data.mensajes[i].fechaLectura);
-		  if(dataLeido!=null){
-		  var horaLeido = ((dataLeido.getHours() < 10 ? '0' : '') + dataLeido.getHours());
-		  var minutosLeido = ((dataLeido.getMinutes() < 10 ? '0' : '') + dataLeido.getMinutes());
-		  var fechaLeido=  dataLeido.getDate() + '/' + (dataLeido.getMonth() +1 ) + '/' + dataLeido.getFullYear() +' ' + horaLeido+ ':' + minutosLeido;
-		  var chatLeido = chatCreado + "<br/>Leido ("+leidomsg+"):"+fechaLeido;
+
+		  if ( dataLeido != null ) {
+			  var horaLeido = ((dataLeido.getHours() < 10 ? '0' : '') + dataLeido.getHours());
+			  var minutosLeido = ((dataLeido.getMinutes() < 10 ? '0' : '') + dataLeido.getMinutes());
+			  var fechaLeido=  dataLeido.getDate() + '/' + (dataLeido.getMonth() +1 ) + '/' + dataLeido.getFullYear() +' ' + horaLeido+ ':' + minutosLeido;
+			  var chatLeido = chatCreado + "<br/>"+txtLeido+" ("+leidomsg+"):"+fechaLeido;
 		  }
 
-
-//		  if(tipo=="true"){
-//		    tipo="INFORMADOR";
-//		  }
-//		  if(tipo=="false"){
-//		    tipo="SISTEMA";
-//		  }
-
-
-
 		  if(gestor==false && leido==true){
-			  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-mensaje">' + texto + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-mensaje chat-mensaje-supervisor">' + texto + '</p></div>');
 			  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-usuario">' + chatLeido + '</p></div>');
 		  }
 
 		  if(gestor==false && leido==false){
 			  if (tienePermisoPublicar != 'S') {
-			  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-mensaje">' + texto + '</p></div>');
+				  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)" /><p class="chat-mensaje chat-mensaje-supervisor">' + texto + '</p></div>');
 			  }else{
-				  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-mensaje">' + texto + '</p></div>');
+				  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-mensaje chat-mensaje-supervisor">' + texto + '</p></div>');
 			  }
 			  $('#chatmsg').append('<div class ="chat supervisor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-usuario">' + chatCreado + '</p></div>');
-		   }
+		  }
 
 		  if(gestor==true && leido==true){
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)" /><p class="chat-mensaje">' + texto + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)" /><p class="chat-mensaje chat-mensaje-gestor">' + texto + '</p></div>');
 			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)" /><p class="chat-usuario">' + chatLeido + '</p></div>');
-
 		  }
+
 		  if(gestor==true && leido==false){
 			  if (tienePermisoPublicar != 'S') {
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)"  /><p class="chat-mensaje">' + texto + '</p></div>');
-			  }else{
-				  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido" value="Marcar como leido" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)"  /><p class="chat-mensaje">' + texto + '</p></div>');
+				  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="'+txtMarcarComoLeido+'" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)"  /><p class="chat-mensaje chat-mensaje-gestor">' + texto + '</p></div>');
+			  } else {
+				  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido" value="'+txtMarcarComoLeido+'" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)"  /><p class="chat-mensaje chat-mensaje-gestor">' + texto + '</p></div>');
 			  }
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="Marcar como leido" id="marcar" name="marcar"  /><p class="chat-usuario" onClick="marcarComoLeido('+id+',this)" >' + chatCreado + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="'+txtMarcarComoLeido+'" id="marcar" name="marcar"  /><p class="chat-usuario" onClick="marcarComoLeido('+id+',this)" >' + chatCreado + '</p></div>');
 		  }
 
 

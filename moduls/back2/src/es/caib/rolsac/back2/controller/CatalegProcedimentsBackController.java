@@ -1022,16 +1022,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// acciones
 			if (proc.getValidacion() == Validacion.PUBLICA.intValue()) {
 
-				acciones.add(new IdNomDTO(null, ""));
-				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
-						messageSource.getMessage("accion.republicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
+						messageSource.getMessage("accion.publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
 						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
 
 			} else if (proc.getValidacion() == Validacion.INTERNA.intValue()) {
-				acciones.add(new IdNomDTO(null, ""));
+				acciones.add(new IdNomDTO(null, messageSource.getMessage("accion.guardar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
 						messageSource.getMessage("accion.publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
@@ -1230,8 +1229,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (id == null) {
 			resultats.put("error", "No se ha podido marcar como leido");
 		} else {
-			final String usuario = "";
-			DelegateUtil.getMensajeDelegate().marcarMensajeLeidoProc(id, usuario);
+			final String username = request.getRemoteUser();
+			DelegateUtil.getMensajeDelegate().marcarMensajeLeidoProc(id, username);
 		}
 		return resultats;
 	}

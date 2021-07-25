@@ -1955,9 +1955,14 @@ input[type=text]:disabled{
     width: 70%;
     padding: 15px 15px 22px 15px;
     margin: 5px 10px 0;
-    background-color: #ECF6FC;
     color: black;
     font-size: 14px;
+}
+.chat .chat-mensaje-supervisor {
+	background-color: #dff2b5;
+}
+.chat .chat-mensaje-gestor {
+	background-color: #ECF6FC;
 }
 .chat .chat-usuario {
     width: 70%;
@@ -1983,7 +1988,7 @@ input[type=text]:disabled{
 	 margin-left: 300px;
 }
 .supervisor .chat-mensaje {
-   background-color: #ECF6FC;
+   background-color: #dff2b5;
 }
 
 .gestor .chat-mensaje {
@@ -1993,7 +1998,7 @@ input[type=text]:disabled{
 }
 
 .supervisor .chat-usuario {
-    background-color: #ECF6FC;
+    background-color: #dff2b5;
 }
 
 .gestor .chat-usuario {

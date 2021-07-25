@@ -816,7 +816,7 @@
 	</target>
 
 	<!-- Deploya la librería en maven. -->
-	<target name="mavenDeployROLSAC"   >
+	<target name="mavenDeployROLSAC" if="isMavenDeploy" >
 		<echo>Copiamos sac-api-client y pom.xml</echo>
 		<unjar src="output/moduls/sac-api-client.jar" dest="target/classes/">
 		  <patternset>
@@ -832,7 +832,7 @@
 		<artifact:mvn  pom="pom.xml" mavenHome="${mvn.installation.path}" fork="true" >
 			<arg value="deploy" />
 			<arg value="-Dmaven.javadoc.skip=true" />
-			<arg value="-X" />		
+			<arg value="-X" />
 			<jvmarg value="-Dhttps.protocols=TLSv1.2"></jvmarg>
 		</artifact:mvn>
 	</target>

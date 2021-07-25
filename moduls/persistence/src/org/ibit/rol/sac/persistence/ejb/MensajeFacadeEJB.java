@@ -194,7 +194,7 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 
 			hql.append(" select mensaje from ProcedimientoMensaje mensaje");
 			hql.append(" where mensaje.idProcedimiento = " + idProcedimiento);
-			hql.append(" order by mensaje.fechaCreacion asc");
+			hql.append(" order by mensaje.fechaCreacion desc");
 			return session.createQuery(hql.toString()).list();
 
 		} catch (final Exception he) {
@@ -220,7 +220,7 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 
 			hql.append(" select mensaje from ServicioMensaje mensaje");
 			hql.append(" where mensaje.idServicio = " + idServicio);
-			hql.append(" order by mensaje.fechaCreacion asc");
+			hql.append(" order by mensaje.fechaCreacion desc");
 			return session.createQuery(hql.toString()).list();
 
 		} catch (final Exception he) {

@@ -944,8 +944,8 @@ function CDetall() {
 		// Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo servicio:
 		// (1 = Pública, 3 = Reserva).
 		$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
-		$("#item_estat option[value=1]").hide();
-		$("#item_estat option[value=2]").show();
+		$("#item_estat option[value=1]").show();
+		$("#item_estat option[value=2]").hide();
 		$("#item_estat option[value=3]").hide();
 
 		ModulMateries.nuevo();
@@ -1406,7 +1406,6 @@ function CDetall() {
 	};
 
 	this.actualizarBotonesGuardar = function(permite) {
-		var disabled = "false";
 		if (permite == 'S') {
 			$("li:has(> a#btnGuardar)").show();
 			$("li:has(> a#btnGuardar_normatives)").show();
@@ -1416,6 +1415,9 @@ function CDetall() {
 			$("li:has(> a#btnGuardar_taxes_tramit)").show();
 			$("li:has(> a#btnGuardar_formularis_tramit)").show();
 			$("li:has(> a#btnGuardar_documents_tramit)").show();
+			$("#btnFinalizar_materias").show();
+			$(".btnEliminar").show();
+			$("#formTramits .btnEliminar").show();
 
 		} else {
 			$("li:has(> a#btnGuardar)").hide();
@@ -1426,7 +1428,8 @@ function CDetall() {
 			$("li:has(> a#btnGuardar_taxes_tramit)").hide();
 			$("li:has(> a#btnGuardar_formularis_tramit)").hide();
 			$("li:has(> a#btnGuardar_documents_tramit)").hide();
-
+			$("#btnFinalizar_materias").hide();
+			$("#formTramits .btnEliminar").hide();
 
 		}
 	};
