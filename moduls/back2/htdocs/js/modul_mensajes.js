@@ -121,7 +121,7 @@ function marcarComoLeido(idDato, boton) {
 			if (data.error != null && data.error != undefined) {
 				Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: data.error, text: "<p>" + txtIntenteho + "</p>"});
 			} else {
-				boton.style.display="none";
+				boton.style.visibility = "hidden"; //.style.display="none";
 			}
 		} // Fin success
 	}); //Fin ajax
