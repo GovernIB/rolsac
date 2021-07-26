@@ -948,9 +948,10 @@ function CDetall() {
 		// Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo servicio:
 		// (1 = Pública, 3 = Reserva).
 		$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
-		$("#item_estat option[value=1]").show();
-		$("#item_estat option[value=2]").hide();
+		$("#item_estat option[value=1]").hide();
+		$("#item_estat option[value=2]").show();
 		$("#item_estat option[value=3]").hide();
+		$("#item_estat option[value=2]").prop('selected', true)
 
 		ModulMateries.nuevo();
 		ModulFetsVitals.nuevo();

@@ -862,9 +862,7 @@ function CDetall() {
 		jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").change(function(){
 			jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val( jQuery(this).val() );
 		});
-		jQuery("#item_pdt_validar,#item_pdt_validar_es,#item_pdt_validar_en").change(function(){
-			jQuery("#item_pdt_validar,#item_pdt_validar_es,#item_pdt_validar_en").val( jQuery(this).val() );
-		});
+
 		//#366 se añade SIA
 		jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").change(function(){
 			jQuery("#item_codigo_sia,#item_codigo_sia_es,#item_codigo_sia_en,#item_codigo_sia_de,#item_codigo_sia_fr").val( jQuery(this).val() );
@@ -963,9 +961,10 @@ function CDetall() {
 		// Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo procedimiento:
 		// (1 = Pública, 3 = Reserva).
 		$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
-		$("#item_estat option[value=1]").show();
-		$("#item_estat option[value=2]").hide();
+		$("#item_estat option[value=1]").hide();
+		$("#item_estat option[value=2]").show();
 		$("#item_estat option[value=3]").hide();
+		$("#item_estat option[value=2]").prop('selected', true)
 
 		ModulMateries.nuevo();
 		ModulFetsVitals.nuevo();

@@ -27,6 +27,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals_serveis.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_mensajes.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/buscador_servicios.js'/>"></script>
 
 <script type="text/javascript">

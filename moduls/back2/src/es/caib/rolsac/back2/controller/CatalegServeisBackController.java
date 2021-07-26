@@ -215,7 +215,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		}
 
 		// Tiene permiso supervisor (permiso publicar)
-		model.put("permisoPublicar", Usuario.tienePermiso(permisos, Usuario.PERMISO_GESTION_COMUNES) ? "S" : "N");
+		model.put("permisoPublicar", Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO) ? "S" : "N");
 
 		return "index";
 

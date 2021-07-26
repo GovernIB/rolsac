@@ -167,6 +167,7 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			mensaje.setUsuario(usuario);
 
 			session.save(mensaje);
+			session.flush();
 
 		} catch (final Exception he) {
 			throw new EJBException(he);

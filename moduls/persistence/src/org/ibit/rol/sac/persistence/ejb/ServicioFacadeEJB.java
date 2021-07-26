@@ -269,7 +269,6 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 				session.save(servicioMensaje);
 				session.flush();
 
-				calculamosMensajesPendiente(servicio.getId());
 			}
 
 			Hibernate.initialize(servicio.getMaterias());
@@ -294,34 +293,6 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			close(session);
 
 		}
-
-	}
-
-	private void calculamosMensajesPendiente(final Long id) throws HibernateException {
-		boolean pdtGestor = false;
-		boolean pdtSupervisor = false;
-
-		final Session session = getSession();
-		final Query query = session
-				.createQuery("from ServicioMensaje sm where sm.idProcedimiento = :id and sm.leido = false");
-		query.setLong("id", id);
-
-		final List<ServicioMensaje> mensas = query.list();
-		if (mensas != null) {
-			for (final ServicioMensaje mensa : mensas) {
-				if (mensa.isGestor()) {
-					pdtSupervisor = true;
-				} else {
-					pdtGestor = true;
-				}
-			}
-		}
-
-		final Servicio servicio = (Servicio) session.load(Servicio.class, id);
-		servicio.setMensajesNoLeidosGestor(pdtGestor);
-		servicio.setMensajesNoLeidosSupervisor(pdtSupervisor);
-		session.save(servicio);
-		session.flush();
 
 	}
 

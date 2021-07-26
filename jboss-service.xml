@@ -153,9 +153,9 @@ es.caib.rolsac.subscripcions
 		-->
 	   	es.caib.rolsac.A04003003.correo.normativas=simplificacio@caib.es
 
-		<!--  Acciones de proc/servs  -->
-		es.caib.rolsac.procServ.accion.publicar.es=Se solicita la publicación del contenido
-		es.caib.rolsac.procServ.accion.publicar.ca=Se sol·licita la publicació del contingut
+<!--  Acciones de proc/servs  -->
+		es.caib.rolsac.procServ.accion.publicar.es=Se solicita la publicacion del contenido
+		es.caib.rolsac.procServ.accion.publicar.ca=Se sol·licita la publicacio del contingut
 		es.caib.rolsac.procServ.accion.republicar.es=Se solicita la republicar el contenido
 		es.caib.rolsac.procServ.accion.republicar.ca=Se sol·licita la republicar el contingut
 		es.caib.rolsac.procServ.accion.eliminar.es=Se solicita eliminar el contenido
@@ -168,8 +168,8 @@ es.caib.rolsac.subscripcions
 		es.caib.rolsac.procServ.estado.publico.ca=S'ha actualitzat la dada ja publicada
 
 		<!--  Supervisor revisado de proc/servs  -->
-		es.caib.rolsac.procServ.revisado.es=Se ha revisado la información
-		es.caib.rolsac.procServ.revisado.ca=S'ha revisat l'informació
+		es.caib.rolsac.procServ.revisado.es=Se ha revisado la informacion
+		es.caib.rolsac.procServ.revisado.ca=S'ha revisat l'informacio
 
 
     </attribute>
