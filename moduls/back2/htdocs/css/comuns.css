@@ -1893,7 +1893,7 @@ input[type=text]:disabled{
     width: 500px;
     display: none;
     left:30%;
-    top:25%;
+    top:10%;
     position: fixed;
     min-width: 390px;
     height: 580px;

@@ -1423,6 +1423,7 @@ function CDetall() {
 			$("#btnFinalizar_materias").show();
 			$(".btnEliminar").show();
 			$("#formTramits .btnEliminar").show();
+			$(".documents .elimina").show();
 
 		} else {
 			$("li:has(> a#btnGuardar)").hide();
@@ -1435,6 +1436,7 @@ function CDetall() {
 			$("li:has(> a#btnGuardar_documents_tramit)").hide();
 			$("#btnFinalizar_materias").hide();
 			$("#formTramits .btnEliminar").hide();
+			$(".documents .elimina").hide();
 
 		}
 	};
@@ -1492,10 +1494,10 @@ function CDetall() {
 		hechosVitalesAsignados = dades.fetsVitals;
 
 		ModulMateries.inicializarMaterias(dades.materies);
-		ModulDocuments.inicializarDocuments(dades.documents);
+		ModulDocuments.inicializarDocuments(dades.documents, dades.permiteGuardar);
 		ModulFetsVitals.inicializarHechosVitales(hechosVitalesAsignados);
 		ModulNormativa.inicializarNormativas(dades.normatives);
-		ModulDocumentsLopd.inicializarDocuments(dades.lopd);
+		ModulDocumentsLopd.inicializarDocuments(dades.lopd, dades.permiteGuardar);
 	};
 
 	this.ocultarModulos = function(selector) {

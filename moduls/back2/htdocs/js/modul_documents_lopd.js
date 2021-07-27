@@ -458,11 +458,15 @@ function CModulDocumentsLopd() {
 
 	};
 
-	this.inicializarDocuments = function(listaDocuments) {
+	this.inicializarDocuments = function(listaDocuments, permiteGuardar) {
 
 		if (typeof listaDocuments != 'undefined' && listaDocuments != null) {
             modul_documents_elm_lopd.find(".listaOrdenable").empty();
-			EscriptoriPareLopd.agregaItems(listaDocuments, true);
+            var mostrarBtnEliminar = true;
+            if (permiteGuardar != null && permiteGuardar != undefined && permiteGuardar == 'N') {
+            	mostrarBtnEliminar = false;
+            }
+			EscriptoriPareLopd.agregaItems(listaDocuments, mostrarBtnEliminar);
         }
 
         // Editar el documento al hacer click sobre el.

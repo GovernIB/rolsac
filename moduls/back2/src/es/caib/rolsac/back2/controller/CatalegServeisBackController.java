@@ -1117,6 +1117,14 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			resultats.put("lopd",
 					CargaModulosLateralesUtil.recuperaLopdServicio(serv.getTraducciones(), id, idiomas, true));
 
+			final String permisos = getPermisosUsuario(request);
+			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
+			if (gestor && (serv.getValidacion() == Validacion.RESERVA.intValue()
+					|| (serv.isPendienteValidar() && serv.getValidacion() == Validacion.INTERNA.intValue()))) {
+				resultats.put("permiteGuardar", "N");
+			} else {
+				resultats.put("permiteGuardar", "S");
+			}
 		} catch (final DelegateException dEx) {
 
 			log.error(ExceptionUtils.getStackTrace(dEx));
