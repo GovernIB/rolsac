@@ -2073,6 +2073,16 @@ input[type=text]:disabled{
 float: right;
 }
 
+.chat-cerrar-abs {
+	margin-top: 10px;
+    float: right;
+    top: -2px;
+    right: 2px;
+    position: absolute;
+    cursor: pointer;
+
+}
+
 .chat-cerrar button {
 /*  background: #E57700; */
  padding: 5px 15px;

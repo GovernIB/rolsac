@@ -1018,7 +1018,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("boto_sia_no_activo", "N");
 			}
 
-			final List<IdNomDTO> acciones = new ArrayList<IdNomDTO>();
+			List<IdNomDTO> acciones = new ArrayList<IdNomDTO>();
 			// acciones
 			if (proc.getValidacion() == Validacion.PUBLICA.intValue()) {
 
@@ -1043,7 +1043,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} else if (proc.getValidacion() == Validacion.BAJA.intValue()) {
 				// No tiene acciones
 			}
-			resultats.put("acciones", acciones);
 			resultats.put("item_pdt_validar", proc.isPendienteValidar());
 
 			// PermiteGuardar
@@ -1055,9 +1054,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (gestor && (proc.getValidacion() == Validacion.RESERVA.intValue()
 					|| (proc.isPendienteValidar() && proc.getValidacion() == Validacion.INTERNA.intValue()))) {
 				resultats.put("permiteGuardar", "N");
+				acciones = new ArrayList<IdNomDTO>(); // Si no puede guardar, que no se vean las acciones.
 			} else {
 				resultats.put("permiteGuardar", "S");
 			}
+			resultats.put("acciones", acciones);
 
 			// PermitirEliminar
 			// No se permitirá eliminar al gestor
@@ -2138,6 +2139,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
 		} else {
 			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
+				procediment.setPendienteValidar(true);
+			} else if (procediment != null && procediment.getValidacion() == Validacion.PUBLICA) {
+				// Si es gestor y está en estado publica, pasar automáticamente a pendiente
+				// validar.
 				procediment.setPendienteValidar(true);
 			}
 		}

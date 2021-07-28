@@ -1022,7 +1022,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			}
 			resultats.put("item_parametros", serv.getParametros());
 
-			final List<IdNomDTO> acciones = new ArrayList<IdNomDTO>();
+			List<IdNomDTO> acciones = new ArrayList<IdNomDTO>();
 			// acciones
 			if (serv.getValidacion() == Validacion.PUBLICA.intValue()) {
 
@@ -1047,7 +1047,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			} else if (serv.getValidacion() == Validacion.BAJA.intValue()) {
 				// No tiene acciones
 			}
-			resultats.put("acciones", acciones);
 			resultats.put("item_pdt_validar", serv.isPendienteValidar());
 
 			// PermiteGuardar
@@ -1056,9 +1055,12 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			if (gestor && (serv.getValidacion() == Validacion.RESERVA.intValue()
 					|| (serv.isPendienteValidar() && serv.getValidacion() == Validacion.INTERNA.intValue()))) {
 				resultats.put("permiteGuardar", "N");
+				acciones = new ArrayList<IdNomDTO>(); // Si no puede guardar, que no se vean las acciones.
+
 			} else {
 				resultats.put("permiteGuardar", "S");
 			}
+			resultats.put("acciones", acciones);
 
 			// PermitirEliminar
 			// No se permitirá eliminar al gestor
@@ -1745,6 +1747,10 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
 		} else {
 			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
+				servicio.setPendienteValidar(true);
+			} else if (servicio != null && servicio.getValidacion() == Validacion.PUBLICA) {
+				// Si es gestor y está en estado publica, pasar automáticamente a pendiente
+				// validar.
 				servicio.setPendienteValidar(true);
 			}
 		}

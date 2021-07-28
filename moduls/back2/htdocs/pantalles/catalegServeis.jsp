@@ -127,6 +127,10 @@
 	var txtMarcarComoLeido= "<spring:message code='proc.mensajes.marcarLeido'/>";
 	var txtLeido= "<spring:message code='proc.mensajes.leido'/>";
 	var txtCreado = "<spring:message code='proc.mensajes.creado'/>";
+	var txtMensajeSin = "<spring:message code='proc.mensajes.sinMensajes'/>";
+	var txtMensajeG = "<spring:message code='proc.mensajes.mensajesG'/>";
+	var txtMensajeS = "<spring:message code='proc.mensajes.mensajesS'/>";
+	var txtMensajeGS = "<spring:message code='proc.mensajes.mensajesGS'/>";
 
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
@@ -442,6 +446,9 @@
 		<div class="usuariomod">
 			<label class="cabezerah2">Gestor</label><label
 				class="cabezerah2 derecha">Supervisor </label>
+		</div>
+		<div class="chat-cerrar-abs">
+				<input type="image" src="../img/botons/eliminar.gif" onclick="ocultarModal();" style="height: 20px;background:none;border:none;margin-right: 10px;" />
 		</div>
 		 <hr>
 
@@ -788,6 +795,12 @@ window.onclick = function(event) {
 											<label for="item_pdt_validar"><spring:message code='camp.cerca_pdt_validar' /></label>
 										 </div>
                                 </div>
+                                <div class="fila" id="filaNoEditable">
+										<div class="element t90p"  style="margin-bottom:20px;margin-top: 20px;">
+											<label style="color:red"><spring:message code='serv.error.noeditable' /></label>
+										</div>
+                                </div>
+
 
 								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
                                 <!-- Camps per cada idioma -->

@@ -467,15 +467,15 @@ function CLlistat() {
 
 				if (dada_node.mensajes_gestor == true) {
 					if (dada_node.mensajes_supervisor == true) {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_GS.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_GS.png' title='"+txtMensajeGS+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					} else {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_S.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_S.png' title='"+txtMensajeS+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					}
 				} else {
 					if (dada_node.mensajes_supervisor == true) {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_G.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_G.png' title='"+txtMensajeG+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					} else {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' title='"+txtMensajeSin+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					}
 				}
 
@@ -602,7 +602,12 @@ function CDetall() {
 		if ($("#item_estat").val() == 1 && jQuery("#item_lopd_activo").is(":checked")) {
 			paginaCheck = pagCheckPublico;
 		} else {
-			paginaCheck = pagNormativaVigentes;
+			//Si es interna y selecciona la accion de publicar, comportarse como si es publico
+			if ($("#item_estat").val() == 2 && $("#item_accion").val() == 1 ) {
+				paginaCheck = pagCheckPublico;
+			} else {
+				paginaCheck = pagNormativaVigentes;
+			}
 		}
 
 		// ajax
@@ -1063,6 +1068,7 @@ function CDetall() {
 		$("#item_accion").hide();
 		$("#lbl_item_accion").hide();
 		$("#item_pdt_validar").prop( "disabled", true );
+		$("#filaNoEditable").hide();
 
 		this.actualizaEventos();
 
@@ -1408,6 +1414,13 @@ function CDetall() {
 		this.actualizarBotonesGuardar(dada_node.permiteGuardar);
 		//noPermiteEliminar
 		this.actualizarBotonesEliminar(dada_node.permiteEliminar);
+
+		if (dada_node.permiteGuardar == 'N' && dada_node.item_estat == 2) {
+			$("#filaNoEditable").show();
+			//Mostrar solo el mensaje cuando no puede guardar y el estado es interna (valor 2)
+		} else {
+			$("#filaNoEditable").hide();
+		}
 	};
 
 	this.actualizarBotonesGuardar = function(permite) {
@@ -1425,6 +1438,7 @@ function CDetall() {
 			$("#formTramits .btnEliminar").show();
 			$(".documents .elimina").show();
 
+
 		} else {
 			$("li:has(> a#btnGuardar)").hide();
 			$("li:has(> a#btnGuardar_normatives)").hide();
@@ -1437,6 +1451,7 @@ function CDetall() {
 			$("#btnFinalizar_materias").hide();
 			$("#formTramits .btnEliminar").hide();
 			$(".documents .elimina").hide();
+
 
 		}
 	};

@@ -85,7 +85,7 @@ function abrirMensaje(idDato) {
 			  } else {
 				  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido" value="'+txtMarcarComoLeido+'" id="marcar" name="marcar" onClick="marcarComoLeido('+id+',this)"  /><p class="chat-mensaje chat-mensaje-gestor">' + texto + '</p></div>');
 			  }
-			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="'+txtMarcarComoLeido+'" id="marcar" name="marcar"  /><p class="chat-usuario" onClick="marcarComoLeido('+id+',this)" >' + chatCreado + '</p></div>');
+			  $('#chatmsg').append('<div class ="chat gestor"><input type="button" class ="chat-leido ocultar" value="'+txtMarcarComoLeido+'" id="marcar" name="marcar"  /><p class="chat-usuario" >' + chatCreado + '</p></div>');
 		  }
 
 
