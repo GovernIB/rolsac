@@ -1185,8 +1185,6 @@ create table RSC_SERVIC (
    SER_PARAMS varchar2(255),
    SER_CLOPD number(1,0),
    SER_PDTVAL number(1,0),
-   SER_MENGES number(1,0),
-   SER_MENSUP number(1,0),
    SER_INSTRU number(19,0),
    SER_SERRSP number(19,0),
    SER_CODPLT number(19,0),
