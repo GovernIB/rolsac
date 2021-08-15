@@ -1870,6 +1870,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (!getAccesoManager().tieneAccesoProcedimiento(id))
 				throw new SecurityException("No tiene acceso al procedimiento");
 
+			// Borramos los mensajes que puedan tener
+			session.delete("from ProcedimientoMensaje as procMen where procMen.idProcedimiento = ?", id,
+					Hibernate.LONG);
+
 			final ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
 			idSia = procedimiento.getCodigoSIA();
 			procedimiento.getNormativas().clear();

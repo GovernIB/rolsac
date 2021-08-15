@@ -1240,6 +1240,9 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			if (!getAccesoManager().tieneAccesoServicio(id))
 				throw new SecurityException("No tiene acceso al servicio");
 
+			// Borramos los mensajes que puedan tener
+			session.delete("from ServicioMensaje as srvMen where srvMen.idServicio = ?", id, Hibernate.LONG);
+
 			final Servicio servicio = obtenerServicioParaSolr(id, session);
 
 			idSia = servicio.getCodigoSIA();
