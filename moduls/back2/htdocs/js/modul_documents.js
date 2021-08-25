@@ -1,5 +1,7 @@
 // MODUL DOCUMENTS
 
+var editDoc=true;
+
 jQuery(document).ready(function() {
 	// elements
 	escriptori_documents_elm = jQuery("#escriptori_documents");
@@ -237,6 +239,14 @@ function CModulDocuments() {
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
 
+		 // Validamos el servicio
+		if(!validarServeis()){
+	   		 return false;
+	   	   }
+		 // Validamos el procedimiento
+		if(!validarProcediment()){
+	   		 return false;
+	   	   }
         // Validamos el formulario
         if (!that.formulariValid()) {
             return false;
@@ -431,6 +441,7 @@ function CModulDocuments() {
 		modul_documents_elm.find('div.documents').each(function() {
 
 		            $(this).unbind("click").bind("click", function() {
+		            	if(editDoc){
 
 		                var docId = $(this).find("input.documents_id").val();
 		                Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
@@ -458,14 +469,18 @@ function CModulDocuments() {
 		                        }
 		                    }
 		                });
-
+		            	 }else{
+		            		 editDoc=true;
+		            	 }
 		            });
+
 
 		        });
 	};
 	this.activarEventoBotonBorrar = function () {
 		modul_documents_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {
 
+			if(validarServeis() && validarProcediment()){
 			var itemLista = jQuery(this).parents("li:first");
 			EscriptoriPare.eliminaItem(itemLista);
 			that.contaSeleccionats();
@@ -475,6 +490,9 @@ function CModulDocuments() {
 			if (that.existeBotonGuardar()) {
 				Detall.modificado(true);
 				that.habilitarBotonGuardar();
+			}
+			}else{
+				editDoc=false;
 			}
 
 		});

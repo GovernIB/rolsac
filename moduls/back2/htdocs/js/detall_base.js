@@ -140,6 +140,8 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 
 	};
 
+
+
 	this.guardaGenerico = function(dataVars, funcion) {
 
 		DebugJS.debug("Entrando en DetallBase.guardaGenerico");
@@ -473,7 +475,7 @@ function DetallBase(soloFicha, reglasFormulario, identificadores) {
 				// Actualizamos los campos multi-idioma independientes.
 				escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();
 				escriptori_detall_elm.find(".element.multilang ." + a_clicat_class).show();
-				
+
 				//Se añade solución multiidioma global independiente
 				// debe contenter esta clase .elementoMultiidiomaIndividual
 				$(".elementoMultiidiomaIndividual .campoIdioma").hide();

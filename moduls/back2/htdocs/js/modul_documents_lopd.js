@@ -1,3 +1,4 @@
+var editDoc=true;
 
 jQuery(document).ready(function() {
 	// elements
@@ -273,6 +274,15 @@ function CModulDocumentsLopd() {
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
 
+		 // Validamos el servicio
+		if(!validarServeis()){
+	   		 return false;
+	   	   }
+
+		// Validamos el procedimiento
+		if(!validarProcediment()){
+   		 return false;
+   	   }
         // Validamos el formulario
         if (!that.formulariValid()) {
             return false;
@@ -492,7 +502,7 @@ function CModulDocumentsLopd() {
 		modul_documents_elm_lopd.find('div.documents').each(function() {
 
 		            $(this).unbind("click").bind("click", function() {
-
+		            	if(editDoc){
 		                //var docId = $(this).find("input.documents_id").val();
 		            	//Como solo hay uno , se carga a partir del id de proc
 		                var procId = $("#item_id").val();
@@ -520,15 +530,18 @@ function CModulDocumentsLopd() {
 		                            Error.llansar();
 		                        }
 		                    }
-		                });
 
+		                });
+		            	}else{
+		            		 editDoc=true;
+		            	 }
 		            });
 
 		        });
 	};
 	this.activarEventoBotonBorrar = function () {
 		modul_documents_elm_lopd.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {
-
+			if(validarServeis() && validarProcediment()){
 			var itemLista = jQuery(this).parents("li:first");
 			EscriptoriPareLopd.eliminaItem(itemLista);
 			that.contaSeleccionats();
@@ -538,6 +551,9 @@ function CModulDocumentsLopd() {
 			if (that.existeBotonGuardar()) {
 				Detall.modificado(true);
 				that.habilitarBotonGuardar();
+			}
+			}else{
+				editDoc=false;
 			}
 
 		});

@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 
+<script type="text/javascript" src="<c:url value='/js/validar_serveis.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/autoresize.jquery.min.js'/>"></script>
@@ -208,6 +209,31 @@
     var txtSI 			= "<spring:message code='txt.si'/>";
 	var txtNO 			= "<spring:message code='txt.no'/>";
 	var txtComun 		= "<spring:message code='camp.tipo.comun'/>";
+
+	//camps
+	var servIncomplet="<spring:message code= 'serv.formulari.error'/>";
+	var servCanal="<spring:message code= 'tramit.formulari.canal.obligatori'/>";
+	var servCanalTele="<spring:message code= 'proc.formulari.error.telematic.sensedades'/>";
+	var servNom= "<spring:message code= 'proc.formulari.error.nom.obligatori'/>";
+	var servObjecte= "<spring:message code= 'serv.formulari.error.objecte.obligatori'/>";
+	var servOrganRespon= "<spring:message code= 'personal.formulari.organ.responsable.obligatori'/>";
+	var servRespon= "<spring:message code= 'serv.formulari.error.responsable.obligatori'/>";
+	var servResponItem= "<spring:message code= 'serv.formulari.error.servei.responsable.obligatori'/>";
+	var servDest="<spring:message code= 'serv.formulari.error.destinataris.obligatori'/>";
+	var servPublObj="<spring:message code= 'serv.error.falta.public'/>";
+	var servPublFecha="<spring:message code= 'serv.formulari.error.fechapublicacion.obligatori'/>";
+    //LOPD
+	var servLopdFin= "<spring:message code= 'proc.formulari.error.lopdfinalidad.obligatori'/>";
+	var servLopdLegiObligatori="<spring:message code= 'proc.formulari.error.lopdlegitimacion.obligatori'/>";
+	var servLopdDes="<spring:message code= 'proc.formulari.error.lopddestintario.obligatori'/>";
+	var servLopdDret="<spring:message code= 'proc.formulari.error.lopdderechos.obligatori'/>";
+	//camps obligatoris
+
+
+
+
+
+
 
 
 </script>
@@ -458,6 +484,7 @@
 		<textarea id="textChat" rows="3"></textarea>
 		<input id="modalID" name="modalID" type="hidden" type="hidden" value="">
 		<button onClick="enviarChat()">Enviar</button>
+		<checkbox id="enviarEmailChat" />
 	</div>
  <hr>
 	<div class="chat-cerrar">

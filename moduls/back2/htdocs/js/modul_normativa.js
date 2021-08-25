@@ -1,6 +1,6 @@
 //MODUL NORMATIVES
 
-$(document).ready(function() {	
+$(document).ready(function() {
 
 	// elements
 	escriptori_normatives_elm = jQuery("#escriptori_normatives");
@@ -18,22 +18,26 @@ $(document).ready(function() {
 	}
 
 	// Evento para el botón de volver al detalle
-	jQuery("#btnVolver_normatives").bind("click", function() { EscriptoriNormativa.torna(); });	
-	jQuery("#btnGuardar_normatives").bind("click", function() { 
-		if (this.parentNode.className.indexOf("off") == -1) {
-			EscriptoriNormativa.finalizar();	
+	jQuery("#btnVolver_normatives").bind("click", function() { EscriptoriNormativa.torna(); });
+	jQuery("#btnGuardar_normatives").bind("click", function() {
+
+
+
+		if (this.parentNode.className.indexOf("off") == -1 && validarProcediment() && validarServeis()) {
+			EscriptoriNormativa.finalizar();
 		}
 	});
-	
+
 });
 
+
 function CModulNormativa() {
-	
+
 	// Activa mensajes de debug.
 	var debug = false;
-	
+
 	this.extend = ListaOrdenable;
-	this.extend();		
+	this.extend();
 
 	var that = this;
 
@@ -41,10 +45,10 @@ function CModulNormativa() {
 	var $moduloModificado = modul_normatives_elm.find('input[name="modulo_normativas_modificado"]');
 
 	this.iniciar = function() {
-		
+
 		jQuery("#cerca_normativa_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		jQuery("#cerca_normativa_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
-		
+
 		normatives_llistat_elm = escriptori_normatives_elm.find("div.escriptori_items_llistat:first");
 		normatives_cercador_elm = escriptori_normatives_elm.find("div.escriptori_items_cercador:first");
 		normatives_seleccionades_elm = escriptori_normatives_elm.find("div.escriptori_items_seleccionats:first");
@@ -56,10 +60,10 @@ function CModulNormativa() {
 		ordreCamp_normativa_elm = normatives_llistat_elm.find("input.ordreCamp:first");
 
 		escriptori_normatives_elm.find("div.botonera").each(function() {
-			botonera_elm = $(this);		
+			botonera_elm = $(this);
 		});
 
-		normatives_llistat_elm.add(normatives_seleccionades_elm);							
+		normatives_llistat_elm.add(normatives_seleccionades_elm);
 
 		// Configuramos la lista ordenable.
 		this.configurar({
@@ -67,9 +71,9 @@ function CModulNormativa() {
 			nodoOrigen: modul_normatives_elm.find(".listaOrdenable"),
 			nodoDestino: normatives_seleccionades_elm.find(".listaOrdenable"),
 			atributos: [			// Campos que queremos que aparezcan en las listas.
-	            "id", 
-	            "nombre", 
-	            "orden", 
+	            "id",
+	            "nombre",
+	            "orden",
 	            "idRelatedItem", 	// Campo necesario para guardado AJAX genérico de módulos laterales.
 	            "idMainItem",		// Campo necesario para guardado AJAX genérico de módulos laterales.
 	            "color" 			//Indica si es datos validos o no.
@@ -79,42 +83,42 @@ function CModulNormativa() {
 
 		// one al botó de gestionar
 		modul_normatives_elm.find("a.gestiona").one("click", function() { ModulNormativa.gestiona(); });
-		
+
 	};
 
-	// Marcar el módulo como modificado.    
+	// Marcar el módulo como modificado.
 	this.modificado = function() {
 		$moduloModificado.val(1);
 	};
 
-	this.nuevo = function() {       
+	this.nuevo = function() {
 		norma_seleccionats_elm = escriptori_detall_elm.find("div.modulNormatives div.seleccionats");
 		norma_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaNormativa + ".");
 	};
 
 	this.gestiona = function() {
-		
+
 		lis_size = modul_normatives_elm.find("li").size();
 
 		if (lis_size > 0) {
 			this.copiaInicial();
 			EscriptoriNormativa.contaSeleccionats();
 		} else {
-			normatives_seleccionades_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaNormativesSeleccionades + ".");			
+			normatives_seleccionades_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaNormativesSeleccionades + ".");
 			normatives_seleccionades_elm.find(".listaOrdenable").html("");
 		}
 
 		// animacio
-		escriptori_detall_elm.fadeOut(300, function() {			
-			escriptori_normatives_elm.fadeIn(300);			
+		escriptori_detall_elm.fadeOut(300, function() {
+			escriptori_normatives_elm.fadeIn(300);
 		});
-		
+
 		this.deshabilitarBotonGuardar();
-		
+
 	};
 
 	this.contaSeleccionats = function() {
-		
+
 		seleccionats_val = modul_normatives_elm.find(".seleccionat").find("li").size();
 		info_elm = modul_normatives_elm.find("p.info:first");
 
@@ -123,26 +127,26 @@ function CModulNormativa() {
 		} else if (seleccionats_val == 1) {
 			info_elm.html(txtSeleccionada + " <strong>" + seleccionats_val + " " + txtNormativa.toLowerCase() + "</strong>.");
 		} else if (seleccionats_val > 1) {
-			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtNormatives.toLowerCase() + "</strong>.");						
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtNormatives.toLowerCase() + "</strong>.");
 		}
-		
+
 	};
 
 	this.inicializarNormativas = function(listaNormativas) {
-		
+
 		modul_normatives_elm.find(".listaOrdenable").empty();
-		
+
 		if (typeof listaNormativas != 'undefined' && listaNormativas != null && listaNormativas.length > 0) {
 			that.agregaItems(listaNormativas);
 		}
-		
+
 		that.contaSeleccionats();
-		
+
 	};
 
 	// Devuelve un string con el formato normatives=n1,n2,...,nm donde n son codigos de normativas.
 	this.listaNormativas = function () {
-		
+
 		var listaNormativas = "normatives=";
 
 		modul_normatives_elm.find("div.listaOrdenable input.normativa_id").each(function() {
@@ -154,59 +158,60 @@ function CModulNormativa() {
 		}
 
 		return listaNormativas;
-		
+
 	};
 	this.hayNormativaSeleccionada = function (idProc) {
 		//Si es alta no se valida que haya normativa seleccionada
         return (idProc == "" || idProc == null) ? true : modul_normatives_elm.find('div.listaOrdenable input.normativa_id').length > 0;
     };
-	
+
 	this.botonGuardar = jQuery("#btnGuardar_normatives");
-	
+
 	this.existeBotonGuardar = function() {
-		
+
 		if (debug)
 			console.log("Entrando en CModulNormativa.existeBotonGuardar");
-		
+
 		if (debug)
 			console.log("Saliendo de CModulNormativa.existeBotonGuardar");
-		
+
 		return (this.botonGuardar.length > 0);
-		
+
 	};
-	
+
 	this.habilitarBotonGuardar = function() {
-		
+
 		if (debug)
 			console.log("Entrando en CModulNormativa.habilitarBotonGuardar");
-		
+
 		if (this.existeBotonGuardar() && this.botonGuardar.parent().hasClass("off")) {
     		this.botonGuardar.parent().removeClass("off");
     	}
-		
+
 		if (debug)
 			console.log("Saliendo de CModulNormativa.habilitarBotonGuardar");
-		
+
     };
-    
+
     this.deshabilitarBotonGuardar = function() {
-    	
+
     	if (debug)
 			console.log("Entrando en CModulNormativa.deshabilitarBotonGuardar");
-    	
+
     	if (this.existeBotonGuardar() && !this.botonGuardar.parent().hasClass("off")) {
     		this.botonGuardar.parent().addClass("off");
     	}
-    	
+
     	if (debug)
 			console.log("Saliendo de CModulNormativa.deshabilitarBotonGuardar");
-    	
+
     };
-    
+
     this._eliminaItem = this.eliminaItem;
-	
+
 	this.eliminaItem = function( item ) {
-		
+
+		if(validarServeis() && validarProcediment()){
 		if (debug)
 			console.log("Entrando en CModulNormativa.eliminaItem");
 
@@ -215,34 +220,35 @@ function CModulNormativa() {
 		if (this.existeBotonGuardar()) {
 			this.habilitarBotonGuardar();
 		}
-		
+
 		if (debug)
 			console.log("Saliendo de CModulNormativa.eliminaItem");
-		
+		}
+
 	};
-	
+
 	this._agregaItem = this.agregaItem;
-	
+
 	this.agregaItem = function( item ) {
-		
+
 		if (debug)
 			console.log("Entrando en CModulNormativa.agregaItem");
-		
+
 		that._agregaItem(item);
 
 		if (this.existeBotonGuardar()) {
 			this.habilitarBotonGuardar();
 		}
-		
+
 		if (debug)
 			console.log("Saliendo de CModulNormativa.agregaItem");
-		
+
 	};
-	
+
 };
 
 function CEscriptoriNormativa() {
-	
+
 	this.extend = ListadoBase;
 	this.extend("opcions_normativa", "resultats_normativa", "cercador_normativa", "cercador_normativa_contingut", "", "", "", "btnBuscarForm_normativa", "btnLimpiarForm_normativa");
 
@@ -256,7 +262,7 @@ function CEscriptoriNormativa() {
 	/**
 	 * Agrega un item a la lista.
 	 */
-	this.agregaItem = function( itemID, titulo, idMainItem, idRelatedItem ) {	
+	this.agregaItem = function( itemID, titulo, idMainItem, idRelatedItem ) {
 
 		// Componemos el item para enviar a la lista.
 		var item = {
@@ -267,19 +273,19 @@ function CEscriptoriNormativa() {
 		};
 
 		// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
-		if ( ModulNormativa.agregaItem( item ) ){		
-			this.contaSeleccionats();		
+		if ( ModulNormativa.agregaItem( item ) ){
+			this.contaSeleccionats();
 		}
-		
+
 	};
 
 	// Cambia de página.
 	this.cambiaPagina = function( pag ) {
-		
+
 		multipagina_normativa.setPaginaActual(pag - 1);
 		pag_Pag = pag;
 		this.anar(pag);
-		
+
 	};
 
 	this.finCargaListado = function(data, opcions){
@@ -305,7 +311,7 @@ function CEscriptoriNormativa() {
 			if ( resultats_total == resultatFinal ) {
 				isUltimaPagina = true;
 			}
-			
+
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
@@ -354,9 +360,9 @@ function CEscriptoriNormativa() {
 
 			// codi cuerpo
 			$(data.nodes).slice().each(function(i) {
-				
+
 				dada_node = this;
-				
+
 				parClass = (i % 2) ? " par": "";
 				codi_taula += "<div class=\"tr "+parClass+"\">";
 
@@ -409,12 +415,12 @@ function CEscriptoriNormativa() {
 				resultats_normativa_elm.find(".llistat .tbody a").unbind("click").bind("click", function() {
 
 					var partesItem = jQuery(this).attr("class").split("_");
-					
+
 					var itemID = partesItem[1];
 					var titulo = jQuery(this).html();
 					var idMainItem = $('#item_id').val();
 					var idRelatedItem = itemID;
-					
+
 					that.agregaItem(itemID, titulo, idMainItem, idRelatedItem);
 
 				});
@@ -423,16 +429,16 @@ function CEscriptoriNormativa() {
 				normatives_cercador_elm.find("input, select").removeAttr("disabled");
 
 			});
-			
-		});	
-		
+
+		});
+
 	};
-	
+
 	this.carregar = function(opcions) {
 		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 
 		//dataVars = "";
-		
+
 		// cercador
 		var filtrosBuscador = "&titol=" + $("#cerca_normativa_titol").val();
 		filtrosBuscador += "&data=" + $("#cerca_normativa_data").val();
@@ -445,7 +451,7 @@ function CEscriptoriNormativa() {
 		if (typeof opcions.ordreTipus != "undefined") {
 			ordreTipus_normativa_elm.val(opcions.ordreTipus);
 		}
-		
+
 		// ordreCamp
 		if (typeof opcions.ordreCamp != "undefined") {
 			ordreCamp_normativa_elm.val(opcions.ordreCamp);
@@ -459,7 +465,7 @@ function CEscriptoriNormativa() {
 		ordre_Camp = ordreCamp_normativa_elm.val();
 
 		// variables
-		dataVars = "pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + filtrosBuscador;		
+		dataVars = "pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + filtrosBuscador;
 
 		// ajax
 		$.ajax({
@@ -485,10 +491,10 @@ function CEscriptoriNormativa() {
 				}
 			}
 		});
-		
+
 	};
 
-	this.finalizar = function() {		
+	this.finalizar = function() {
 
 		nombre_llistat = ModulNormativa.finalizar();
 
@@ -497,9 +503,9 @@ function CEscriptoriNormativa() {
 
 		modul_normatives_elm.find("p.info").html(codi_info);
 
-//		if (nombre_llistat > 1) {			
-//		modul_normatives_elm.find(".listaOrdenable ul").sortable({ 
-//		axis: 'y', 
+//		if (nombre_llistat > 1) {
+//		modul_normatives_elm.find(".listaOrdenable ul").sortable({
+//		axis: 'y',
 //		update: function(event,ui){
 //		ModulNormativa.calculaOrden(ui,"origen");
 //		EscriptoriNormativa.contaSeleccionats();
@@ -511,7 +517,7 @@ function CEscriptoriNormativa() {
 		ModulNormativa.modificado();
 
 		this.torna();
-		
+
 	};
 
 	// Método sobreescrito
@@ -521,22 +527,23 @@ function CEscriptoriNormativa() {
 
 		// text cercant
 		txt = (num <= pag_Pag) ? txtCercantAnteriors : txtCercantItemsSeguents;
-		
+
 		normatives_dades_elm.fadeOut(300, function() {
 			// pintem
 			codi_anar = "<p class=\"executant\">" + txt + "</p>";
 			normatives_dades_elm.html(codi_anar).fadeIn(300, function() {
-				pagPagina_normativa_elm.val(num - 1);								
-				that.carregar({pagina: num - 1});				
+				pagPagina_normativa_elm.val(num - 1);
+				that.carregar({pagina: num - 1});
 			});
 		});
-		
+
 	};
 
 	this.torna = function() {
 
+
 		// animacio
-		escriptori_normatives_elm.fadeOut(300, function() {			
+		escriptori_normatives_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
 				modul_normatives_elm.find("a.gestiona").one("click", function() { ModulNormativa.gestiona(); });
@@ -562,9 +569,9 @@ function CEscriptoriNormativa() {
 
 		} else {
 
-			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtNormatives.toLowerCase() + "</strong>.");						
-			// normatives_seleccionades_elm.find(".listaOrdenable ul").sortable({ 
-			// axis: 'y', 
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtNormatives.toLowerCase() + "</strong>.");
+			// normatives_seleccionades_elm.find(".listaOrdenable ul").sortable({
+			// axis: 'y',
 			// update: function(event,ui){
 			// ModulNormativa.calculaOrden(ui,"origen");
 			// EscriptoriNormativa.contaSeleccionats();
@@ -573,13 +580,13 @@ function CEscriptoriNormativa() {
 
 		}
 
-		normatives_seleccionades_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {				
+		normatives_seleccionades_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function() {
 			var itemLista = jQuery(this).parents("li:first");
 			ModulNormativa.eliminaItem(itemLista);
 			ModulNormativa.habilitarBotonGuardar();
 			EscriptoriNormativa.contaSeleccionats();
 		});
-		
+
 	};
-	    
+
 };

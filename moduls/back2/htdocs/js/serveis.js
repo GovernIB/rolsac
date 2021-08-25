@@ -102,6 +102,7 @@ $(document).ready(function() {
 
 		ListaSimpleDocumentos.guardar(elements, url, id);
 
+
 	});
 
 	jQuery(".lista-simple-documentos-lopd").click(function() {
@@ -120,8 +121,9 @@ $(document).ready(function() {
 			var elements = $('#escriptori_normatives .seleccionats').find("li");
 			var id = $('#item_id').val();
 			var url = $(this).attr('action');
-
+			if(validarServeis()){
 			ListaSimpleNormativas.guardar(elements, url, id);
+			}
 		}
 
 	});
@@ -475,7 +477,7 @@ function CLlistat() {
 					if (dada_node.mensajes_supervisor == true) {
 						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_G.png' title='"+txtMensajeG+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					} else {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' title='"+txtMensajeSin+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						//codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' title='"+txtMensajeSin+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					}
 				}
 
@@ -603,7 +605,7 @@ function CDetall() {
 			paginaCheck = pagCheckPublico;
 		} else {
 			//Si es interna y selecciona la accion de publicar, comportarse como si es publico
-			if ($("#item_estat").val() == 2 && $("#item_accion").val() == 1 ) {
+			if ($("#item_estat").val() == 2 && $("#item_accion").val() == 1 && jQuery("#item_lopd_activo").is(":checked")) {
 				paginaCheck = pagCheckPublico;
 			} else {
 				paginaCheck = pagNormativaVigentes;
@@ -1068,6 +1070,7 @@ function CDetall() {
 		$("#item_accion").hide();
 		$("#lbl_item_accion").hide();
 		$("#item_pdt_validar").prop( "disabled", true );
+		$('#item_pdt_validar').attr('checked', false);
 		$("#filaNoEditable").hide();
 
 		this.actualizaEventos();
@@ -1386,6 +1389,7 @@ function CDetall() {
 			//$("#lbl_item_accion").show();
 			$("#item_pdt_validar").prop( "disabled", true );
 			$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
+			$("#enviarEmailChat").hide(); //Ocultamos el check de email
 			if (dada_node.item_estat == 1) {
 				$("#item_estat option[value=1]").show();
 				$("#item_estat option[value=2]").hide();
@@ -1406,6 +1410,7 @@ function CDetall() {
 			$("#item_accion").hide();
 			$("#lbl_item_accion").hide();
 			$("#item_pdt_validar").prop( "disabled", false );
+			$("#enviarEmailChat").show();
 		}
 
 		this.modificado(false);

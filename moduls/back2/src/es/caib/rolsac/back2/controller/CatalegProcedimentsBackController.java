@@ -1705,6 +1705,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
 						&& procedimentOld != null && procedimentOld.isPendienteValidar()) {
 
+
 					procedimientoMensaje = new ProcedimientoMensaje();
 					final String literal = RolsacPropertiesUtil
 							.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));

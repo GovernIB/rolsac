@@ -49,6 +49,7 @@ $(document).ready(function() {
 
 });
 
+
 function CModulTramit() {
 
     this.extend = ListaOrdenable;
@@ -94,12 +95,12 @@ function CModulTramit() {
             a_primer_elm.parent().html("<span class=\"" + a_primer_elm_class + "\">" + a_primer_elm_text + "</span>");
 
             var div_idiomes_elm = escriptori_tramits_elm.find("div.idiomes:first, div.elementoMultiidiomaIndividual");
-            $("div.elementoMultiidiomaIndividual div.campoIdioma").hide(); //ocultamos los idiomas individuales     
+            $("div.elementoMultiidiomaIndividual div.campoIdioma").hide(); //ocultamos los idiomas individuales
             div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat").show();
-            
-            
-            
-            
+
+
+
+
             ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_tramits'}, Detall.idioma);
         }
 
@@ -302,6 +303,11 @@ function CEscriptoriTramit() {
     };
 
     this.guarda = function() {
+
+    	// Validamos el procedimiento
+    	if(!validarProcediment()){
+    		 return false;
+    	}
 
         var idTramit = $("#id_tramit_actual").val();
         // Validam el formulari de tramit
@@ -507,12 +513,12 @@ function CEscriptoriTramit() {
 
     this.limpia = function() {
         $("#formTramits :input").each(limpiarCampo);
-      
+
         //Se neteja manualment ja que limpiarCampo no afecta els input hidden ni disabled
-        $("#id_tramit_actual").val(""); 
+        $("#id_tramit_actual").val("");
         $("#item_tramite_tramit").val("");
 		$("#item_version_tramit").val("");
-		$("#item_parametros").val("");		
+		$("#item_parametros").val("");
 		$("[id^=item_url_tramit_]").val("");
     };
 

@@ -1516,6 +1516,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
 						&& servicioOld != null && servicioOld.isPendienteValidar()) {
 
+
 					servicioMensaje = new ServicioMensaje();
 					final String literal = RolsacPropertiesUtil
 							.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
