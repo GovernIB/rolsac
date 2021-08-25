@@ -1703,7 +1703,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
 
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
-						&& procedimentOld.isPendienteValidar()) {
+						&& procedimentOld != null && procedimentOld.isPendienteValidar()) {
 
 					procedimientoMensaje = new ProcedimientoMensaje();
 					final String literal = RolsacPropertiesUtil

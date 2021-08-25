@@ -1514,7 +1514,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
 
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
-						&& servicioOld.isPendienteValidar()) {
+						&& servicioOld != null && servicioOld.isPendienteValidar()) {
 
 					servicioMensaje = new ServicioMensaje();
 					final String literal = RolsacPropertiesUtil
