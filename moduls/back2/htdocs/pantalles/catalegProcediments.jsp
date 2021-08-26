@@ -742,6 +742,7 @@
 		<textarea id="textChat" rows="3"></textarea>
 		<input id="modalID" name="modalID" type="hidden" type="hidden" value="">
 		<button onClick="enviarChat()">Enviar</button>
+		<checkbox id="enviarEmailChat" />
 	</div>
  <hr>
 	<div class="chat-cerrar">

@@ -1026,8 +1026,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			// acciones
 			if (serv.getValidacion() == Validacion.PUBLICA.intValue()) {
 
-				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
-						messageSource.getMessage("accion.publicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
+						messageSource.getMessage("accion.republicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
@@ -1513,9 +1513,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			ServicioMensaje servicioMensaje = null;
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
 
-				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
-						&& servicioOld != null && servicioOld.isPendienteValidar()) {
-
+				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && servicioOld != null
+						&& servicioOld.isPendienteValidar()) {
 
 					servicioMensaje = new ServicioMensaje();
 					final String literal = RolsacPropertiesUtil
@@ -1546,18 +1545,32 @@ public class CatalegServeisBackController extends PantallaBaseController {
 						servicioMensaje.setGestor(true);
 						servicioMensaje.setLeido(false);
 						servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
-					} else if (servicioOld != null && servicioOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
-
-						final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
-						servicioMensaje = new ServicioMensaje();
-						final String literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
-								request.getLocale().getLanguage().contains("ca"));
-						servicioMensaje.setTexto(literal);
-						servicioMensaje.setFechaCreacion(new Date());
-						servicioMensaje.setGestor(true);
-						servicioMensaje.setLeido(false);
-						servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
 					}
+				} else if (servicioOld != null && servicioOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
+
+					final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
+					servicioMensaje = new ServicioMensaje();
+					final String literal;
+					if (request.getParameter("item_accion") == null || request.getParameter("item_accion").isEmpty()) {
+						literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
+								request.getLocale().getLanguage().contains("ca"));
+					} else {
+						final String iaccion = request.getParameter("item_accion").toString();
+						final Long accion = Long.parseLong(iaccion);
+						if (accion.compareTo(Validacion.ACCION_PUBLICAR.longValue()) == 0) {
+							// Si la acción es publicar, simplemente avisamos que se ha actualizado
+							literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
+									request.getLocale().getLanguage().contains("ca"));
+						} else {
+							literal = RolsacPropertiesUtil.getLiteralFlujoAccion(accion,
+									request.getLocale().getLanguage().contains("ca"));
+						}
+					}
+					servicioMensaje.setTexto(literal);
+					servicioMensaje.setFechaCreacion(new Date());
+					servicioMensaje.setGestor(true);
+					servicioMensaje.setLeido(false);
+					servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
 
 				}
 			}

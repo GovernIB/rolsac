@@ -512,7 +512,7 @@ function CLlistat() {
 					if (dada_node.mensajes_supervisor == true) {
 						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email_G.png' title='"+txtMensajeG+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					} else {
-						codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' title='"+txtMensajeSin+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
+						//codi_taula += "<div class=\"td mensajes\" role=\"gridcell\"><img src='../img/email.png' title='"+txtMensajeSin+"' class='imgMensaje' onclick=\"abrirMensaje('"+dada_node.id+"')\" /></div>";
 					}
 				}
 
@@ -1089,6 +1089,7 @@ function CDetall() {
 		$("#item_accion").hide();
 		$("#lbl_item_accion").hide();
 		$("#item_pdt_validar").prop( "disabled", true );
+		$('#item_pdt_validar').attr('checked', false);
 		$("#filaNoEditable").hide();
 
 		this.actualizaEventos();
@@ -1165,7 +1166,9 @@ function CDetall() {
 			jQuery("#item_pdt_validar").change();
 		}
 
-		if (tienePermisoPublicar != 'S') {
+		if (tienePermisoPublicar == 'S') {
+			jQuery("#item_pdt_validar").prop( "disabled", false );
+		} else {
 			jQuery("#item_pdt_validar").prop( "disabled", true );
 		}
 
@@ -1364,7 +1367,7 @@ function CDetall() {
 			//$("#item_accion").show();
 			//$("#lbl_item_accion").show();
 			$("#item_pdt_validar").prop( "disabled", true );
-
+			$("#enviarEmailChat").hide();
 			$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
 			if (dada_node.item_estat == 1) {
 				$("#item_estat option[value=1]").show();
@@ -1388,6 +1391,7 @@ function CDetall() {
 			$("#item_accion").hide();
 			$("#lbl_item_accion").hide();
 			$("#item_pdt_validar").prop( "disabled", false );
+			$("#enviarEmailChat").show();
 		}
 
 		this.modificado(false);

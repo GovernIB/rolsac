@@ -151,6 +151,23 @@ public class RolsacPropertiesUtil {
 		return getProperty(literal);
 	}
 
+	/** Los campos de email **/
+	public static final String getEmailUser() {
+		return getProperty("es.caib.rolsac.procServ.email.user");
+	}
+
+	public static final String getEmailPass() {
+		return getProperty("es.caib.rolsac.procServ.email.pass");
+	}
+
+	public static final String getEmailSmtp() {
+		return getProperty("es.caib.rolsac.procServ.email.stmp");
+	}
+
+	public static final String getEmailPort() {
+		return getProperty("es.caib.rolsac.procServ.email.port");
+	}
+
 	/** Devuevle el texto cuando eres supervisor y lo revisas **/
 	public static final String getLiteralFlujoActualizadoSupervisor(final boolean catalan) {
 		final String idioma = catalan ? "ca" : "es";
