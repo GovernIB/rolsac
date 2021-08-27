@@ -984,10 +984,10 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 							" and servicio.id in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0) ");
 				} else if (bc.getMensajePorLeer() == 2) {
 					where.append(
-							" and servicio.id  in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0 and servMensa.gestor = 0) ");
+							" and servicio.id  in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0 and servMensa.gestor = 1) ");
 				} else if (bc.getMensajePorLeer() == 3) {
 					where.append(
-							" and servicio.id  in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0 and servMensa.gestor = 1) ");
+							" and servicio.id  in ( select servMensa.idServicio from ServicioMensaje servMensa where servMensa.leido = 0 and servMensa.gestor = 0) ");
 				}
 			}
 			if (bc.getEstado() != null) {
@@ -1136,6 +1136,45 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			resultadoBusqueda.setTotalResultados(query.list().size());
 
 			resultadoBusqueda = PaginatedHibernateEJB.obtenerListadoPaginado(query, paginacion);
+
+			if (resultadoBusqueda.getListaResultados() != null) {
+
+				try {
+					final StringBuilder idServs = new StringBuilder();
+					for (final Object serv : resultadoBusqueda.getListaResultados()) {
+						final Long idServ = ((Servicio) serv).getId();
+						idServs.append(idServ);
+						idServs.append(" , ");
+					}
+
+					String idServicios = idServs.toString();
+					idServicios = idServicios.substring(0, idServicios.length() - 2);
+
+					final String hql = "select srvMensa.idServicio, srvMensa.gestor from ServicioMensaje srvMensa where srvMensa.leido = false and srvMensa.idServicio in ("
+							+ idServicios + ")";
+					final Query queryMensas = session.createQuery(hql);
+					// queryMensas.setParameterList("idProcs", idProcs);
+					final List<Object[]> resultados = queryMensas.list();
+					if (resultados != null) {
+						for (final Object[] resultado : resultados) {
+							for (final Object serv : resultadoBusqueda.getListaResultados()) {
+								final String idServ = ((Servicio) serv).getId().toString();
+								if (resultado[0].toString().equals(idServ)) {
+									final boolean gestor = Boolean.valueOf(resultado[1].toString());
+									if (gestor) {
+										((Servicio) serv).setMensajesNoLeidosGestor(true);
+									} else {
+										((Servicio) serv).setMensajesNoLeidosSupervisor(true);
+									}
+									break;
+								}
+							}
+						}
+					}
+				} catch (final Exception ex) {
+					log.error("Error calculando el total de mensajes", ex);
+				}
+			}
 
 		} catch (final HibernateException e) {
 

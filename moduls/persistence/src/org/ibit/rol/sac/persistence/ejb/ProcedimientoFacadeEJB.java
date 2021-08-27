@@ -1399,10 +1399,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 							" and procedimiento.id in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0) ");
 				} else if (bc.getMensajePorLeer() == 2) {
 					where.append(
-							" and procedimiento.id  in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 0) ");
+							" and procedimiento.id  in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 1) ");
 				} else if (bc.getMensajePorLeer() == 3) {
 					where.append(
-							" and procedimiento.id  in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 1) ");
+							" and procedimiento.id  in ( select procMensa.idProcedimiento from ProcedimientoMensaje procMensa where procMensa.leido = 0 and procMensa.gestor = 0) ");
 				}
 			}
 			if (bc.getEstado() != null) {

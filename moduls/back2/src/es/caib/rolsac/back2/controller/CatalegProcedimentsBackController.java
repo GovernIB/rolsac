@@ -91,6 +91,7 @@ import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.util.EmailUtils;
 import org.ibit.rol.sac.persistence.util.POUtils;
 import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
@@ -1022,8 +1023,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// acciones
 			if (proc.getValidacion() == Validacion.PUBLICA.intValue()) {
 
-				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
-						messageSource.getMessage("accion.publicar", null, request.getLocale())));
+				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
+						messageSource.getMessage("accion.republicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
@@ -1259,6 +1260,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				username = (String) request.getSession().getAttribute("username");
 			}
 			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor);
+		}
+
+		final EmailUtils emailUtils = new EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
+				RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
+		try {
+			emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
+					RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
+		} catch (final Exception e) {
+			resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el email");
+			log.error(e);
 		}
 		return resultats;
 	}
@@ -1702,8 +1713,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			ProcedimientoMensaje procedimientoMensaje = null;
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
 
-				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar"))
-						&& procedimentOld != null && procedimentOld.isPendienteValidar()) {
+				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && procedimentOld != null
+						&& procedimentOld.isPendienteValidar()) {
 
 
 					procedimientoMensaje = new ProcedimientoMensaje();
@@ -1734,20 +1745,33 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						procedimientoMensaje.setGestor(true);
 						procedimientoMensaje.setLeido(false);
 						procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
-					} else if (procedimentOld != null
-							&& procedimentOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
-
-						final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
-						procedimientoMensaje = new ProcedimientoMensaje();
-						final String literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
-								request.getLocale().getLanguage().contains("ca"));
-						procedimientoMensaje.setTexto(literal);
-						procedimientoMensaje.setFechaCreacion(new Date());
-						procedimientoMensaje.setGestor(true);
-						procedimientoMensaje.setLeido(false);
-						procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
 					}
+				} else if (procedimentOld != null
+						&& procedimentOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
 
+					final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
+					procedimientoMensaje = new ProcedimientoMensaje();
+					final String literal;
+					if (request.getParameter("item_accion") == null || request.getParameter("item_accion").isEmpty()) {
+						literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
+								request.getLocale().getLanguage().contains("ca"));
+					} else {
+						final String iaccion = request.getParameter("item_accion").toString();
+						final Long accion = Long.parseLong(iaccion);
+						if (accion.compareTo(Validacion.ACCION_PUBLICAR.longValue()) == 0) {
+							// Si la acción es publicar, simplemente avisamos que se ha actualizado
+							literal = RolsacPropertiesUtil.getLiteralFlujoEstado(estado,
+									request.getLocale().getLanguage().contains("ca"));
+						} else {
+							literal = RolsacPropertiesUtil.getLiteralFlujoAccion(accion,
+									request.getLocale().getLanguage().contains("ca"));
+						}
+					}
+					procedimientoMensaje.setTexto(literal);
+					procedimientoMensaje.setFechaCreacion(new Date());
+					procedimientoMensaje.setGestor(true);
+					procedimientoMensaje.setLeido(false);
+					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
 				}
 			}
 
