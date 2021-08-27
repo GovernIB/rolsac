@@ -1024,7 +1024,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (proc.getValidacion() == Validacion.PUBLICA.intValue()) {
 
 				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
-						messageSource.getMessage("accion.republicar", null, request.getLocale())));
+						messageSource.getMessage("accion.re"
+								+ "publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
@@ -1262,15 +1263,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor);
 		}
 
-		final EmailUtils emailUtils = new EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
-				RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
-		try {
-			emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
-					RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
-		} catch (final Exception e) {
-			resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el email");
-			log.error(e);
-		}
+//		final EmailUtils emailUtils = new EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
+//				RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
+//		try {
+//			emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
+//					RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
+//		} catch (final Exception e) {
+//			resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el email");
+//			log.error(e);
+//		}
 		return resultats;
 	}
 
