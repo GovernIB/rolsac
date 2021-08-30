@@ -586,6 +586,11 @@ function CLlistat() {
 
 		});
 
+		if (tienePermisoPublicar != 'S') {
+			$("#cerca_mensajePorLeer option[value=1]").hide();
+			$("#cerca_mensajePorLeer option[value=2]").hide();
+		}
+
 	};
 
 	this.carregar = function(opcions) {

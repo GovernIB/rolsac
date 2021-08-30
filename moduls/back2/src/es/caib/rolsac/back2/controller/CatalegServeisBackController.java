@@ -1039,8 +1039,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 						messageSource.getMessage("accion.publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
-				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
-						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
 
 			} else if (serv.getValidacion() == Validacion.RESERVA.intValue()) {
 				// No tiene acciones
@@ -1515,7 +1513,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && servicioOld != null
 						&& servicioOld.isPendienteValidar()) {
-
 
 					servicioMensaje = new ServicioMensaje();
 					final String literal = RolsacPropertiesUtil

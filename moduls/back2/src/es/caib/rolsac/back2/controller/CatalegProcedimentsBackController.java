@@ -91,7 +91,6 @@ import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
-import org.ibit.rol.sac.persistence.util.EmailUtils;
 import org.ibit.rol.sac.persistence.util.POUtils;
 import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
@@ -1024,8 +1023,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (proc.getValidacion() == Validacion.PUBLICA.intValue()) {
 
 				acciones.add(new IdNomDTO(Validacion.ACCION_REPUBLICAR,
-						messageSource.getMessage("accion.re"
-								+ "publicar", null, request.getLocale())));
+						messageSource.getMessage("accion.re" + "publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
@@ -1037,8 +1035,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						messageSource.getMessage("accion.publicar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
-				acciones.add(new IdNomDTO(Validacion.ACCION_CERRAR,
-						messageSource.getMessage("accion.cerrar", null, request.getLocale())));
 
 			} else if (proc.getValidacion() == Validacion.RESERVA.intValue()) {
 				// No tiene acciones
@@ -1263,15 +1259,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor);
 		}
 
-//		final EmailUtils emailUtils = new EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
-//				RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
-//		try {
-//			emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
-//					RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
-//		} catch (final Exception e) {
-//			resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el email");
-//			log.error(e);
-//		}
+		// final EmailUtils emailUtils = new
+		// EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
+		// RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
+		// try {
+		// emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
+		// RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
+		// } catch (final Exception e) {
+		// resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el
+		// email");
+		// log.error(e);
+		// }
 		return resultats;
 	}
 
@@ -1716,7 +1714,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && procedimentOld != null
 						&& procedimentOld.isPendienteValidar()) {
-
 
 					procedimientoMensaje = new ProcedimientoMensaje();
 					final String literal = RolsacPropertiesUtil
