@@ -1454,6 +1454,21 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 	}
 
+	private String getLiteralValidacion(final Integer validacion, final Locale locale) {
+		final String literal;
+		if (validacion.compareTo(1) == 0) {
+			literal = messageSource.getMessage("txt.validacio.publica", null, locale);
+		} else if (validacion.compareTo(2) == 0) {
+			literal = messageSource.getMessage("txt.validacio.interna", null, locale);
+		} else if (validacion.compareTo(3) == 0) {
+			literal = messageSource.getMessage("txt.validacio.reserva", null, locale);
+		} else {
+			literal = "";
+		}
+
+		return literal;
+	}
+
 	@RequestMapping(value = "/guardar.do", method = POST)
 	public @ResponseBody IdNomDTO guardar(final HttpSession session, final HttpServletRequest request) {
 
@@ -1511,12 +1526,45 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			ServicioMensaje servicioMensaje = null;
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
 
+				String literal = null;
+				final Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
+
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && servicioOld != null
 						&& servicioOld.isPendienteValidar()) {
 
+					if (servicioOld != null && servicioOld.getValidacion().compareTo(validacion) != 0) {
+
+						literal = RolsacPropertiesUtil
+								.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"))
+
+								+ ". " +
+
+								RolsacPropertiesUtil.getLiteralValidacionActualizadoSupervisor(
+										request.getLocale().getLanguage().contains("ca"),
+										getLiteralValidacion(servicioOld.getValidacion(), request.getLocale()),
+										getLiteralValidacion(validacion, request.getLocale()));
+					} else {
+
+						literal = RolsacPropertiesUtil
+								.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
+
+					}
+				} else {
+
+					if (servicioOld != null && servicioOld.getValidacion().compareTo(validacion) != 0) {
+
+						literal = RolsacPropertiesUtil.getLiteralValidacionActualizadoSupervisor(
+								request.getLocale().getLanguage().contains("ca"),
+								getLiteralValidacion(servicioOld.getValidacion(), request.getLocale()),
+								getLiteralValidacion(validacion, request.getLocale()));
+					} else {
+						literal = null;
+					}
+				}
+
+				if (literal != null && !literal.isEmpty()) {
+
 					servicioMensaje = new ServicioMensaje();
-					final String literal = RolsacPropertiesUtil
-							.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
 					servicioMensaje.setTexto(literal);
 					servicioMensaje.setFechaCreacion(new Date());
 					servicioMensaje.setGestor(false);
@@ -1754,16 +1802,20 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	 */
 	private Servicio guardarPdtValidacion(final HttpServletRequest request, final Servicio servicio,
 			final String error) {
-		final String permisos = getPermisosUsuario(request);
-		if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
-			servicio.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
+		if (servicio.getId() == null) {
+			servicio.setPendienteValidar(false);
 		} else {
-			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
-				servicio.setPendienteValidar(true);
-			} else if (servicio != null && servicio.getValidacion() == Validacion.PUBLICA) {
-				// Si es gestor y está en estado publica, pasar automáticamente a pendiente
-				// validar.
-				servicio.setPendienteValidar(true);
+			final String permisos = getPermisosUsuario(request);
+			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
+				servicio.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
+			} else {
+				if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
+					servicio.setPendienteValidar(true);
+				} else if (servicio != null && servicio.getValidacion() == Validacion.PUBLICA) {
+					// Si es gestor y está en estado publica, pasar automáticamente a pendiente
+					// validar.
+					servicio.setPendienteValidar(true);
+				}
 			}
 		}
 		return servicio;

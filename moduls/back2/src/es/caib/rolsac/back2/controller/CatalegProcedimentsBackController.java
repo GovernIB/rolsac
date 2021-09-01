@@ -91,6 +91,7 @@ import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.util.EmailUtils;
 import org.ibit.rol.sac.persistence.util.POUtils;
 import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
@@ -1259,17 +1260,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor);
 		}
 
-		// final EmailUtils emailUtils = new
-		// EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
-		// RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
-		// try {
-		// emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
-		// RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
-		// } catch (final Exception e) {
-		// resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el
-		// email");
-		// log.error(e);
-		// }
+//		final EmailUtils emailUtils = new EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
+//				RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
+//		try {
+//			emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
+//					RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
+//		} catch (final Exception e) {
+//			resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el email");
+//			log.error(e);
+//		}
 		return resultats;
 	}
 
@@ -1712,12 +1711,45 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			ProcedimientoMensaje procedimientoMensaje = null;
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
 
+				String literal = null;
+				final Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
+
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && procedimentOld != null
 						&& procedimentOld.isPendienteValidar()) {
 
+					if (procedimentOld != null && procedimentOld.getValidacion().compareTo(validacion) != 0) {
+
+						literal = RolsacPropertiesUtil
+								.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"))
+
+								+ ". " +
+
+								RolsacPropertiesUtil.getLiteralValidacionActualizadoSupervisor(
+										request.getLocale().getLanguage().contains("ca"),
+										getLiteralValidacion(procedimentOld.getValidacion(), request.getLocale()),
+										getLiteralValidacion(validacion, request.getLocale()));
+					} else {
+
+						literal = RolsacPropertiesUtil
+								.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
+
+					}
+				} else {
+
+					if (procedimentOld != null && procedimentOld.getValidacion().compareTo(validacion) != 0) {
+
+						literal = RolsacPropertiesUtil.getLiteralValidacionActualizadoSupervisor(
+								request.getLocale().getLanguage().contains("ca"),
+								getLiteralValidacion(procedimentOld.getValidacion(), request.getLocale()),
+								getLiteralValidacion(validacion, request.getLocale()));
+					} else {
+						literal = null;
+					}
+				}
+
+				if (literal != null && !literal.isEmpty()) {
+
 					procedimientoMensaje = new ProcedimientoMensaje();
-					final String literal = RolsacPropertiesUtil
-							.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
 					procedimientoMensaje.setTexto(literal);
 					procedimientoMensaje.setFechaCreacion(new Date());
 					procedimientoMensaje.setGestor(false);
@@ -1990,6 +2022,21 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
+	private String getLiteralValidacion(final Integer validacion, final Locale locale) {
+		final String literal;
+		if (validacion.compareTo(1) == 0) {
+			literal = messageSource.getMessage("txt.validacio.publica", null, locale);
+		} else if (validacion.compareTo(2) == 0) {
+			literal = messageSource.getMessage("txt.validacio.interna", null, locale);
+		} else if (validacion.compareTo(3) == 0) {
+			literal = messageSource.getMessage("txt.validacio.reserva", null, locale);
+		} else {
+			literal = "";
+		}
+
+		return literal;
+	}
+
 	@RequestMapping(value = "/guardarInfoAdicional.do", method = POST)
 	public @ResponseBody IdNomDTO guardarInfoAdicional(final Long id, Long[] elementos,
 			final HttpServletRequest request) throws FileUploadException {
@@ -2157,18 +2204,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 */
 	private ProcedimientoLocal guardarPdtValidacion(final HttpServletRequest request,
 			final ProcedimientoLocal procediment, final String error) {
-		final String permisos = getPermisosUsuario(request);
-		if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
-			procediment.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
+		if (procediment.getId() == null) {
+			procediment.setPendienteValidar(false);
 		} else {
-			if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
-				procediment.setPendienteValidar(true);
-			} else if (procediment != null && procediment.getValidacion() == Validacion.PUBLICA) {
-				// Si es gestor y está en estado publica, pasar automáticamente a pendiente
-				// validar.
-				procediment.setPendienteValidar(true);
+			final String permisos = getPermisosUsuario(request);
+			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO)) {
+				procediment.setPendienteValidar("on".equalsIgnoreCase(request.getParameter("item_pdt_validar")));
+			} else {
+				if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
+					procediment.setPendienteValidar(true);
+				} else if (procediment != null && procediment.getValidacion() == Validacion.PUBLICA) {
+					// Si es gestor y está en estado publica, pasar automáticamente a pendiente
+					// validar.
+					procediment.setPendienteValidar(true);
+				}
 			}
 		}
+
 		return procediment;
 
 	}

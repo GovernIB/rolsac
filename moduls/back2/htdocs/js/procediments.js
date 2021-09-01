@@ -684,9 +684,11 @@ function CDetall() {
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()
 	//this._baseGuarda = this.guarda;
 	this.guardaFinal = function (funcion) {
+
 		// Si el estado de publicación del procedimiento es distinto a 1 (Pública),
 		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
-		if ( ($('#item_estat').val() != 1) ) {
+		// y que la acción no sea publicar
+		if ( ($('#item_estat').val() != 1 && $("#item_accion").val() != 1) ) {
 
 			urlParams = ModulNormativa.listaNormativas();
 			urlParams += "&" + ModulMateries.listaMaterias();
@@ -698,11 +700,12 @@ function CDetall() {
 
 		}
 
-		// En cambio, si el estado de publicación es 1 (Pública), hacemos la comprobación
+		// En cambio, si el estado de (publicación es 1 (Pública) o la acción es publicar), hacemos la comprobación
 		// en el if. Si todo está OK, ejecutamos el mismo código anterior (lo dejo duplicado
 		// porque considero que ha de estar comentado de este modo para que el próximo que
 		// tenga que mantener esto lo entienda.
-		else if ( $('#item_estat').val() == 1 && ModulTramit.hayTramiteInicializacion() && ModulNormativa.hayNormativaSeleccionada($('#item_clave_primaria').val()) ) {
+
+		else if ( ($('#item_estat').val() == 1 || $("#item_accion").val() == 1) && ModulTramit.hayTramiteInicializacion() && ModulNormativa.hayNormativaSeleccionada($('#item_clave_primaria').val()) ) {
 
 			urlParams = ModulNormativa.listaNormativas();
 			urlParams += "&" + ModulMateries.listaMaterias();
@@ -1088,6 +1091,8 @@ function CDetall() {
 		jQuery("#item_lopd_derechos_ca").val(lopdDerechos);
 		jQuery("#item_lopd_derechos_es").val(lopdDerechosESP);
 
+		//Seteamos el botón de guardar a visible
+		$("li:has(> a#btnGuardar)").css({display: ""});
 
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
 

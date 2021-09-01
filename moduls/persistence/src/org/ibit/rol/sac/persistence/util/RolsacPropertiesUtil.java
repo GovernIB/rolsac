@@ -174,6 +174,13 @@ public class RolsacPropertiesUtil {
 		return getProperty("es.caib.rolsac.procServ.revisado." + idioma);
 	}
 
+	public static final String getLiteralValidacionActualizadoSupervisor(final boolean catalan, final String val1,
+			final String val2) {
+		final String idioma = catalan ? "ca" : "es";
+		final String literal = getProperty("es.caib.rolsac.procServ.cambioValidacion." + idioma);
+		return literal.replace("{0}", val1).replace("{1}", val2);
+	}
+
 	public static final int getAltoIcono() {
 		return getIntFromProperty("es.caib.rolsac.fitxa.icona.altura");
 	}

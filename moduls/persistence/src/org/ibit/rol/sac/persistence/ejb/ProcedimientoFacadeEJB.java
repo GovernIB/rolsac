@@ -446,6 +446,30 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
 	 */
 	@Override
+	public boolean tieneNormativas(final Long id) throws DelegateException {
+		final Session session = getSession();
+		boolean resultado = true;
+		try {
+			final ProcedimientoLocal procedimientoBD = obtenerProcedimientoNewBack(id);
+			resultado = procedimientoBD.getNormativas() != null && !procedimientoBD.getNormativas().isEmpty();
+		} catch (final Exception he) {
+
+			throw new EJBException(he);
+
+		} finally {
+
+			close(session);
+		}
+		return resultado;
+	}
+
+	/**
+	 * Check si alguna normativa esta como no valida..
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	@Override
 	public boolean isNormativaValidas(final Long id) throws DelegateException {
 		final Session session = getSession();
 		boolean resultado = true;

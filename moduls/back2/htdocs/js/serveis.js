@@ -666,7 +666,8 @@ function CDetall() {
 
 		// Si el estado de publicación del servicio es distinto a 1 (Pública),
 		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
-		if ( ($('#item_estat').val() != 1) ) {
+		// y la acción no es guardar
+		if ( ($('#item_estat').val() != 1 && $("#item_accion").val() != 1) ) {
 
 			urlParams = ModulNormativa.listaNormativas();
 			urlParams += "&" + ModulMateries.listaMaterias();
@@ -1071,6 +1072,10 @@ function CDetall() {
 				itemID_ultim = 0;
 			});
 		});
+
+		//Seteamos el botón de guardar a visible
+		$("li:has(> a#btnGuardar)").css({display: ""});
+
 
 		$("#item_accion").hide();
 		$("#lbl_item_accion").hide();

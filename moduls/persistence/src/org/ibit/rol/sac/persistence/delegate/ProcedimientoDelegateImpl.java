@@ -618,4 +618,13 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 		}
 	}
 
+	@Override
+	public boolean tieneNormativas(final Long id) throws DelegateException {
+		try {
+			return getFacade().tieneNormativas(id);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
 }

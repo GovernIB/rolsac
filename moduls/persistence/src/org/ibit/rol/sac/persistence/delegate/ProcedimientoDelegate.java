@@ -81,6 +81,10 @@ public class ProcedimientoDelegate {
 		impl.eliminarTramite(tramiteId, procId);
 	}
 
+	public void tieneNormativas(final Long id) throws DelegateException {
+		impl.tieneNormativas(id);
+	}
+
 	public Long grabarProcedimiento(final ProcedimientoLocal procedimiento, final Long idUA,
 			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException {
 		return impl.grabarProcedimiento(procedimiento, idUA, procedimientoMensaje);
