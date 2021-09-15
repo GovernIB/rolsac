@@ -123,4 +123,6 @@ public interface ProcedimientoDelegateI {
 	public boolean checkInfoAdicional(final Long id) throws DelegateException;
 
 	public boolean tieneNormativas(Long id) throws DelegateException;
+
+	public String obtenerNombreProcedimiento(final Long idProc, final boolean catalan) throws DelegateException;
 }

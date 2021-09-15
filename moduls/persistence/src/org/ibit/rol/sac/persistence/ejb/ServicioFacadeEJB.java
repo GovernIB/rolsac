@@ -381,6 +381,43 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	}
 
 	/**
+	 * Obtiene el nombre de servicio Local.
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 * @param idProc
+	 *            Identificador del servicio.
+	 * @param catalan
+	 *            Indica si es catalan.
+	 * @return Devuelve el nombre del <code>Servicio</code> solicitado.
+	 */
+	public String obtenerNombreServicio(final Long idServ, final boolean catalan) {
+
+		final Session session = getSession();
+		String nombre = null;
+		Servicio servicio = null;
+		try {
+			servicio = (Servicio) session.load(Servicio.class, idServ);
+
+			TraduccionServicio trad = null;
+			if (catalan) {
+				trad = ((TraduccionServicio) servicio.getTraduccion("ca"));
+			} else {
+				trad = ((TraduccionServicio) servicio.getTraduccion("es"));
+				if (trad == null || trad.getNombre() == null || trad.getNombre().isEmpty()) {
+					trad = ((TraduccionServicio) servicio.getTraduccion("ca"));
+				}
+			}
+			nombre = trad.getNombre();
+		} catch (final HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+		return nombre;
+	}
+
+	/**
 	 * Obtiene un servicio Local.
 	 *
 	 * @ejb.interface-method

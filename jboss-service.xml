@@ -175,7 +175,16 @@ es.caib.rolsac.subscripcions
 		es.caib.rolsac.procServ.cambioValidacion.es=Se ha actualizado del estado {0} a {1}
 		es.caib.rolsac.procServ.cambioValidacion.ca=S'ha actualizat de l'estat {0} a {1}
 
-
+		<!--  Envio de emails  -->
+		es.caib.rolsac.procServ.email.test=N
+		es.caib.rolsac.procServ.email.test.from=emailFrom@caib.es
+		es.caib.rolsac.procServ.email.test.to=emailTo@caib.es
+		es.caib.rolsac.procServ.email.taskEnvio=0 0/10 * * * ?
+	    es.caib.rolsac.procServ.email.taskLimpieza=0 0 1 * * ?
+	    es.caib.rolsac.procServ.email.srv.titulo=Actualizacion en el servicio {0}
+	    es.caib.rolsac.procServ.email.srv.contenido=El supervisor {0} comenta que:\n {1} \n Mas informacion en la url http://www.caib.es/rolsacback/catelegServeis/catalegServeis.do?itemId={2}
+		es.caib.rolsac.procServ.email.proc.titulo=Actualizacion en el procedimiento {0}
+	    es.caib.rolsac.procServ.email.proc.contenido=El supervisor {0} comenta que:\n {1} \n Mas informacion en la url http://www.caib.es/rolsacback/catalegProcediments/catalegProcediments.do?itemId={2}
     </attribute>
 
 </mbean>

@@ -7,6 +7,7 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.ServicioMensaje;
 import org.ibit.rol.sac.persistence.intf.MensajeFacade;
@@ -60,20 +61,20 @@ public class MensajeDelegateImpl extends MensajeDelegate implements StatelessDel
 	}
 
 	@Override
-	public void enviarMensajeProc(final String texto, final Long idEntidad, final String usuario, final boolean gestor)
-			throws DelegateException {
+	public void enviarMensajeProc(final String texto, final Long idEntidad, final String usuario, final boolean gestor,
+			final MensajeEmail mensajeEmail) throws DelegateException {
 		try {
-			getFacade().enviarMensajeProc(texto, idEntidad, usuario, gestor);
+			getFacade().enviarMensajeProc(texto, idEntidad, usuario, gestor, mensajeEmail);
 		} catch (final Exception e) {
 			throw new DelegateException(e);
 		}
 	}
 
 	@Override
-	public void enviarMensajeServ(final String texto, final Long idEntidad, final String usuario, final boolean gestor)
-			throws DelegateException {
+	public void enviarMensajeServ(final String texto, final Long idEntidad, final String usuario, final boolean gestor,
+			final MensajeEmail mensajeEmail) throws DelegateException {
 		try {
-			getFacade().enviarMensajeServ(texto, idEntidad, usuario, gestor);
+			getFacade().enviarMensajeServ(texto, idEntidad, usuario, gestor, mensajeEmail);
 		} catch (final Exception e) {
 			throw new DelegateException(e);
 		}
@@ -97,4 +98,39 @@ public class MensajeDelegateImpl extends MensajeDelegate implements StatelessDel
 		}
 	}
 
+	@Override
+	public void enviarEmailsPendientes() throws DelegateException {
+		try {
+			getFacade().enviarEmailsPendientes();
+		} catch (final Exception e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public void limpiarEmails() throws DelegateException {
+		try {
+			getFacade().limpiarEmails();
+		} catch (final Exception e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public String obtenerUltimoGestorProc(final Long idEntidad) throws DelegateException {
+		try {
+			return getFacade().obtenerUltimoGestorProc(idEntidad);
+		} catch (final Exception e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public String obtenerUltimoGestorServ(final Long idEntidad) throws DelegateException {
+		try {
+			return getFacade().obtenerUltimoGestorServ(idEntidad);
+		} catch (final Exception e) {
+			throw new DelegateException(e);
+		}
+	}
 }

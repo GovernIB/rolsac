@@ -34,6 +34,12 @@ function abrirMensaje(idDato) {
 
 	function recuperarMensaje(data,i){
 
+		if (tienePermisoPublicar != 'S') {
+			$("#divEnviarEmailChat").hide();
+		} else {
+			$("#divEnviarEmailChat").show();
+		}
+
 		  var id = data.mensajes[i].id;
 		  var texto = data.mensajes[i].texto;
 		  var leido = data.mensajes[i].leido;
@@ -138,7 +144,11 @@ function enviarChat() {
 		return;
 	}
 	var id = $('#modalID').val();
-	dataVars = "texto=" + texto +"&idEntidad="+id;
+	var enviarEmail = "N";
+	if ($('#enviarEmailChat').is(':checked')) {
+		enviarEmail ="S";
+	}
+	dataVars = "texto=" + texto +"&idEntidad="+id+"&enviarEmail="+enviarEmail;
 
 	$.ajax({
 		type: "POST",
@@ -151,7 +161,8 @@ function enviarChat() {
 		success: function(data) {
 			if (data.error != null && data.error != undefined) {
 				Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: data.error, text: "<p>" + txtIntenteho + "</p>"});
-
+				// error
+				//Error.llansar();
 			} else {
 				$("#textChat").val('');
 				abrirMensaje(idDatoSave);

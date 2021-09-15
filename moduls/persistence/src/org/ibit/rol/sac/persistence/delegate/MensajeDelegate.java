@@ -2,6 +2,7 @@ package org.ibit.rol.sac.persistence.delegate;
 
 import java.util.List;
 
+import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.ServicioMensaje;
 
@@ -27,14 +28,14 @@ public class MensajeDelegate implements StatelessDelegate {
 		impl.marcarMensajeLeidoServ(idMensaje, usuario);
 	}
 
-	public void enviarMensajeProc(final String texto, final Long idEntidad, final String usuario, final boolean gestor)
-			throws DelegateException {
-		impl.enviarMensajeProc(texto, idEntidad, usuario, gestor);
+	public void enviarMensajeProc(final String texto, final Long idEntidad, final String usuario, final boolean gestor,
+			final MensajeEmail mensajeEmail) throws DelegateException {
+		impl.enviarMensajeProc(texto, idEntidad, usuario, gestor, mensajeEmail);
 	}
 
-	public void enviarMensajeServ(final String texto, final Long idEntidad, final String usuario, final boolean gestor)
-			throws DelegateException {
-		impl.enviarMensajeServ(texto, idEntidad, usuario, gestor);
+	public void enviarMensajeServ(final String texto, final Long idEntidad, final String usuario, final boolean gestor,
+			final MensajeEmail mensajeEmail) throws DelegateException {
+		impl.enviarMensajeServ(texto, idEntidad, usuario, gestor, mensajeEmail);
 	}
 
 	public List<ProcedimientoMensaje> getMensajesProcedimiento(final Long idProcedimiento) throws DelegateException {
@@ -45,4 +46,19 @@ public class MensajeDelegate implements StatelessDelegate {
 		return impl.getMensajesServicio(idServicio);
 	}
 
+	public void enviarEmailsPendientes() throws DelegateException {
+		impl.enviarEmailsPendientes();
+	}
+
+	public void limpiarEmails() throws DelegateException {
+		impl.limpiarEmails();
+	}
+
+	public String obtenerUltimoGestorProc(final Long idEntidad) throws DelegateException {
+		return impl.obtenerUltimoGestorProc(idEntidad);
+	}
+
+	public String obtenerUltimoGestorServ(final Long idEntidad) throws DelegateException {
+		return impl.obtenerUltimoGestorServ(idEntidad);
+	}
 }

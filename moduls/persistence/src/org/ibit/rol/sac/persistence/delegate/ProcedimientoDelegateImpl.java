@@ -627,4 +627,13 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 		}
 	}
 
+	@Override
+	public String obtenerNombreProcedimiento(final Long idProc, final boolean catalan) throws DelegateException {
+		try {
+			return getFacade().obtenerNombreProcedimiento(idProc, catalan);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
 }

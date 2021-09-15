@@ -744,6 +744,44 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	}
 
 	/**
+	 * Obtiene el nombre de procedimiento Local.
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 * @param idProc
+	 *            Identificador del procedimiento.
+	 * @param catalan
+	 *            Indica si es catalan.
+	 * @return Devuelve el nombre del <code>ProcedimientoLocal</code> solicitado.
+	 */
+	@Override
+	public String obtenerNombreProcedimiento(final Long idProc, final boolean catalan) {
+
+		final Session session = getSession();
+		String nombre = null;
+		ProcedimientoLocal procedimiento = null;
+		try {
+			procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, idProc);
+
+			TraduccionProcedimientoLocal trad = null;
+			if (catalan) {
+				trad = ((TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca"));
+			} else {
+				trad = ((TraduccionProcedimientoLocal) procedimiento.getTraduccion("es"));
+				if (trad == null || trad.getNombre() == null || trad.getNombre().isEmpty()) {
+					trad = ((TraduccionProcedimientoLocal) procedimiento.getTraduccion("ca"));
+				}
+			}
+			nombre = trad.getNombre();
+		} catch (final HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+		return nombre;
+	}
+
+	/**
 	 * Obtiene un procedimiento Local.
 	 *
 	 * @ejb.interface-method

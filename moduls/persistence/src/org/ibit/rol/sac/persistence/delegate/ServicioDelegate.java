@@ -453,4 +453,13 @@ public class ServicioDelegate implements StatelessDelegate {
 			throw new DelegateException(e);
 		}
 	}
+
+	public String obtenerNombreServicio(final Long idServ, final boolean catalan) throws DelegateException {
+		try {
+			return getFacade().obtenerNombreServicio(idServ, catalan);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
 }

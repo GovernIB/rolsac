@@ -46,6 +46,7 @@ import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.LopdLegitimacion;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Plataforma;
 import org.ibit.rol.sac.model.Procedimiento;
@@ -91,7 +92,6 @@ import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SilencioAdmDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
-import org.ibit.rol.sac.persistence.util.EmailUtils;
 import org.ibit.rol.sac.persistence.util.POUtils;
 import org.ibit.rol.sac.persistence.util.RolsacPropertiesUtil;
 import org.ibit.rol.sac.persistence.util.SiaEnviableResultado;
@@ -1245,7 +1245,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	@RequestMapping(value = "/enviarMensaje.do")
 	public @ResponseBody Map<String, Object> enviarMensaje(final String texto, final Long idEntidad,
-			final HttpServletRequest request) throws DelegateException {
+			final String enviarEmail, final HttpServletRequest request) throws DelegateException {
 		final Map<String, Object> resultats = new HashMap<String, Object>();
 		if (texto == null || texto.isEmpty() || idEntidad == null) {
 			resultats.put("error", "No se ha podido marcar como leido");
@@ -1257,18 +1257,38 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (StringUtils.isEmpty(username)) {
 				username = (String) request.getSession().getAttribute("username");
 			}
-			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor);
+
+			MensajeEmail mensajeEmail = null;
+			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO) && enviarEmail != null
+					&& "S".equals(enviarEmail)) {
+				mensajeEmail = new MensajeEmail();
+				mensajeEmail.setFechaCreacion(new Date());
+				mensajeEmail.setEnviado(false);
+				mensajeEmail.setTipo("PCR");
+				mensajeEmail.setCodigo(idEntidad);
+				String to, from;
+				final String nombreProc = DelegateUtil.getProcedimientoDelegate().obtenerNombreProcedimiento(idEntidad,
+						request.getLocale().getLanguage().contains("ca") ? true : false);
+				if (RolsacPropertiesUtil.isEmailTest()) {
+					to = RolsacPropertiesUtil.getEmailTo();
+					from = RolsacPropertiesUtil.getEmailFrom();
+				} else {
+					to = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorProc(idEntidad) + "@caib.es";
+					from = username + "@caib.es";
+				}
+
+				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailProcTitulo(nombreProc));
+				mensajeEmail.setContenido(
+						RolsacPropertiesUtil.getEmailProcContenido(username, texto, idEntidad.toString()));
+				mensajeEmail.setTo(to);
+				mensajeEmail.setFrom(from);
+
+			}
+
+			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor, mensajeEmail);
+
 		}
 
-//		final EmailUtils emailUtils = new EmailUtils(RolsacPropertiesUtil.getEmailSmtp(),
-//				RolsacPropertiesUtil.getEmailUser(), RolsacPropertiesUtil.getEmailPass());
-//		try {
-//			emailUtils.postMail("Mensaje de proc x", "Mensaje del supervisor: " + texto,
-//					RolsacPropertiesUtil.getEmailUser(), "slromero@indra.es");
-//		} catch (final Exception e) {
-//			resultats.put("error", "Se ha marcado como enviado pero no se ha enviado el email");
-//			log.error(e);
-//		}
 		return resultats;
 	}
 

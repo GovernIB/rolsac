@@ -151,21 +151,44 @@ public class RolsacPropertiesUtil {
 		return getProperty(literal);
 	}
 
-	/** Los campos de email **/
-	public static final String getEmailUser() {
-		return getProperty("es.caib.rolsac.procServ.email.user");
+	/** Info de email **/
+	public static final boolean isEmailTest() {
+		final String emailActivo = getProperty("es.caib.rolsac.procServ.email.test");
+		boolean activo;
+		if (emailActivo != null && emailActivo.equals("S")) {
+			activo = true;
+		} else {
+			activo = false;
+		}
+		return activo;
 	}
 
-	public static final String getEmailPass() {
-		return getProperty("es.caib.rolsac.procServ.email.pass");
+	public static final String getEmailTo() {
+		return getProperty("es.caib.rolsac.procServ.email.test.to");
 	}
 
-	public static final String getEmailSmtp() {
-		return getProperty("es.caib.rolsac.procServ.email.stmp");
+	public static final String getEmailFrom() {
+		return getProperty("es.caib.rolsac.procServ.email.test.from");
 	}
 
-	public static final String getEmailPort() {
-		return getProperty("es.caib.rolsac.procServ.email.port");
+	public static final String getEmailProcTitulo(final String nombre) {
+		return getProperty("es.caib.rolsac.procServ.email.proc.titulo").replace("{0}", nombre);
+	}
+
+	public static final String getEmailProcContenido(final String usuario, final String mensaje,
+			final String idEntidad) {
+		return getProperty("es.caib.rolsac.procServ.email.proc.contenido").replace("{0}", usuario)
+				.replace("{1}", mensaje).replace("{2}", idEntidad);
+	}
+
+	public static final String getEmailServTitulo(final String nombre) {
+		return getProperty("es.caib.rolsac.procServ.email.srv.titulo").replace("{0}", nombre);
+	}
+
+	public static final String getEmailServProcContenido(final String usuario, final String mensaje,
+			final String idEntidad) {
+		return getProperty("es.caib.rolsac.procServ.email.srv.contenido").replace("{0}", usuario)
+				.replace("{1}", mensaje).replace("{1}", idEntidad);
 	}
 
 	/** Devuevle el texto cuando eres supervisor y lo revisas **/

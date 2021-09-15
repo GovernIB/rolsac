@@ -68,10 +68,8 @@ import net.sf.hibernate.expression.Expression;
 /**
  * Bean con la funcionalidad basica para interactuar con HIBERNATE.
  *
- * @ejb.bean
- *  view-type="remote"
- *  generate="false"
- * 
+ * @ejb.bean view-type="remote" generate="false"
+ *
  * @ejb.security-role-ref role-name="sacsystem" role-link="${role.system}"
  * @ejb.security-role-ref role-name="sacadmin" role-link="${role.admin}"
  * @ejb.security-role-ref role-name="sacsuper" role-link="${role.super}"
@@ -84,210 +82,212 @@ public abstract class HibernateEJB implements SessionBean {
 
 	protected static Log log = LogFactory.getLog(HibernateEJB.class);
 
-    protected SessionFactory sessionFactory = null;
-    protected SessionContext ctx = null;
+	protected SessionFactory sessionFactory = null;
+	protected SessionContext ctx = null;
 
-    public static int RESULTATS_CERCA_TOTS = 99999;    
-    
-    public void setSessionContext(SessionContext ctx) {
-        this.ctx = ctx;
-    }
+	public static int RESULTATS_CERCA_TOTS = 99999;
 
-    public SessionFactory getSessionFactory() {
+	@Override
+	public void setSessionContext(final SessionContext ctx) {
+		this.ctx = ctx;
+	}
+
+	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
-	public void setSessionFactory(SessionFactory sessionFactory) {
+	public void setSessionFactory(final SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 
-    public void ejbCreate() throws CreateException {
-        //log.debug("ejbCreate: " + this.getClass());
-        sessionFactory = HibernateLocator.getSessionFactory();
-    }
+	public void ejbCreate() throws CreateException {
+		// log.debug("ejbCreate: " + this.getClass());
+		sessionFactory = HibernateLocator.getSessionFactory();
+	}
 
-    public void ejbRemove() {
-        //log.debug("ejbRemove: " + this.getClass());
-        sessionFactory = null;
-    }
+	@Override
+	public void ejbRemove() {
+		// log.debug("ejbRemove: " + this.getClass());
+		sessionFactory = null;
+	}
 
-    protected Session getSession() {
-        try {
-        	
-        	Session session=null;
-/*
-        	SessionInterceptor sessionInterceptor = SessionInterceptorBuilder.build();
-        	 
-        	if(null==sessionInterceptor) {
-        		session = sessionFactory.openSession();
-        	}
-        	else {
-        		session = sessionFactory.openSession(sessionInterceptor);
-        		sessionInterceptor.setSession(session);
-        		sessionInterceptor.setSessionContext(ctx);
-        	}
-  */
-        	
-        	session = sessionFactory.openSession();
-            session.setFlushMode(FlushMode.COMMIT);  // (1)
-            
-            // (1) FIXME: ejaen@dgtic - diria que el flush mode.COMMIT  no te sentit doncs les transaccions 
-            // en rolsac son CMT, i  en el moment del commit la sessio hibernate ja l'haura tancat el EJB
+	protected Session getSession() {
+		try {
 
-            log.debug("se ha abierto la sesion: "+ session);
-            return session;	
-        } catch (HibernateException e) {
-            throw new EJBException(e);
-        }
-    }
+			Session session = null;
+			/*
+			 * SessionInterceptor sessionInterceptor = SessionInterceptorBuilder.build();
+			 * 
+			 * if(null==sessionInterceptor) { session = sessionFactory.openSession(); } else
+			 * { session = sessionFactory.openSession(sessionInterceptor);
+			 * sessionInterceptor.setSession(session);
+			 * sessionInterceptor.setSessionContext(ctx); }
+			 */
 
-    public void close(Session session) {
-        if (session != null && session.isOpen()) {
-            try {
-                session.close();
-            } catch (HibernateException e) {
-                log.error(e, e);
-            }
-        }
-    }
+			session = sessionFactory.openSession();
+			session.setFlushMode(FlushMode.COMMIT); // (1)
 
-    /*
-        Los roles de usuario son inclusivos.
-        Los siguientes metodos permiten saber si un usuario tiene los permisos
-        de un determinado rol, bien porque sea su rol, o porque tenga uno superior. 
-    */
+			// (1) FIXME: ejaen@dgtic - diria que el flush mode.COMMIT no te sentit doncs
+			// les transaccions
+			// en rolsac son CMT, i en el moment del commit la sessio hibernate ja l'haura
+			// tancat el EJB
 
-    protected boolean userIsSystem() {
-        return ctx.isCallerInRole("sacsystem");
-    }
-
-    protected boolean userIsAdmin() {
-        return userIsSystem() || ctx.isCallerInRole("sacadmin");
-    }
-
-    protected boolean userIsSuper() {
-        return userIsAdmin() || ctx.isCallerInRole("sacsuper");
-    }
-
-    protected boolean userIsOper() {
-        return userIsSuper() || ctx.isCallerInRole("sacoper");
-    }
-    
-    protected boolean userIsInfo() {
-        return userIsOper() || ctx.isCallerInRole("sacinfo");
-    }
-
-    protected boolean userIs(String role) {
-        if ("sacinfo".equals(role)) {
-            return userIsInfo();
-        } else if ("sacoper".equals(role)) {
-            return userIsOper();
-        } else if ("sacsuper".equals(role)) {
-            return userIsSuper();
-        } else if ("sacadmin".equals(role)) {
-            return userIsAdmin();
-        } else if ("sacsystem".equals(role)) {
-            return userIsSystem();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Devuelve la lista de roles del usuario actual 
-     * @return
-     */
-    protected List<String> getUserRoles() {
-    	List<String> ret = new ArrayList<String>();
-    	if (userIsInfo()) {
-    		ret.add("sacinfo");
-    	}
-    	if (userIsOper()) {
-    		ret.add("sacoper");
-    	}
-    	if (userIsSuper()) {
-    		ret.add("sacsuper");
-    	}
-    	if (userIsAdmin()) {
-    		ret.add("sacadmin");
-    	}
-    	if (userIsSystem()) {
-    		ret.add("sacsystem");
-    	}
-    	return ret;
-
-    }
-
-    
-    protected boolean visible(Validable validable) {
-        return (Validacion.PUBLICA.equals(validable.getValidacion()) || Validacion.RESERVA.equals(validable.getValidacion()) || userIsOper());
-    }
-
-    
-    protected Usuario getUsuario(Session session) throws HibernateException {
-        Criteria criteriUsu = session.createCriteria(Usuario.class);
-        criteriUsu.add(Expression.eq("username", ctx.getCallerPrincipal().getName()));
-        List usuaris;
-        
-        try {
-        	usuaris = criteriUsu.list();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        }
-        
-        
-        if (usuaris.isEmpty()) {
-            throw new EJBException("El usuario actual no existe!");
-        }
-        return (Usuario) usuaris.get(0);
-    }
-    /**
-     * Descripcion: Delete del valor del campo CodUA de la tabla Historico. El metodo devolvera una session para que el commit se  
-     * realice en la funcion que llama a este metodo.
-     * 
-     * @param session  session
-     * @param ua  Unidad Administrativa
-     * @return   session
-     * @throws HibernateException
-     */
-     
-    protected Session deleteCodUaHistorico(Session session, UnidadAdministrativa ua)
-	throws HibernateException {
-    	//UAs
-    	    Long idUA = ua.getId();
-			Query query = session.createQuery("from HistoricoUA as hua where hua.ua.id = :ua_id");
-			query.setParameter("ua_id", idUA, Hibernate.LONG);
-			query.setCacheable(true);
-			List<?> huas = query.list();
-			Iterator<?> iterUA = huas.iterator();
-			while(iterUA.hasNext()){
-        		HistoricoUA histUA = (HistoricoUA) iterUA.next();
-        		histUA.setUa(null);
-				session.update(histUA);
-			}
-		//Ficha		
-		   	Query queryFicha = session.createQuery("from HistoricoFicha as hp where hp.ua.id = :ua_id");
-		   	queryFicha.setParameter("ua_id", idUA, Hibernate.LONG);
-		   	queryFicha.setCacheable(true);
-	    	
-	    	List<?> hFicha = queryFicha.list();
-			Iterator<?> iterFicha = hFicha.iterator();
-			while(iterFicha.hasNext()){
-				HistoricoFicha histFicha = (HistoricoFicha) iterFicha.next();
-				histFicha.setUa(null);
-				session.update(histFicha);
-			}
-			
+			log.debug("se ha abierto la sesion: " + session);
 			return session;
-}
+		} catch (final HibernateException e) {
+			throw new EJBException(e);
+		}
+	}
 
-    protected Historico getHistorico(Session session, UnidadAdministrativa ua)
-	    	throws HibernateException {
-	HistoricoUA hua;
-		Query query = session.createQuery("from HistoricoUA as hua where hua.ua.id = :ua_id");
+	public void close(final Session session) {
+		if (session != null && session.isOpen()) {
+			try {
+				session.close();
+			} catch (final HibernateException e) {
+				log.error(e, e);
+			}
+		}
+	}
+
+	/*
+	 * Los roles de usuario son inclusivos. Los siguientes metodos permiten saber si
+	 * un usuario tiene los permisos de un determinado rol, bien porque sea su rol,
+	 * o porque tenga uno superior.
+	 */
+
+	protected boolean userIsSystem() {
+		return ctx.isCallerInRole("sacsystem");
+	}
+
+	protected boolean userIsAdmin() {
+		return userIsSystem() || ctx.isCallerInRole("sacadmin");
+	}
+
+	protected boolean userIsSuper() {
+		return userIsAdmin() || ctx.isCallerInRole("sacsuper");
+	}
+
+	protected boolean userIsOper() {
+		return userIsSuper() || ctx.isCallerInRole("sacoper");
+	}
+
+	protected boolean userIsInfo() {
+		return userIsOper() || ctx.isCallerInRole("sacinfo");
+	}
+
+	protected boolean userIs(final String role) {
+		if ("sacinfo".equals(role)) {
+			return userIsInfo();
+		} else if ("sacoper".equals(role)) {
+			return userIsOper();
+		} else if ("sacsuper".equals(role)) {
+			return userIsSuper();
+		} else if ("sacadmin".equals(role)) {
+			return userIsAdmin();
+		} else if ("sacsystem".equals(role)) {
+			return userIsSystem();
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Devuelve la lista de roles del usuario actual
+	 * 
+	 * @return
+	 */
+	protected List<String> getUserRoles() {
+		final List<String> ret = new ArrayList<String>();
+		if (userIsInfo()) {
+			ret.add("sacinfo");
+		}
+		if (userIsOper()) {
+			ret.add("sacoper");
+		}
+		if (userIsSuper()) {
+			ret.add("sacsuper");
+		}
+		if (userIsAdmin()) {
+			ret.add("sacadmin");
+		}
+		if (userIsSystem()) {
+			ret.add("sacsystem");
+		}
+		return ret;
+
+	}
+
+	protected boolean visible(final Validable validable) {
+		return (Validacion.PUBLICA.equals(validable.getValidacion())
+				|| Validacion.RESERVA.equals(validable.getValidacion()) || userIsOper());
+	}
+
+	protected Usuario getUsuario(final Session session) throws HibernateException {
+		final Criteria criteriUsu = session.createCriteria(Usuario.class);
+		criteriUsu.add(Expression.eq("username", ctx.getCallerPrincipal().getName()));
+		List usuaris;
+
+		try {
+			usuaris = criteriUsu.list();
+		} catch (final HibernateException he) {
+			throw new EJBException(he);
+		}
+
+		if (usuaris.isEmpty()) {
+			throw new EJBException("El usuario actual no existe!");
+		}
+		return (Usuario) usuaris.get(0);
+	}
+
+	/**
+	 * Descripcion: Delete del valor del campo CodUA de la tabla Historico. El
+	 * metodo devolvera una session para que el commit se realice en la funcion que
+	 * llama a este metodo.
+	 *
+	 * @param session
+	 *            session
+	 * @param ua
+	 *            Unidad Administrativa
+	 * @return session
+	 * @throws HibernateException
+	 */
+
+	protected Session deleteCodUaHistorico(final Session session, final UnidadAdministrativa ua)
+			throws HibernateException {
+		// UAs
+		final Long idUA = ua.getId();
+		final Query query = session.createQuery("from HistoricoUA as hua where hua.ua.id = :ua_id");
+		query.setParameter("ua_id", idUA, Hibernate.LONG);
+		query.setCacheable(true);
+		final List<?> huas = query.list();
+		final Iterator<?> iterUA = huas.iterator();
+		while (iterUA.hasNext()) {
+			final HistoricoUA histUA = (HistoricoUA) iterUA.next();
+			histUA.setUa(null);
+			session.update(histUA);
+		}
+		// Ficha
+		final Query queryFicha = session.createQuery("from HistoricoFicha as hp where hp.ua.id = :ua_id");
+		queryFicha.setParameter("ua_id", idUA, Hibernate.LONG);
+		queryFicha.setCacheable(true);
+
+		final List<?> hFicha = queryFicha.list();
+		final Iterator<?> iterFicha = hFicha.iterator();
+		while (iterFicha.hasNext()) {
+			final HistoricoFicha histFicha = (HistoricoFicha) iterFicha.next();
+			histFicha.setUa(null);
+			session.update(histFicha);
+		}
+
+		return session;
+	}
+
+	protected Historico getHistorico(final Session session, final UnidadAdministrativa ua) throws HibernateException {
+		HistoricoUA hua;
+		final Query query = session.createQuery("from HistoricoUA as hua where hua.ua.id = :ua_id");
 		query.setParameter("ua_id", ua.getId(), Hibernate.LONG);
 		query.setCacheable(true);
-		List<?> huas = query.list();
+		final List<?> huas = query.list();
 		if (huas.isEmpty()) {
 			hua = new HistoricoUA();
 			hua.setUa(ua);
@@ -301,495 +301,499 @@ public abstract class HibernateEJB implements SessionBean {
 		} else {
 			hua = (HistoricoUA) huas.get(0);
 		}
-	
+
 		return hua;
 	}
-    
-    protected Historico getHistorico(Session session, ProcedimientoLocal pr) throws HibernateException {
-    	HistoricoProcedimiento hp;
-    	Query query = session.createQuery("from HistoricoProcedimiento as hp where hp.procedimiento.id = :proc_id");
-    	query.setParameter("proc_id", pr.getId(), Hibernate.LONG);
-    	query.setCacheable(true);
-    	List hprs = query.list();
-    	if (hprs.isEmpty()) {
-		    hp = new HistoricoProcedimiento();
-		    hp.setProcedimiento(pr);
-		    TraduccionProcedimientoLocal traduccionProcedimientoLocal = (TraduccionProcedimientoLocal) pr.getTraduccion();
-		    if (traduccionProcedimientoLocal != null) {
-		        hp.setNombre(traduccionProcedimientoLocal.getNombre());
-		    } else {
-		        hp.setNombre("-");
-		    }
-		    session.save(hp);
-		    session.flush();
+
+	protected Historico getHistorico(final Session session, final ProcedimientoLocal pr) throws HibernateException {
+		HistoricoProcedimiento hp;
+		final Query query = session
+				.createQuery("from HistoricoProcedimiento as hp where hp.procedimiento.id = :proc_id");
+		query.setParameter("proc_id", pr.getId(), Hibernate.LONG);
+		query.setCacheable(true);
+		final List hprs = query.list();
+		if (hprs.isEmpty()) {
+			hp = new HistoricoProcedimiento();
+			hp.setProcedimiento(pr);
+			final TraduccionProcedimientoLocal traduccionProcedimientoLocal = (TraduccionProcedimientoLocal) pr
+					.getTraduccion();
+			if (traduccionProcedimientoLocal != null) {
+				hp.setNombre(traduccionProcedimientoLocal.getNombre());
+			} else {
+				hp.setNombre("-");
+			}
+			session.save(hp);
+			session.flush();
 		} else {
-		    hp = (HistoricoProcedimiento) hprs.get(0);
+			hp = (HistoricoProcedimiento) hprs.get(0);
 		}
-    	return hp;
+		return hp;
 	}
-    	
-	protected Historico getHistorico(Session session, Servicio sr) throws HibernateException {
-    	HistoricoServicio hs;
-    	Query query = session.createQuery("from HistoricoServicio as hp where hp.servicio.id = :serv_id");
-    	query.setParameter("serv_id", sr.getId(), Hibernate.LONG);
-    	query.setCacheable(true);
-    	List hprs = query.list();
-    	if (hprs.isEmpty()) {
-	    hs = new HistoricoServicio();
-	    hs.setServicio(sr);
-	    TraduccionServicio traduccionServicio = (TraduccionServicio) sr.getTraduccion();
-	    if (traduccionServicio != null) {
-		        hs.setNombre(traduccionServicio.getNombre());
-		    } else {
-		        hs.setNombre("-");
-		    }
-		    session.save(hs);
-		    session.flush();
+
+	protected Historico getHistorico(final Session session, final Servicio sr) throws HibernateException {
+		HistoricoServicio hs;
+		final Query query = session.createQuery("from HistoricoServicio as hp where hp.servicio.id = :serv_id");
+		query.setParameter("serv_id", sr.getId(), Hibernate.LONG);
+		query.setCacheable(true);
+		final List hprs = query.list();
+		if (hprs.isEmpty()) {
+			hs = new HistoricoServicio();
+			hs.setServicio(sr);
+			final TraduccionServicio traduccionServicio = (TraduccionServicio) sr.getTraduccion();
+			if (traduccionServicio != null) {
+				hs.setNombre(traduccionServicio.getNombre());
+			} else {
+				hs.setNombre("-");
+			}
+			session.save(hs);
+			session.flush();
 		} else {
-		    hs = (HistoricoServicio) hprs.get(0);
+			hs = (HistoricoServicio) hprs.get(0);
 		}
-	
-    	return hs;
+
+		return hs;
 	}
-    
-    protected Historico getHistorico(Session session, Normativa norm)
-            throws HibernateException {
-        HistoricoNormativa hnorm;
-        Query query = session.createQuery("from HistoricoNormativa as hnorm where hnorm.normativa.id = :nor_id");
-        query.setParameter("nor_id", norm.getId(), Hibernate.LONG);
-        query.setCacheable(true);
-        List hnorms = query.list();
-        if (hnorms.isEmpty()) {
-            hnorm = new HistoricoNormativa();
-            hnorm.setNormativa(norm);
-            if(norm.getTraduccion()!=null){
-                hnorm.setNombre(((TraduccionNormativa) norm.getTraduccion()).getTitulo());
-            }
-            session.save(hnorm);
-            session.flush();
-        } else {
-            hnorm = (HistoricoNormativa) hnorms.get(0);
-        }
 
-        return hnorm;
-    }
+	protected Historico getHistorico(final Session session, final Normativa norm) throws HibernateException {
+		HistoricoNormativa hnorm;
+		final Query query = session.createQuery("from HistoricoNormativa as hnorm where hnorm.normativa.id = :nor_id");
+		query.setParameter("nor_id", norm.getId(), Hibernate.LONG);
+		query.setCacheable(true);
+		final List hnorms = query.list();
+		if (hnorms.isEmpty()) {
+			hnorm = new HistoricoNormativa();
+			hnorm.setNormativa(norm);
+			if (norm.getTraduccion() != null) {
+				hnorm.setNombre(((TraduccionNormativa) norm.getTraduccion()).getTitulo());
+			}
+			session.save(hnorm);
+			session.flush();
+		} else {
+			hnorm = (HistoricoNormativa) hnorms.get(0);
+		}
 
-    protected Historico getHistorico(Session session, Ficha ficha)
-            throws HibernateException {
-        HistoricoFicha hficha;
-        Query query = session.createQuery("from HistoricoFicha as hficha where hficha.ficha.id = :ficha_id and hficha.materia.id is null and hficha.ua.id is null ");
-        query.setParameter("ficha_id", ficha.getId(), Hibernate.LONG);
-        query.setCacheable(true);
-        List hfichas = query.list();
-        if (hfichas.isEmpty()) {
-            hficha = new HistoricoFicha();
-            hficha.setFicha(ficha);
-            if(ficha.getTraduccion()!=null){
-                hficha.setNombre(((TraduccionFicha) ficha.getTraduccion()).getTitulo());
-            }
-            session.save(hficha);
-            session.flush();
-        } else {
-            hficha = (HistoricoFicha) hfichas.get(0);
-        }
+		return hnorm;
+	}
 
-        return hficha;
-    }
+	protected Historico getHistorico(final Session session, final Ficha ficha) throws HibernateException {
+		HistoricoFicha hficha;
+		final Query query = session.createQuery(
+				"from HistoricoFicha as hficha where hficha.ficha.id = :ficha_id and hficha.materia.id is null and hficha.ua.id is null ");
+		query.setParameter("ficha_id", ficha.getId(), Hibernate.LONG);
+		query.setCacheable(true);
+		final List hfichas = query.list();
+		if (hfichas.isEmpty()) {
+			hficha = new HistoricoFicha();
+			hficha.setFicha(ficha);
+			if (ficha.getTraduccion() != null) {
+				hficha.setNombre(((TraduccionFicha) ficha.getTraduccion()).getTitulo());
+			}
+			session.save(hficha);
+			session.flush();
+		} else {
+			hficha = (HistoricoFicha) hfichas.get(0);
+		}
 
-    protected Historico getHistorico(Session session, Materia mat)
-    	throws HibernateException {
-    	HistoricoMateria hmat;
-    	Query query = session.createQuery("from HistoricoMateria as hmat where hmat.materia.id = :materia_id");
-    	query.setParameter("materia_id", mat.getId(), Hibernate.LONG);
-    	query.setCacheable(true);
-    	List hmats = query.list();
-    	if (hmats.isEmpty()) {
-    		hmat = new HistoricoMateria();
-    		hmat.setMateria(mat);
-            if(mat.getTraduccion()!=null){
-    		    hmat.setNombre(((TraduccionMateria) mat.getTraduccion()).getNombre());
-            }
-    		session.save(hmat);
-    		session.flush();
-    	} else {
-    		hmat = (HistoricoMateria) hmats.get(0);
-    	}
+		return hficha;
+	}
 
-    	return hmat;
-    }
+	protected Historico getHistorico(final Session session, final Materia mat) throws HibernateException {
+		HistoricoMateria hmat;
+		final Query query = session.createQuery("from HistoricoMateria as hmat where hmat.materia.id = :materia_id");
+		query.setParameter("materia_id", mat.getId(), Hibernate.LONG);
+		query.setCacheable(true);
+		final List hmats = query.list();
+		if (hmats.isEmpty()) {
+			hmat = new HistoricoMateria();
+			hmat.setMateria(mat);
+			if (mat.getTraduccion() != null) {
+				hmat.setNombre(((TraduccionMateria) mat.getTraduccion()).getNombre());
+			}
+			session.save(hmat);
+			session.flush();
+		} else {
+			hmat = (HistoricoMateria) hmats.get(0);
+		}
 
+		return hmat;
+	}
 
-    protected void addOperacion(Session session, UnidadAdministrativa ua, int operacion) throws HibernateException {
-        Auditoria aud = new Auditoria();
-        aud.setUsuario(ctx.getCallerPrincipal().getName());
-        aud.setFecha(new Date());
-        aud.setCodigoOperacion(operacion);
-        aud.setHistorico(getHistorico(session, ua));
-        session.save(aud);
-        session.flush();
-    }
+	protected void addOperacion(final Session session, final UnidadAdministrativa ua, final int operacion)
+			throws HibernateException {
+		final Auditoria aud = new Auditoria();
+		aud.setUsuario(ctx.getCallerPrincipal().getName());
+		aud.setFecha(new Date());
+		aud.setCodigoOperacion(operacion);
+		aud.setHistorico(getHistorico(session, ua));
+		session.save(aud);
+		session.flush();
+	}
 
-    protected void addOperacion(Session session, ProcedimientoLocal pr, int operacion) throws HibernateException {
-        Auditoria aud = new Auditoria();
-        aud.setUsuario(ctx.getCallerPrincipal().getName());
-        aud.setFecha(new Date());
-        aud.setCodigoOperacion(operacion);
-        aud.setHistorico(getHistorico(session, pr));
-        session.save(aud);
-        session.flush();
-    }
-    
-    protected void addOperacion(Session session, Servicio sr, int operacion) throws HibernateException {
-        Auditoria aud = new Auditoria();
-        aud.setUsuario(ctx.getCallerPrincipal().getName());
-        aud.setFecha(new Date());
-        aud.setCodigoOperacion(operacion);
-        aud.setHistorico(getHistorico(session, sr));
-        session.save(aud);
-        session.flush();
-    }
+	protected void addOperacion(final Session session, final ProcedimientoLocal pr, final int operacion)
+			throws HibernateException {
+		final Auditoria aud = new Auditoria();
+		aud.setUsuario(ctx.getCallerPrincipal().getName());
+		aud.setFecha(new Date());
+		aud.setCodigoOperacion(operacion);
+		aud.setHistorico(getHistorico(session, pr));
+		session.save(aud);
+		session.flush();
+	}
 
-    protected void addOperacion(Session session, Normativa norm, int operacion) throws HibernateException {
-        Auditoria aud = new Auditoria();
-        aud.setUsuario(ctx.getCallerPrincipal().getName());
-        aud.setFecha(new Date());
-        aud.setCodigoOperacion(operacion);
-        aud.setHistorico(getHistorico(session, norm));
-        session.save(aud);
-        session.flush();
-    }
+	protected void addOperacion(final Session session, final Servicio sr, final int operacion)
+			throws HibernateException {
+		final Auditoria aud = new Auditoria();
+		aud.setUsuario(ctx.getCallerPrincipal().getName());
+		aud.setFecha(new Date());
+		aud.setCodigoOperacion(operacion);
+		aud.setHistorico(getHistorico(session, sr));
+		session.save(aud);
+		session.flush();
+	}
 
-    protected void addOperacion(Session session, Ficha ficha, int operacion) throws HibernateException {
-    	Auditoria aud = new Auditoria();
-        aud.setUsuario(ctx.getCallerPrincipal().getName());
-        aud.setFecha(new Date());
-        aud.setCodigoOperacion(operacion);
-        aud.setHistorico(getHistorico(session, ficha));
-        session.save(aud);
-        session.flush();
-    }
-    
-    protected void addOperacion(Session session, Materia materia, int operacion) throws HibernateException {
-    	Auditoria aud = new Auditoria();
-        aud.setUsuario(ctx.getCallerPrincipal().getName());
-        aud.setFecha(new Date());
-        aud.setCodigoOperacion(operacion);
-        aud.setHistorico(getHistorico(session, materia));
-        session.save(aud);
-        session.flush();
-    }
+	protected void addOperacion(final Session session, final Normativa norm, final int operacion)
+			throws HibernateException {
+		final Auditoria aud = new Auditoria();
+		aud.setUsuario(ctx.getCallerPrincipal().getName());
+		aud.setFecha(new Date());
+		aud.setCodigoOperacion(operacion);
+		aud.setHistorico(getHistorico(session, norm));
+		session.save(aud);
+		session.flush();
+	}
 
-    // Metodes de seguretat.
+	protected void addOperacion(final Session session, final Ficha ficha, final int operacion)
+			throws HibernateException {
+		final Auditoria aud = new Auditoria();
+		aud.setUsuario(ctx.getCallerPrincipal().getName());
+		aud.setFecha(new Date());
+		aud.setCodigoOperacion(operacion);
+		aud.setHistorico(getHistorico(session, ficha));
+		session.save(aud);
+		session.flush();
+	}
 
-    /**
-     * Comprueba si un usuario puede modificar una unidad administrativa.
-     * El parametro modificacion indica el nivel de acceso, si solo a efectos de relacionar informacion (false)
-     *  o tambien de modificacion (true).
-     */
-    protected boolean tieneAcceso(Usuario usuario, UnidadAdministrativa unidad, boolean modificacion) {
-        return userIsSystem()
-                || ( (!modificacion || userIsSuper()) && usuario.hasAccess(unidad));
-    }
-    
-    
-    /**
-     * Comprueba si un usuario puede modificar una seccion.
-     * El parámetro modificacion indica el nivel de acceso, si solo a efectos de relacionar informacion (false)
-     *  o tambien de modificacion (true).
-     */
-    protected boolean tieneAcceso(Usuario usuario, PerfilGestor perfil, boolean modificacion) {
-        return userIsSystem()
-                || ( (!modificacion || userIsSuper()) && usuario.hasAccess(perfil));
-    }
+	protected void addOperacion(final Session session, final Materia materia, final int operacion)
+			throws HibernateException {
+		final Auditoria aud = new Auditoria();
+		aud.setUsuario(ctx.getCallerPrincipal().getName());
+		aud.setFecha(new Date());
+		aud.setCodigoOperacion(operacion);
+		aud.setHistorico(getHistorico(session, materia));
+		session.save(aud);
+		session.flush();
+	}
 
-    /**
-     * Comprueba si un usuario puede modificar los contenidos de una seccion.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Seccion seccion) {
-	    /*if (seccion.getPerfilsGestor().isEmpty()) {
-	        return true;
-	    }*/
-	
-	    for (Iterator<PerfilGestor> iterator = seccion.getPerfilsGestor().iterator(); iterator.hasNext();) {
-	        PerfilGestor perfilGestor = iterator.next();
-	        if (tieneAcceso(usuario, perfilGestor, true)) {
-	            return true;
-	        }
-	    }
-	    return false;
+	// Metodes de seguretat.
 
-    }
+	/**
+	 * Comprueba si un usuario puede modificar una unidad administrativa. El
+	 * parametro modificacion indica el nivel de acceso, si solo a efectos de
+	 * relacionar informacion (false) o tambien de modificacion (true).
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final UnidadAdministrativa unidad,
+			final boolean modificacion) {
+		return userIsSystem() || ((!modificacion || userIsSuper()) && usuario.hasAccess(unidad));
+	}
 
-    /**
-     * Comprueba si un usuario puede modificar un procedimiento.
-     */
-    protected boolean tieneAcceso(Usuario usuario, ProcedimientoLocal procedimiento) {
-        return (tieneAccesoValidable(usuario, procedimiento)
-                && tieneAcceso(usuario, procedimiento.getUnidadAdministrativa(), false));
-    }
-    
-    /**
-     * Comprueba si un usuario puede modificar un servicio.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Servicio servicio) {
-        return (tieneAccesoValidable(usuario, servicio)
-                && tieneAcceso(usuario, servicio.getOrganoInstructor(), false));
-    }
+	/**
+	 * Comprueba si un usuario puede modificar una seccion. El parámetro
+	 * modificacion indica el nivel de acceso, si solo a efectos de relacionar
+	 * informacion (false) o tambien de modificacion (true).
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final PerfilGestor perfil, final boolean modificacion) {
+		return userIsSystem() || ((!modificacion || userIsSuper()) && usuario.hasAccess(perfil));
+	}
 
-    /**
-     * Comprueba si un usuario puede modificar una normativa.
-     * Tendra acceso si tiene acceso a la validacion y la normativa no esta relacionada con ninguna unidad o
-     * tiene acceso a la unidad con la que esta relacionada.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Normativa normativa) {
-        if (!tieneAccesoValidable(usuario, normativa)) {
-            return false;
-        }
+	/**
+	 * Comprueba si un usuario puede modificar los contenidos de una seccion.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Seccion seccion) {
+		/*
+		 * if (seccion.getPerfilsGestor().isEmpty()) { return true; }
+		 */
 
-        if (normativa.getUnidadesnormativas() != null) {
-        	for(UnidadNormativa unidadNormativa : normativa.getUnidadesnormativas()) {
-	        	if (! tieneAcceso(usuario, unidadNormativa.getUnidadAdministrativa(), false)) {
-	        		return false; 
-	        	}
-        	}
-        }
-        
-        return true;
-    }
+		for (final Iterator<PerfilGestor> iterator = seccion.getPerfilsGestor().iterator(); iterator.hasNext();) {
+			final PerfilGestor perfilGestor = iterator.next();
+			if (tieneAcceso(usuario, perfilGestor, true)) {
+				return true;
+			}
+		}
+		return false;
 
-    /**
-     * Comprueba si un usuario puede modificar una ficha.
-     * Tendra acceso si tiene acceso a la validacion y no esta relacionada
-     *  o tiene acceso a alguna unidad/seccion con
-     * la que esta relacionada.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Ficha ficha) {
-        if (!tieneAccesoValidable(usuario, ficha)) {
-            return false;
-        }
+	}
 
-        if (ficha.getFichasua().isEmpty()) {
-            return true;
-        }
+	/**
+	 * Comprueba si un usuario puede modificar un procedimiento.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final ProcedimientoLocal procedimiento) {
+		return (tieneAccesoValidable(usuario, procedimiento)
+				&& tieneAcceso(usuario, procedimiento.getUnidadAdministrativa(), false));
+	}
 
-        for (Iterator iterator = ficha.getFichasua().iterator(); iterator.hasNext();) {
-            FichaUA fichaUA = (FichaUA) iterator.next();
-            if (tieneAcceso(usuario, fichaUA)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	/**
+	 * Comprueba si un usuario puede modificar un servicio.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Servicio servicio) {
+		return (tieneAccesoValidable(usuario, servicio) && tieneAcceso(usuario, servicio.getOrganoInstructor(), false));
+	}
 
-    /**
-     * Comprueba si un usuario puede modificar una ficha.
-     * Tendrá acceso si tiene acceso a la validación y no está relacionada
-     * o tiene acceso a alguna unidad/sección con
-     * la que está relacionada.
-     */
-    protected boolean tieneAcceso(Usuario usuario, FichaResumen fichaResumen) {
-        if (!tieneAccesoValidable(usuario, fichaResumen)) {
-            return false;
-        }
+	/**
+	 * Comprueba si un usuario puede modificar una normativa. Tendra acceso si tiene
+	 * acceso a la validacion y la normativa no esta relacionada con ninguna unidad
+	 * o tiene acceso a la unidad con la que esta relacionada.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Normativa normativa) {
+		if (!tieneAccesoValidable(usuario, normativa)) {
+			return false;
+		}
 
-        if (fichaResumen.getFichasua().isEmpty()) {
-            return true;
-        }
+		if (normativa.getUnidadesnormativas() != null) {
+			for (final UnidadNormativa unidadNormativa : normativa.getUnidadesnormativas()) {
+				if (!tieneAcceso(usuario, unidadNormativa.getUnidadAdministrativa(), false)) {
+					return false;
+				}
+			}
+		}
 
-        for (Iterator iterator = fichaResumen.getFichasua().iterator(); iterator.hasNext();) {
-            FichaResumenUA fichaResumenUA = (FichaResumenUA) iterator.next();
-            if (tieneAcceso(usuario, fichaResumenUA)) {
-                return true;
-            }
-        }
-        return false;
-    }
+		return true;
+	}
 
-    
-    /**
-     * Comprueba si un usuario puede modificar una relacion ficha - unidad.
-     * Tendra acceso si tiene acceso a la seccion y a la unidad.
-     * Si la unidad es <code>null</code> es una relacion general y debe ser usuario de
-     * sistema.
-     */
-    protected boolean tieneAcceso(Usuario usuario, FichaUA fichaUA) {
-        UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
-        return tieneAcceso(usuario, fichaUA.getSeccion()) &&
-                (unidad == null ? userIsSystem() : tieneAcceso(usuario, unidad, false));
-    }
-    
-    /**
-     * Comprueba si un usuario puede modificar una relación ficha - unidad.
-     * Tendrá acceso si tiene acceso a la sección y a la unidad.
-     * Si la unidad és <code>null</code> és una relación general y debe ser usuario de
-     * sistema.
-     */
-    protected boolean tieneAcceso(Usuario usuario, FichaResumenUA fichaResumenUA) {
-//        UnidadAdministrativa unidad = fichaResumenUA.getUnidadAdministrativa();
-//        return tieneAcceso(usuario, fichaResumenUA.getSeccion()) &&
-//                (unidad == null ? userIsSystem() : tieneAcceso(usuario, unidad, false));
-    	return true;
-    }
-    
-    /**
-     * Comprueba si un usuario puede modificar un documento.
-     * Tendra acceso si tiene acceso a la ficha o al procedimiento a que pertenece el documento.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Documento documento) {
-        if (documento.getFicha() != null) {
-            return tieneAcceso(usuario, documento.getFicha());
-        }
-        if (documento.getProcedimiento() != null) {
-            return tieneAcceso(usuario, documento.getProcedimiento());
-        }
-        return true;
-    }
-    
-    /**
-     * Comprueba si un usuario puede modificar un documento.
-     * Tendra acceso si tiene acceso a la ficha o al procedimiento a que pertenece el documento.
-     */
-    protected boolean tieneAcceso(Usuario usuario, DocumentoServicio documento) {
-         return tieneAcceso(usuario, documento.getServicio());
-    }
+	/**
+	 * Comprueba si un usuario puede modificar una ficha. Tendra acceso si tiene
+	 * acceso a la validacion y no esta relacionada o tiene acceso a alguna
+	 * unidad/seccion con la que esta relacionada.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Ficha ficha) {
+		if (!tieneAccesoValidable(usuario, ficha)) {
+			return false;
+		}
 
-    /**
-     * Comprueba si un usuario puede modificar un tramite.
-     * Tendra acceso si tiene acceso al procedimiento.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Tramite tramite) {
-        return tramite.getProcedimiento() == null || tieneAcceso(usuario, tramite.getProcedimiento());
-    }
+		if (ficha.getFichasua().isEmpty()) {
+			return true;
+		}
 
-    /**
-     * Comprueba si un usuario puede modificar un formulario.
-     * Tendra acceso si tiene acceso al tramite.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Formulario formulario) {
-        return formulario.getTramite() == null || tieneAcceso(usuario, formulario.getTramite());
-    }
+		for (final Iterator iterator = ficha.getFichasua().iterator(); iterator.hasNext();) {
+			final FichaUA fichaUA = (FichaUA) iterator.next();
+			if (tieneAcceso(usuario, fichaUA)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Comprueba si un usuario puede modificar un edificio.
-     * Tendra acceso si el edificio no pertenece a ninguna unidad o si tiene
-     * acceso a alguna de las unidades a las que pertenece.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Edificio edificio) {
-        if (edificio.getUnidadesAdministrativas().isEmpty()) {
-            return true;
-        }
+	/**
+	 * Comprueba si un usuario puede modificar una ficha. Tendrá acceso si tiene
+	 * acceso a la validación y no está relacionada o tiene acceso a alguna
+	 * unidad/sección con la que está relacionada.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final FichaResumen fichaResumen) {
+		if (!tieneAccesoValidable(usuario, fichaResumen)) {
+			return false;
+		}
 
-        for (Iterator iterator = edificio.getUnidadesAdministrativas().iterator(); iterator.hasNext();) {
-            UnidadAdministrativa unidad = (UnidadAdministrativa) iterator.next();
-            if (tieneAcceso(usuario, unidad, true)) {
-                return true;
-            }
-        }
-        return false;
-    }
+		if (fichaResumen.getFichasua().isEmpty()) {
+			return true;
+		}
 
-    /**
-     * Comprueba si un usuario puede modificar un personal.
-     * Tendra acceso si puede acceder a la unidad administrativa.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Personal personal) {
-        return tieneAcceso(usuario, personal.getUnidadAdministrativa(), true);
-    }
+		for (final Iterator iterator = fichaResumen.getFichasua().iterator(); iterator.hasNext();) {
+			final FichaResumenUA fichaResumenUA = (FichaResumenUA) iterator.next();
+			if (tieneAcceso(usuario, fichaResumenUA)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Comprueba si un usuario puede modificar un comentario.
-     * Tendra acceso si es el informador que lo creo o tiene acceso a la ficha
-     * o al procedimiento a que pertenece el comentario.
-     */
-    protected boolean tieneAcceso(Usuario usuario, Comentario comentario) {
-        if (ctx.isCallerInRole("sacinfo")
-                && comentario.getUsuario() != null
-                && comentario.getUsuario().getUsername().equals(usuario.getUsername())) {
-            return true;
-        }
-        if (comentario instanceof ComentarioFicha) {
-            return tieneAcceso(usuario, ((ComentarioFicha) comentario).getFicha());
-        }
-        if (comentario instanceof ComentarioProcedimiento) {
-            return tieneAcceso(usuario, ((ComentarioProcedimiento) comentario).getProcedimiento());
-        }
-        return true;
-    }
-    
-    /**
-     * Comprueba si un usuario puede modificar un contenido.
-     */
-    protected boolean tieneAccesoValidable(Usuario usuario, Validable validable) {
-        return (userIsSuper() || validable.getValidacion().equals(Validacion.INTERNA));
-    }
-        
-    /**
-     * Método que gestiona la paginación de las listas de entidades de tablas maestras.
-     * 
-     * @param pagina Número de página actual
-     * @param resultados Número de resultados a mostrar
-     * @return ResultadoBusqueda Objeto con la información solicitada (registros de página y total)
-     */
-    protected ResultadoBusqueda listarTablaMaestraPaginada(int pagina, int resultats, List<?> listaEntidades) {
-    	
-    	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-    	
-    	int indiceDesde = pagina * resultats;
-    	int indiceHasta = indiceDesde + resultats;
-    	int tamanyoLista = listaEntidades.size();
-    	
-    	if (indiceHasta > tamanyoLista) {
-    		indiceHasta = tamanyoLista;
-    	}
-    		
-    	resultadoBusqueda.setTotalResultados(listaEntidades.size());
-    	
-    	if ( resultats < RESULTATS_CERCA_TOTS ) {
-    		listaEntidades = listaEntidades.subList( indiceDesde, indiceHasta );    		
-    	}
-    	
-    	resultadoBusqueda.setListaResultados(listaEntidades);
-    	
-    	return resultadoBusqueda;
-    }
-    
-    /**
-     * Método encargado de realizar el casting de listas no tipadas a listas
-     * tipadas
-     * 
-     * @param <T>
-     * @param clazz Clase del tipo de objeto contenido en la lista
-     * @param c Colección a ser tipada
-     * @return Lista tipada
-     */
-    protected <T>List<T> castList(Class<? extends T> clazz, Collection<?> c) {
-        List<T> r = new ArrayList<T>();
-        if (c != null) {     
-            r = new ArrayList<T>(c.size());            
-            for (Object o : c) {
-            	r.add(clazz.cast(o));
-            }
-        }
-        return r;
-    }    	
+	/**
+	 * Comprueba si un usuario puede modificar una relacion ficha - unidad. Tendra
+	 * acceso si tiene acceso a la seccion y a la unidad. Si la unidad es
+	 * <code>null</code> es una relacion general y debe ser usuario de sistema.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final FichaUA fichaUA) {
+		final UnidadAdministrativa unidad = fichaUA.getUnidadAdministrativa();
+		return tieneAcceso(usuario, fichaUA.getSeccion())
+				&& (unidad == null ? userIsSystem() : tieneAcceso(usuario, unidad, false));
+	}
 
-    /**
-     * Método encargado de realizar el casting de sets no tipados a sets
-     * tipados
-     * 
-     * @param <T>
-     * @param clazz Clase del tipo de objeto contenido en la lista
-     * @param c Colección a ser tipada
-     * @return Set tipado
-     */    
-    protected <T>Set<T> castSet(Class<? extends T> clazz, Collection<?> c) {
-        Set<T> r = new HashSet<T>();
-        if (c != null) {     
-            r = new HashSet<T>(c.size());            
-            for (Object o : c) {
-            	r.add(clazz.cast(o));
-            }
-        }
-        return r;    	
-    }
+	/**
+	 * Comprueba si un usuario puede modificar una relación ficha - unidad. Tendrá
+	 * acceso si tiene acceso a la sección y a la unidad. Si la unidad és
+	 * <code>null</code> és una relación general y debe ser usuario de sistema.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final FichaResumenUA fichaResumenUA) {
+		// UnidadAdministrativa unidad = fichaResumenUA.getUnidadAdministrativa();
+		// return tieneAcceso(usuario, fichaResumenUA.getSeccion()) &&
+		// (unidad == null ? userIsSystem() : tieneAcceso(usuario, unidad, false));
+		return true;
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un documento. Tendra acceso si tiene
+	 * acceso a la ficha o al procedimiento a que pertenece el documento.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Documento documento) {
+		if (documento.getFicha() != null) {
+			return tieneAcceso(usuario, documento.getFicha());
+		}
+		if (documento.getProcedimiento() != null) {
+			return tieneAcceso(usuario, documento.getProcedimiento());
+		}
+		return true;
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un documento. Tendra acceso si tiene
+	 * acceso a la ficha o al procedimiento a que pertenece el documento.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final DocumentoServicio documento) {
+		return tieneAcceso(usuario, documento.getServicio());
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un tramite. Tendra acceso si tiene
+	 * acceso al procedimiento.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Tramite tramite) {
+		return tramite.getProcedimiento() == null || tieneAcceso(usuario, tramite.getProcedimiento());
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un formulario. Tendra acceso si tiene
+	 * acceso al tramite.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Formulario formulario) {
+		return formulario.getTramite() == null || tieneAcceso(usuario, formulario.getTramite());
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un edificio. Tendra acceso si el
+	 * edificio no pertenece a ninguna unidad o si tiene acceso a alguna de las
+	 * unidades a las que pertenece.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Edificio edificio) {
+		if (edificio.getUnidadesAdministrativas().isEmpty()) {
+			return true;
+		}
+
+		for (final Iterator iterator = edificio.getUnidadesAdministrativas().iterator(); iterator.hasNext();) {
+			final UnidadAdministrativa unidad = (UnidadAdministrativa) iterator.next();
+			if (tieneAcceso(usuario, unidad, true)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un personal. Tendra acceso si puede
+	 * acceder a la unidad administrativa.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Personal personal) {
+		return tieneAcceso(usuario, personal.getUnidadAdministrativa(), true);
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un comentario. Tendra acceso si es el
+	 * informador que lo creo o tiene acceso a la ficha o al procedimiento a que
+	 * pertenece el comentario.
+	 */
+	protected boolean tieneAcceso(final Usuario usuario, final Comentario comentario) {
+		if (ctx.isCallerInRole("sacinfo") && comentario.getUsuario() != null
+				&& comentario.getUsuario().getUsername().equals(usuario.getUsername())) {
+			return true;
+		}
+		if (comentario instanceof ComentarioFicha) {
+			return tieneAcceso(usuario, ((ComentarioFicha) comentario).getFicha());
+		}
+		if (comentario instanceof ComentarioProcedimiento) {
+			return tieneAcceso(usuario, ((ComentarioProcedimiento) comentario).getProcedimiento());
+		}
+		return true;
+	}
+
+	/**
+	 * Comprueba si un usuario puede modificar un contenido.
+	 */
+	protected boolean tieneAccesoValidable(final Usuario usuario, final Validable validable) {
+		return (userIsSuper() || validable.getValidacion().equals(Validacion.INTERNA));
+	}
+
+	/**
+	 * Método que gestiona la paginación de las listas de entidades de tablas
+	 * maestras.
+	 *
+	 * @param pagina
+	 *            Número de página actual
+	 * @param resultados
+	 *            Número de resultados a mostrar
+	 * @return ResultadoBusqueda Objeto con la información solicitada (registros de
+	 *         página y total)
+	 */
+	protected ResultadoBusqueda listarTablaMaestraPaginada(final int pagina, final int resultats,
+			List<?> listaEntidades) {
+
+		final ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+
+		final int indiceDesde = pagina * resultats;
+		int indiceHasta = indiceDesde + resultats;
+		final int tamanyoLista = listaEntidades.size();
+
+		if (indiceHasta > tamanyoLista) {
+			indiceHasta = tamanyoLista;
+		}
+
+		resultadoBusqueda.setTotalResultados(listaEntidades.size());
+
+		if (resultats < RESULTATS_CERCA_TOTS) {
+			listaEntidades = listaEntidades.subList(indiceDesde, indiceHasta);
+		}
+
+		resultadoBusqueda.setListaResultados(listaEntidades);
+
+		return resultadoBusqueda;
+	}
+
+	/**
+	 * Método encargado de realizar el casting de listas no tipadas a listas tipadas
+	 *
+	 * @param <T>
+	 * @param clazz
+	 *            Clase del tipo de objeto contenido en la lista
+	 * @param c
+	 *            Colección a ser tipada
+	 * @return Lista tipada
+	 */
+	protected <T> List<T> castList(final Class<? extends T> clazz, final Collection<?> c) {
+		List<T> r = new ArrayList<T>();
+		if (c != null) {
+			r = new ArrayList<T>(c.size());
+			for (final Object o : c) {
+				r.add(clazz.cast(o));
+			}
+		}
+		return r;
+	}
+
+	/**
+	 * Método encargado de realizar el casting de sets no tipados a sets tipados
+	 *
+	 * @param <T>
+	 * @param clazz
+	 *            Clase del tipo de objeto contenido en la lista
+	 * @param c
+	 *            Colección a ser tipada
+	 * @return Set tipado
+	 */
+	protected <T> Set<T> castSet(final Class<? extends T> clazz, final Collection<?> c) {
+		Set<T> r = new HashSet<T>();
+		if (c != null) {
+			r = new HashSet<T>(c.size());
+			for (final Object o : c) {
+				r.add(clazz.cast(o));
+			}
+		}
+		return r;
+	}
+
 }

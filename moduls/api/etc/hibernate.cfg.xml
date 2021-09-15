@@ -52,6 +52,7 @@
         <mapping resource="org/ibit/rol/sac/model/Personal.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Procedimiento.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/ProcedimientoMensaje.hbm.xml" />
+        <mapping resource="org/ibit/rol/sac/model/MensajeEmail.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Seccion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Tipo.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/TipoAfectacion.hbm.xml" />

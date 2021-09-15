@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.sac.model.MensajeEmail" table="RSC_MSJMAI" >
+
+        <cache usage="read-write"/>
+
+        <id name="id" unsaved-value="null" column="MAI_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_MAI</param>
+            </generator>
+        </id>
+
+        <property name="from" length="100" column="MAI_FROM"/>
+        <property name="to" length="100" column="MAI_TO"/>
+        <property name="enviado"   column="MAI_ENVIAD" />
+        <property name="titulo" length="100"  column="MAI_TITUL"/>
+        <property name="contenido" length="500"  column="MAI_CONTE"/>
+        <property name="error" length="500"  column="MAI_ERROR"/>
+        <property name="tipo" length="3"  column="MAI_TIPO"/>
+        <property name="codigo"  column="MAI_PROSRV"/>
+		<property name="fechaCreacion" column="MAI_FECCRE"/>
+        <property name="fechaEnviado" column="MAI_FECENV"/>
+
+    </class>
+
+</hibernate-mapping>

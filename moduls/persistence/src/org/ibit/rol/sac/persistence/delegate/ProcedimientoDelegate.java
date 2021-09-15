@@ -270,4 +270,17 @@ public class ProcedimientoDelegate {
 	public boolean checkInfoAdicional(final Long id) throws DelegateException {
 		return impl.checkInfoAdicional(id);
 	}
+
+	/**
+	 * Obtiene solo el nombre del procedimiento
+	 *
+	 * @param idProc
+	 * @param catalan
+	 * @return
+	 * @throws DelegateException
+	 */
+	public String obtenerNombreProcedimiento(final Long idProc, final boolean catalan) throws DelegateException {
+		return impl.obtenerNombreProcedimiento(idProc, catalan);
+	}
+
 }
