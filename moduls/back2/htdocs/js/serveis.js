@@ -1464,6 +1464,7 @@ function CDetall() {
 			$("li:has(> a#btnGuardar_formularis_tramit)").hide();
 			$("li:has(> a#btnGuardar_documents_tramit)").hide();
 			$("#btnFinalizar_materias").hide();
+			$(".btnEliminar").hide();
 			$("#formTramits .btnEliminar").hide();
 			$(".documents .elimina").hide();
 

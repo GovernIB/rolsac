@@ -125,7 +125,7 @@ function marcarComoLeido(idDato, boton) {
 		},
 		success: function(data) {
 			if (data.error != null && data.error != undefined) {
-				Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: data.error, text: "<p>" + txtIntenteho + "</p>"});
+				Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: data.error, text: ""});
 			} else {
 				boton.style.visibility = "hidden"; //.style.display="none";
 			}
@@ -160,7 +160,7 @@ function enviarChat() {
 		},
 		success: function(data) {
 			if (data.error != null && data.error != undefined) {
-				Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: data.error, text: "<p>" + txtIntenteho + "</p>"});
+				Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.error, text: "<p>" + txtIntenteho + "</p>"});
 				// error
 				//Error.llansar();
 			} else {

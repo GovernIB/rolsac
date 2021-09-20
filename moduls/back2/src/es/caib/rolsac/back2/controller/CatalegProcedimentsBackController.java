@@ -1248,7 +1248,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			final String enviarEmail, final HttpServletRequest request) throws DelegateException {
 		final Map<String, Object> resultats = new HashMap<String, Object>();
 		if (texto == null || texto.isEmpty() || idEntidad == null) {
-			resultats.put("error", "No se ha podido marcar como leido");
+			resultats.put("error", "No se ha podido enviar el mensaje");
 		} else {
 
 			final String permisos = getPermisosUsuario(request);
@@ -1273,7 +1273,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					to = RolsacPropertiesUtil.getEmailTo();
 					from = RolsacPropertiesUtil.getEmailFrom();
 				} else {
-					to = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorProc(idEntidad) + "@caib.es";
+					final String toUser = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorProc(idEntidad);
+					if (toUser == null || toUser.isEmpty()) {
+						resultats.put("error",
+								messageSource.getMessage("proc.error.emailNoGestor", null, request.getLocale()));
+						return resultats;
+					}
+					to = toUser + "@caib.es";
 					from = username + "@caib.es";
 				}
 
@@ -1848,7 +1854,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment.setSignatura(request.getParameter("item_codigo_pro")); // Signatura
 			procediment = guardarSilencio(request, procediment, error); // Silencio
 			procediment = guardarLopd(request, procediment, error); // Servei Responsable
-			procediment = guardarPdtValidacion(request, procediment, error);
+			procediment = guardarPdtValidacion(request, procediment, procedimentOld, error);
 
 			// #351 cambio info por dir electronica
 			// procediment.setInfo(request.getParameter("item_notes")); // Info
@@ -2223,8 +2229,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 * @return
 	 */
 	private ProcedimientoLocal guardarPdtValidacion(final HttpServletRequest request,
-			final ProcedimientoLocal procediment, final String error) {
-		if (procediment.getId() == null) {
+			final ProcedimientoLocal procediment, final ProcedimientoLocal procedimentOld, final String error) {
+		if (procedimentOld == null || procedimentOld.getId() == null) {
 			procediment.setPendienteValidar(false);
 		} else {
 			final String permisos = getPermisosUsuario(request);
@@ -2233,7 +2239,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} else {
 				if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
 					procediment.setPendienteValidar(true);
-				} else if (procediment != null && procediment.getValidacion() == Validacion.PUBLICA) {
+				} else if (procedimentOld != null && procedimentOld.getValidacion() == Validacion.PUBLICA) {
 					// Si es gestor y está en estado publica, pasar automáticamente a pendiente
 					// validar.
 					procediment.setPendienteValidar(true);

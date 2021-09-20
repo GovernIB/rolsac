@@ -697,7 +697,9 @@ function CEscriptoriTramit() {
                     	//del trámite (estamos editando un trámite existente)
 	                    escriptori_detall_elm.fadeOut(300, function() {
 	                        escriptori_tramits_elm.fadeIn(300, function() {
-	                            escriptori_tramits_elm.find(".btnEliminar").show();
+	                        	if (!$("#item_pdt_validar").is(":checked")) {
+	                        		escriptori_tramits_elm.find(".btnEliminar").show();
+	                        	}
 	                            escriptori_tramits_elm.find("div#modul_documents_requerits").show();
 	                            escriptori_tramits_elm.find("div#modul_documents_tramits").show();
 	                            escriptori_tramits_elm.find("div#modul_formularis_tramits").show();

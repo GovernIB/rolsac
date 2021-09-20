@@ -905,13 +905,19 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					to = RolsacPropertiesUtil.getEmailTo();
 					from = RolsacPropertiesUtil.getEmailFrom();
 				} else {
-					to = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorServ(idEntidad) + "@caib.es";
+					final String toUser = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorServ(idEntidad);
+					if (toUser == null || toUser.isEmpty()) {
+						resultats.put("error",
+								messageSource.getMessage("serv.error.emailNoGestor", null, request.getLocale()));
+						return resultats;
+					}
+					to = toUser + "@caib.es";
 					from = username + "@caib.es";
 				}
 
-				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailProcTitulo(nombreServ));
+				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailServTitulo(nombreServ));
 				mensajeEmail.setContenido(
-						RolsacPropertiesUtil.getEmailProcContenido(username, texto, idEntidad.toString()));
+						RolsacPropertiesUtil.getEmailServContenido(username, texto, idEntidad.toString()));
 				mensajeEmail.setTo(to);
 				mensajeEmail.setFrom(from);
 
@@ -1665,7 +1671,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			servicio = guardarOrganInstructor(request, servicio, error); // Organ Resolutori
 			servicio = guardarServeiResponsable(request, servicio, error); // Servei Responsable
 			servicio = guardarLopd(request, servicio, error); // Servei Responsable
-			servicio = guardarPdtValidacion(request, servicio, error); // Pdt validacion
+			servicio = guardarPdtValidacion(request, servicio, servicioOld, error); // Pdt validacion
 
 			// Cargamos los datos básicos
 			servicio.setNombreResponsable(request.getParameter("item_responsable_nombre")); // Responsable
@@ -1830,8 +1836,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	 * @return
 	 */
 	private Servicio guardarPdtValidacion(final HttpServletRequest request, final Servicio servicio,
-			final String error) {
-		if (servicio.getId() == null) {
+			final Servicio servicioOld, final String error) {
+		if (servicioOld == null || servicioOld.getId() == null) {
 			servicio.setPendienteValidar(false);
 		} else {
 			final String permisos = getPermisosUsuario(request);
@@ -1840,7 +1846,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			} else {
 				if (request.getParameter("item_accion") != null && !request.getParameter("item_accion").isEmpty()) {
 					servicio.setPendienteValidar(true);
-				} else if (servicio != null && servicio.getValidacion() == Validacion.PUBLICA) {
+				} else if (servicioOld != null && servicioOld.getValidacion() == Validacion.PUBLICA) {
 					// Si es gestor y está en estado publica, pasar automáticamente a pendiente
 					// validar.
 					servicio.setPendienteValidar(true);

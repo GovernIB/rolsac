@@ -1413,11 +1413,11 @@ function CDetall() {
 
 		this.modificado(false);
 
-		//noPermiteGuardar
-		this.actualizarBotonesGuardar(dada_node.permiteGuardar);
-
 		//noPermiteEliminar
 		this.actualizarBotonesEliminar(dada_node.permiteEliminar);
+
+		//noPermiteGuardar
+		this.actualizarBotonesGuardar(dada_node.permiteGuardar);
 
 		if (dada_node.permiteGuardar == 'N' && dada_node.item_estat == 2) {
 			$("#filaNoEditable").show();
@@ -1452,6 +1452,7 @@ function CDetall() {
 			$("li:has(> a#btnGuardar_formularis_tramit)").hide();
 			$("li:has(> a#btnGuardar_documents_tramit)").hide();
 			$("#btnFinalizar_materias").hide();
+			$(".btnEliminar").hide();
 			$("#formTramits .btnEliminar").hide();
 			$(".documents .elimina").hide();
 		}

@@ -338,7 +338,7 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 
 			hql.append(" select max(mensaje.id) from ProcedimientoMensaje mensaje");
 			hql.append(" where mensaje.idProcedimiento = " + idEntidad);
-			hql.append("  and mensaje.gestor = 0 ");
+			hql.append("  and mensaje.gestor = 1 ");
 			final Long idMensaje = (Long) session.createQuery(hql.toString()).uniqueResult();
 			String gestor = null;
 			if (idMensaje != null) {
@@ -378,7 +378,7 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 
 			hql.append(" select max(mensaje.id) from ServicioMensaje mensaje");
 			hql.append(" where mensaje.idServicio = " + idEntidad);
-			hql.append("  and mensaje.gestor = 0 ");
+			hql.append("  and mensaje.gestor = 1 ");
 			final Long idMensaje = (Long) session.createQuery(hql.toString()).uniqueResult();
 			String gestor = null;
 			if (idMensaje != null) {
