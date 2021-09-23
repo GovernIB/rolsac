@@ -139,7 +139,8 @@ public class EmailUtils {
 		msg.setSubject(asunto);
 
 		// Configuramos el contenido
-		msg.setContent(mensaje, "text/plain");
+		final String contenid = "text/plain; charset=UTF-8"; // text/html
+		msg.setContent(mensaje, contenid);
 
 		// Mandamos el mail
 		Transport.send(msg);

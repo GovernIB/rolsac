@@ -188,7 +188,7 @@ public class RolsacPropertiesUtil {
 	public static final String getEmailServContenido(final String usuario, final String mensaje,
 			final String idEntidad) {
 		return getProperty("es.caib.rolsac.procServ.email.srv.contenido").replace("{0}", usuario)
-				.replace("{1}", mensaje).replace("{1}", idEntidad);
+				.replace("{1}", mensaje).replace("{1}", idEntidad).replace("{2}", idEntidad);
 	}
 
 	/** Devuevle el texto cuando eres supervisor y lo revisas **/
