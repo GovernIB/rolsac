@@ -657,6 +657,10 @@ function CEscriptoriTramit() {
         ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);
         ModulTaxesTramit.inicializarTaxes(datos.tasasTramite);
 
+
+        if ($("#item_estat").val() == 3 && 'N' == tienePermisoPublicar) {
+        	$("#formTramits li.btnEliminar").hide();
+        }
     };
 
 
