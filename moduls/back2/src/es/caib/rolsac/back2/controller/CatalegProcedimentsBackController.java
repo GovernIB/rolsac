@@ -1033,7 +1033,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} else if (proc.getValidacion() == Validacion.INTERNA.intValue()) {
 				acciones.add(new IdNomDTO(null, messageSource.getMessage("accion.guardar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
-						messageSource.getMessage("accion.publicar", null, request.getLocale())));
+						messageSource.getMessage("accion.validar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
 						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 
