@@ -21,6 +21,7 @@ public class ProcedimientoMensaje implements ValueObject {
 	private boolean gestor;
 	private boolean leido;
 	private Long idProcedimiento;
+	private String usuarioNombre;
 
 	/**
 	 * @return the id
@@ -155,6 +156,21 @@ public class ProcedimientoMensaje implements ValueObject {
 	 */
 	public void setIdProcedimiento(final Long idProcedimiento) {
 		this.idProcedimiento = idProcedimiento;
+	}
+
+	/**
+	 * @return the usuarioNombre
+	 */
+	public String getUsuarioNombre() {
+		return usuarioNombre;
+	}
+
+	/**
+	 * @param usuarioNombre
+	 *            the usuarioNombre to set
+	 */
+	public void setUsuarioNombre(final String usuarioNombre) {
+		this.usuarioNombre = usuarioNombre;
 	}
 
 }

@@ -21,6 +21,7 @@ public class ServicioMensaje implements ValueObject {
 	private boolean gestor;
 	private boolean leido;
 	private Long idServicio;
+	private String usuarioNombre;
 
 	/**
 	 * @return the id
@@ -155,6 +156,21 @@ public class ServicioMensaje implements ValueObject {
 	 */
 	public void setUsuarioLectura(final String usuarioLectura) {
 		this.usuarioLectura = usuarioLectura;
+	}
+
+	/**
+	 * @return the usuarioNombre
+	 */
+	public String getUsuarioNombre() {
+		return usuarioNombre;
+	}
+
+	/**
+	 * @param usuarioNombre
+	 *            the usuarioNombre to set
+	 */
+	public void setUsuarioNombre(final String usuarioNombre) {
+		this.usuarioNombre = usuarioNombre;
 	}
 
 }

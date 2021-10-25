@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,10 +10,13 @@ import javax.ejb.EJBException;
 import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.ServicioMensaje;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.util.EmailUtils;
 
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 /**
@@ -206,9 +210,32 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			final StringBuffer hql = new StringBuffer();
 
 			hql.append(" select mensaje from ProcedimientoMensaje mensaje");
+			hql.append("  from ProcedimientoMensaje mensaje");
 			hql.append(" where mensaje.idProcedimiento = " + idProcedimiento);
 			hql.append(" order by mensaje.fechaCreacion desc");
-			return session.createQuery(hql.toString()).list();
+			final List<ProcedimientoMensaje> mensajes = session.createQuery(hql.toString()).list();
+			final List<String> idUsuarios = new ArrayList<String>();
+			if (mensajes != null) {
+				for (final ProcedimientoMensaje mensaje : mensajes) {
+					if (mensaje.getUsuario() != null && !idUsuarios.contains(mensaje.getUsuario())) {
+						idUsuarios.add(mensaje.getUsuario());
+					}
+				}
+			}
+
+			final List<org.ibit.rol.sac.model.Usuario> usuarios = getUsuarios(session, idUsuarios);
+			if (usuarios != null && !usuarios.isEmpty()) {
+				for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
+					for (final ProcedimientoMensaje mensaje : mensajes) {
+						if (mensaje.getUsuario() != null && mensaje.getUsuarioNombre() == null
+								&& mensaje.getUsuario().equals(usuario.getUsername())) {
+							mensaje.setUsuarioNombre(usuario.getNombre());
+						}
+					}
+				}
+			}
+
+			return mensajes;
 
 		} catch (final Exception he) {
 			throw new EJBException(he);
@@ -234,7 +261,28 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			hql.append(" select mensaje from ServicioMensaje mensaje");
 			hql.append(" where mensaje.idServicio = " + idServicio);
 			hql.append(" order by mensaje.fechaCreacion desc");
-			return session.createQuery(hql.toString()).list();
+			final List<ServicioMensaje> mensajes = session.createQuery(hql.toString()).list();
+			final List<String> idUsuarios = new ArrayList<String>();
+			if (mensajes != null) {
+				for (final ServicioMensaje mensaje : mensajes) {
+					if (mensaje.getUsuario() != null && !idUsuarios.contains(mensaje.getUsuario())) {
+						idUsuarios.add(mensaje.getUsuario());
+					}
+				}
+			}
+
+			final List<org.ibit.rol.sac.model.Usuario> usuarios = getUsuarios(session, idUsuarios);
+			if (usuarios != null && !usuarios.isEmpty()) {
+				for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
+					for (final ServicioMensaje mensaje : mensajes) {
+						if (mensaje.getUsuarioNombre() == null && mensaje.getUsuario().equals(usuario.getUsername())) {
+							mensaje.setUsuarioNombre(usuario.getNombre());
+						}
+					}
+				}
+			}
+
+			return mensajes;
 
 		} catch (final Exception he) {
 			throw new EJBException(he);
@@ -395,5 +443,23 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 				close(session);
 			}
 		}
+	}
+
+	private List<Usuario> getUsuarios(final Session session, final List<String> idUsuarios) throws HibernateException {
+
+		final String hql = " select usu.nombre, usu.username from Usuario usu where usu.username in (:ids)";
+		final Query query = session.createQuery(hql);
+		query.setParameterList("ids", idUsuarios);
+		final List<Object[]> resultados = query.list();
+		final List<Usuario> usuarios = new ArrayList<>();
+		if (resultados != null) {
+			for (final Object[] resultado : resultados) {
+				final Usuario usuario = new Usuario();
+				usuario.setNombre(resultado[0].toString());
+				usuario.setUsername(resultado[1].toString());
+				usuarios.add(usuario);
+			}
+		}
+		return usuarios;
 	}
 }
