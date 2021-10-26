@@ -151,6 +151,12 @@ public class RolsacPropertiesUtil {
 		return getProperty(literal);
 	}
 
+	/** Devuevle el texto **/
+	public static final String getLiteralMantieneEstadoInterna(final boolean catalan) {
+		final String idioma = catalan ? "ca" : "es";
+		return getProperty("es.caib.rolsac.procServ.mantieneEstadoInterna." + idioma);
+	}
+
 	/** Info de email **/
 	public static final boolean isEmailTest() {
 		final String emailActivo = getProperty("es.caib.rolsac.procServ.email.test");

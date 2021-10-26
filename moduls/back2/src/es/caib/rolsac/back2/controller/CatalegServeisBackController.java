@@ -198,6 +198,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		model.put("lopdResponsableComunESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
 		model.put("lopdPlantilla", RolsacPropertiesUtil.getLopdPlantilla(true));
 		model.put("lopdPlantillaESP", RolsacPropertiesUtil.getLopdPlantilla(false));
+		model.put("mantieneEstadoInterna", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(true));
+		model.put("mantieneEstadoInternaESP", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(false));
+		model.put("elIdioma", request.getLocale().getLanguage().contains("ca") ? "ca" : "es");
 
 		final UnidadAdministrativa raiz = ua != null ? ua.getRaiz() : null;
 
@@ -1103,6 +1106,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				resultats.put("permiteEliminar", "S");
 			}
 
+			resultats.put("checkearInterno",
+					!gestor && serv.getValidacion() == Validacion.INTERNA.intValue() && serv.isPendienteValidar());
 		} catch (final DelegateException dEx) {
 
 			logException(log, dEx);
@@ -1509,6 +1514,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		IdNomDTO result = null;
 		String error = null;
+		// Si hay que enviar un mensajeEmail
+		MensajeEmail mensajeEmail = null;
 
 		try {
 
@@ -1777,7 +1784,40 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			}
 
-			final Long servId = guardarGrabar(servicio, servicioMensaje);
+			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO) && servicio.getId() != null
+					&& request.getParameter("enviarMensajeInterna") != null
+					&& "true".equals(request.getParameter("enviarMensajeInterna"))) {
+				mensajeEmail = new MensajeEmail();
+				mensajeEmail.setFechaCreacion(new Date());
+				mensajeEmail.setEnviado(false);
+				mensajeEmail.setTipo("SRV");
+				mensajeEmail.setCodigo(servicio.getId());
+
+				String to, from;
+				if (RolsacPropertiesUtil.isEmailTest()) {
+					to = RolsacPropertiesUtil.getEmailTo();
+					from = RolsacPropertiesUtil.getEmailFrom();
+				} else {
+					final String toUser = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorProc(servicio.getId());
+					if (toUser == null || toUser.isEmpty()) {
+
+						error = messageSource.getMessage("error.permisos", null, request.getLocale());
+						result = new IdNomDTO(-1l, error);
+						return result;
+					}
+					to = toUser + "@caib.es";
+					from = request.getRemoteUser() + "@caib.es";
+				}
+
+				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailProcTitulo(((TraduccionServicio) servicio
+						.getTraduccion(request.getLocale().getLanguage().contains("ca") ? "ca" : "es")).getNombre()));
+				mensajeEmail.setContenido(RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(
+						request.getLocale().getLanguage().contains("ca") ? true : false));
+				mensajeEmail.setTo(to);
+				mensajeEmail.setFrom(from);
+
+			}
+			final Long servId = guardarGrabar(servicio, servicioMensaje, mensajeEmail);
 
 			final String ok = messageSource.getMessage("serv.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(servId, ok);
@@ -2117,15 +2157,15 @@ public class CatalegServeisBackController extends PantallaBaseController {
 	/*
 	 * Función de grabar() servicio
 	 */
-	private Long guardarGrabar(final Servicio servicio, final ServicioMensaje servicioMensaje)
-			throws DelegateException {
+	private Long guardarGrabar(final Servicio servicio, final ServicioMensaje servicioMensaje,
+			final MensajeEmail mensajeEmail) throws DelegateException {
 
 		/* NOTA IMPORTANTE PARA EL RENDIMIENTO */
 		servicio.setDocumentos(null);
 		/* FIN NOTA */
 
 		final Long servId = DelegateUtil.getServicioDelegate().grabarServicio(servicio,
-				servicio.getOrganoInstructor().getId(), servicioMensaje);
+				servicio.getOrganoInstructor().getId(), servicioMensaje, mensajeEmail);
 
 		return servId;
 
@@ -2316,7 +2356,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			}
 
 			final ServicioMensaje servicioMensaje = null;
-			guardarGrabar(servicio, servicioMensaje);
+			guardarGrabar(servicio, servicioMensaje, null);
 
 			result = new IdNomDTO(servicio.getId(),
 					messageSource.getMessage("serv.guardat.fetsVitals.correcte", null, request.getLocale()));
@@ -2383,7 +2423,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			}
 			servicio.setMaterias(materias);
 			final ServicioMensaje servicioMensaje = null;
-			guardarGrabar(servicio, servicioMensaje);
+			guardarGrabar(servicio, servicioMensaje, null);
 			result = new IdNomDTO(servicio.getId(),
 					messageSource.getMessage("serv.guardat.materies.correcte", null, request.getLocale()));
 
@@ -2441,7 +2481,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				servicio.setNormativas(normativas);
 
 				final ServicioMensaje servicioMensaje = null;
-				guardarGrabar(servicio, servicioMensaje);
+				guardarGrabar(servicio, servicioMensaje, null);
 
 				result = new IdNomDTO(servicio.getId(),
 						messageSource.getMessage("serv.guardat.normatives.correcte", null, request.getLocale()));

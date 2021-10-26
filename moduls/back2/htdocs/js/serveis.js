@@ -644,7 +644,27 @@ function CDetall() {
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()
 	//this._baseGuarda = this.guarda;
 	this.guardaFinal = function (funcion) {
+		if (that.checkearInterno &&  $('#item_estat').val() == 2   && !$('#item_pdt_validar').is(':checked') ) {
+			var texto;
+			if (elIdioma == 'es') {
+				texto = 'Deseas enviar el siguiente email al gestor: <br /><br />' + mantieneEstadoInternaESP;
+			} else {
+				texto =  'Desitges enviar el següent email al gestor: <br /><br /> ' + mantieneEstadoInterna;
+			}
+			Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: texto, funcio: function() {
+				//Hacer algo para enviar mensaje.
+				that.guardaFinal2(funcion, true);
+			}, funcioCancelar: function() {
+				//Hacer algo para enviar mensaje.
+				that.guardaFinal2(funcion, false);
+			}
+			});
 
+		} else {
+			this.guardaFinal2(funcion, false);
+		}
+	}
+	this.guardaFinal2 = function (funcion, enviarMensaje) {
 		if (jQuery("#item_lopd_activo").is(":checked")) {
 			if ( jQuery("#item_lopd_legitimacion").val() == "") {
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtLopdCampObligatori, text: "<p>" + txtLopdCampObligatoriLeg + "</p>"});
@@ -673,7 +693,9 @@ function CDetall() {
 			urlParams += "&" + ModulMateries.listaMaterias();
 			urlParams += "&" + ModulFetsVitals.listaHechosVitales();
 			urlParams += "&" + ModulPublicObjectiu.listaPublics();
-
+			if (enviarMensaje) {
+				urlParams += "&enviarMensajeInterna=true";
+			}
 			that.guardaGenerico(urlParams, funcion);
 
 		}
@@ -685,7 +707,9 @@ function CDetall() {
 			urlParams += "&" + ModulMateries.listaMaterias();
 			urlParams += "&" + ModulFetsVitals.listaHechosVitales();
 			urlParams += "&" + ModulPublicObjectiu.listaPublics();
-
+			if (enviarMensaje) {
+				urlParams += "&enviarMensajeInterna=true";
+			}
 			that.guardaGenerico(urlParams, funcion);
 
 		// Si no hay trámite de inicialización con estado de publicación 1, lanzamos mensaje de error.
@@ -947,6 +971,8 @@ function CDetall() {
 	};
 
 	this.nou = function() {
+
+		this.checkearInterno = false;
 
 		//Ocultar paneles
 		jQuery("#modul_documents, #modul_tramits").hide();
@@ -1436,6 +1462,9 @@ function CDetall() {
 		} else {
 			$("#filaNoEditable").hide();
 		}
+
+		// Es tipo interna, checkear pendiente y gestor
+		this.checkearInterno = dada_node.checkearInterno;
 	};
 
 	this.actualizarBotonesGuardar = function(permite) {

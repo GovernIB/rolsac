@@ -26,6 +26,7 @@ import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoProcedimiento;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Procedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
@@ -263,13 +264,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 *            Identificador de la unidad administrativa a la que es asiganda el
 	 *            nuevo procedimiento.
 	 * @param procedimientoMensaje
+	 * @param mensajeEmail
 	 *
 	 * @return Devuelve el identificador del procedimiento guardado.
 	 * @throws DelegateException
 	 */
 	@Override
 	public Long grabarProcedimiento(final ProcedimientoLocal procedimiento, final Long idUA,
-			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException {
+			final ProcedimientoMensaje procedimientoMensaje, final MensajeEmail mensajeEmail) throws DelegateException {
 
 		final Session session = getSession();
 
@@ -337,6 +339,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (procedimientoMensaje != null) {
 				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
 				session.save(procedimientoMensaje);
+				session.flush();
+			}
+
+			if (mensajeEmail != null) {
+				session.save(mensajeEmail);
 				session.flush();
 			}
 
@@ -534,13 +541,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @param listaTramitesParaBorrar
 	 * @param listaIdsTramitesParaActualizar
 	 * @param procedimientoMensaje
+	 * @param mensajeEmail
 	 *
 	 * @return Devuelve el identificador del procedimiento guardado.
 	 */
 	@Override
 	public Long grabarProcedimientoConTramites(final ProcedimientoLocal procedimiento, final Long idUA,
 			final List listaTramitesParaBorrar, final List listaIdsTramitesParaActualizar,
-			final ProcedimientoMensaje procedimientoMensaje) {
+			final ProcedimientoMensaje procedimientoMensaje, final MensajeEmail mensajeEmail) {
 
 		final Session session = getSession();
 
@@ -632,6 +640,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if (procedimientoMensaje != null) {
 				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
 				session.save(procedimientoMensaje);
+				session.flush();
+			}
+
+			// Generamos email directo si hace falta.
+			if (mensajeEmail != null) {
+				session.save(mensajeEmail);
 				session.flush();
 			}
 

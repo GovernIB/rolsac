@@ -24,6 +24,7 @@ import org.ibit.rol.sac.model.HechoVitalServicio;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoServicio;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Servicio;
@@ -206,8 +207,8 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 	 * @return Devuelve el identificador del servicio guardado.
 	 * @throws DelegateException
 	 */
-	public Long grabarServicio(final Servicio servicio, final Long idUA, final ServicioMensaje servicioMensaje)
-			throws DelegateException {
+	public Long grabarServicio(final Servicio servicio, final Long idUA, final ServicioMensaje servicioMensaje,
+			final MensajeEmail mensajeEmail) throws DelegateException {
 
 		final Session session = getSession();
 
@@ -269,6 +270,11 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 				session.save(servicioMensaje);
 				session.flush();
 
+			}
+
+			if (mensajeEmail != null) {
+				session.save(mensajeEmail);
+				session.flush();
 			}
 
 			Hibernate.initialize(servicio.getMaterias());

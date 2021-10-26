@@ -208,7 +208,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("lopdResponsableComunESP", RolsacPropertiesUtil.getLopdResponsableComun(false));
 		model.put("lopdPlantilla", RolsacPropertiesUtil.getLopdPlantilla(true));
 		model.put("lopdPlantillaESP", RolsacPropertiesUtil.getLopdPlantilla(false));
-
+		model.put("mantieneEstadoInterna", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(true));
+		model.put("mantieneEstadoInternaESP", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(false));
+		model.put("elIdioma", request.getLocale().getLanguage().contains("ca") ? "ca" : "es");
 		final UnidadAdministrativa raiz = ua != null ? ua.getRaiz() : null;
 
 		if (raiz != null) {
@@ -1067,6 +1069,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("permiteEliminar", "S");
 			}
 
+			resultats.put("checkearInterno",
+					!gestor && proc.getValidacion() == Validacion.INTERNA.intValue() && proc.isPendienteValidar());
 			// Indica los flags de permisos
 			prepararFlags(resultats);
 
@@ -1692,6 +1696,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				return result = new IdNomDTO(-3l, error);
 			}
 
+			// Si hay que enviar un mensajeEmail
+			MensajeEmail mensajeEmail = null;
+
 			if (!POUtils.validaPublicosObjetivos(request.getParameter("publicsObjectiu"))) {
 				error = messageSource.getMessage("proc.error.public.objectiu.intern", null, request.getLocale());
 				return result = new IdNomDTO(-3l, error);
@@ -1991,8 +1998,45 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			}
 
+			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO) && procediment.getId() != null
+					&& request.getParameter("enviarMensajeInterna") != null
+					&& "true".equals(request.getParameter("enviarMensajeInterna"))) {
+				mensajeEmail = new MensajeEmail();
+				mensajeEmail.setFechaCreacion(new Date());
+				mensajeEmail.setEnviado(false);
+				mensajeEmail.setTipo("PCR");
+				mensajeEmail.setCodigo(procediment.getId());
+
+				String to, from;
+				if (RolsacPropertiesUtil.isEmailTest()) {
+					to = RolsacPropertiesUtil.getEmailTo();
+					from = RolsacPropertiesUtil.getEmailFrom();
+				} else {
+					final String toUser = DelegateUtil.getMensajeDelegate()
+							.obtenerUltimoGestorProc(procediment.getId());
+					if (toUser == null || toUser.isEmpty()) {
+
+						error = messageSource.getMessage("error.permisos", null, request.getLocale());
+						result = new IdNomDTO(-1l, error);
+						return result;
+					}
+					to = toUser + "@caib.es";
+					from = request.getRemoteUser() + "@caib.es";
+				}
+
+				mensajeEmail
+						.setTitulo(RolsacPropertiesUtil.getEmailProcTitulo(((TraduccionProcedimientoLocal) procediment
+								.getTraduccion(request.getLocale().getLanguage().contains("ca") ? "ca" : "es"))
+										.getNombre()));
+				mensajeEmail.setContenido(RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(
+						request.getLocale().getLanguage().contains("ca") ? true : false));
+				mensajeEmail.setTo(to);
+				mensajeEmail.setFrom(from);
+
+			}
+
 			final Long procId = guardarGrabar(procediment, listaTramitesParaBorrar, listaIdsTramitesParaActualizar,
-					procedimientoMensaje);
+					procedimientoMensaje, mensajeEmail);
 
 			final String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(procId, ok);
@@ -2650,8 +2694,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	/*
 	 * Función de grabar() procedimiento
 	 */
-	private Long guardarGrabar(final ProcedimientoLocal procediment, final ProcedimientoMensaje procedimientoMensaje)
-			throws DelegateException {
+	private Long guardarGrabar(final ProcedimientoLocal procediment, final ProcedimientoMensaje procedimientoMensaje,
+			final MensajeEmail mensajeEmail) throws DelegateException {
 
 		/* XXX: NOTA IMPORTANTE PARA EL RENDIMIENTO */
 		procediment.setDocumentos(null);
@@ -2659,7 +2703,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		/* FIN NOTA */
 
 		final Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimiento(procediment,
-				procediment.getUnidadAdministrativa().getId(), procedimientoMensaje);
+				procediment.getUnidadAdministrativa().getId(), procedimientoMensaje, mensajeEmail);
 
 		// Actualiza estadísticas
 		// DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
@@ -2669,13 +2713,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	private Long guardarGrabar(final ProcedimientoLocal procediment, final List<Tramite> listaTramitesParaBorrar,
-			final List<Long> listaIdsTramitesParaActualizar, final ProcedimientoMensaje procedimientoMensaje)
-			throws DelegateException {
+			final List<Long> listaIdsTramitesParaActualizar, final ProcedimientoMensaje procedimientoMensaje,
+			final MensajeEmail mensajeEmail) throws DelegateException {
 
 		// Si no hay trámites que procesar, invocamos guardado normal.
 		if (listaTramitesParaBorrar == null && listaIdsTramitesParaActualizar == null) {
 
-			return guardarGrabar(procediment, procedimientoMensaje);
+			return guardarGrabar(procediment, procedimientoMensaje, mensajeEmail);
 
 			// Si no, procesamos con la actualización de los trámites.
 		} else {
@@ -2686,7 +2730,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			final Long procId = DelegateUtil.getProcedimientoDelegate().grabarProcedimientoConTramites(procediment,
 					procediment.getUnidadAdministrativa().getId(), listaTramitesParaBorrar,
-					listaIdsTramitesParaActualizar, procedimientoMensaje);
+					listaIdsTramitesParaActualizar, procedimientoMensaje, mensajeEmail);
 
 			// Actualiza estadísticas
 			// DelegateUtil.getEstadisticaDelegate().grabarEstadisticaProcedimiento(procId);
@@ -3147,7 +3191,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procedimiento.setPendienteValidar(true);
 			}
 
-			guardarGrabar(procedimiento, procedimientoMensaje);
+			guardarGrabar(procedimiento, procedimientoMensaje, null);
 
 			result = new IdNomDTO(procedimiento.getId(),
 					messageSource.getMessage("proc.guardat.fetsVitals.correcte", null, request.getLocale()));
@@ -3230,7 +3274,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procedimiento.setPendienteValidar(true);
 			}
 
-			guardarGrabar(procedimiento, procedimientoMensaje);
+			guardarGrabar(procedimiento, procedimientoMensaje, null);
 			result = new IdNomDTO(procedimiento.getId(),
 					messageSource.getMessage("proc.guardat.materies.correcte", null, request.getLocale()));
 
@@ -3312,7 +3356,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					procedimiento.setPendienteValidar(true);
 				}
 
-				guardarGrabar(procedimiento, procedimientoMensaje);
+				guardarGrabar(procedimiento, procedimientoMensaje, null);
 
 				result = new IdNomDTO(procedimiento.getId(),
 						messageSource.getMessage("proc.guardat.normatives.correcte", null, request.getLocale()));

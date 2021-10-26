@@ -586,10 +586,18 @@ var Missatge = {
 		if (typeof opcions.funcio != "undefined" && opcions.funcio != "") {
 			$("#missatge_acceptar").bind("click",opcions.funcio);
 			if (opcions.tipus == "confirmacio") {
-				$("#missatge_cancelar").bind("click",Missatge.cancelar);
+				if (typeof opcions.funcioCancelar != "undefined" && opcions.funcioCancelar != "") {
+					$("#missatge_cancelar").bind("click",opcions.funcioCancelar);
+				} else {
+					$("#missatge_cancelar").bind("click",Missatge.cancelar);
+				}
 			}
 		} else {
-			$("#missatge_acceptar").bind("click",Missatge.cancelar);
+			if (typeof opcions.funcioCancelar != "undefined" && opcions.funcioCancelar != "") {
+				$("#missatge_cancelar").bind("click",opcions.funcioCancelar);
+			} else {
+				$("#missatge_acceptar").bind("click",Missatge.cancelar);
+			}
 		}
 		// posicion
 		capa_W = missatge_elm.outerWidth();

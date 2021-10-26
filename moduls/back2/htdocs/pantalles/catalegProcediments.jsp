@@ -55,8 +55,11 @@
 	var lopdDerechosESP = '<c:out value="${lopdDerechosESP}"/>';
 	var lopdResponsableComun = '<c:out value="${lopdResponsableComun}"/>';
 	var lopdResponsableComunESP = '<c:out value="${lopdResponsableComunESP}"/>';
-	var lopdResponsableNOComun = '';
-	var lopdResponsableNOComunESP = '';
+	var lopdResponsableComun = '<c:out value="${lopdResponsableComun}"/>';
+	var lopdResponsableComunESP = '<c:out value="${lopdResponsableComunESP}"/>';
+	var mantieneEstadoInterna = '<c:out value="${mantieneEstadoInterna}"/>';
+	var mantieneEstadoInternaESP = '<c:out value="${mantieneEstadoInternaESP}"/>';
+	var elIdioma = '<c:out value="${elIdioma}"/>';
 	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
 	var tienePermisoPublicar = '<c:out value="${permisoPublicar}"/>';
 	var tienePermisoEdicion = true;

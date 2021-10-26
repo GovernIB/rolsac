@@ -310,8 +310,7 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			final List<Long> idMensajes = session.createQuery(hql.toString()).list();
 
 			if (idMensajes != null) {
-				EmailUtils emailUtils = null;
-				emailUtils = new EmailUtils("java:/es.caib.rolsac.mail");
+				final EmailUtils emailUtils = new EmailUtils("java:/es.caib.rolsac.mail");
 
 				for (final Long idMensaje : idMensajes) {
 					final MensajeEmail mensaje = (MensajeEmail) session.load(MensajeEmail.class, idMensaje);

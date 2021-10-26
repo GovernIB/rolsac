@@ -51,6 +51,9 @@
 	var lopdResponsableComunESP = '<c:out value="${lopdResponsableComunESP}"/>';
 	var lopdResponsableNOComun = '';
 	var lopdResponsableNOComunESP = '';
+	var mantieneEstadoInterna = '<c:out value="${mantieneEstadoInterna}"/>';
+	var mantieneEstadoInternaESP = '<c:out value="${mantieneEstadoInternaESP}"/>';
+	var elIdioma = '<c:out value="${elIdioma}"/>';
 	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
 	var lopdPlantilla = '<c:out value="${lopdPlantilla}"/>';
 	var lopdPlantillaESP = '<c:out value="${lopdPlantillaESP}"/>';

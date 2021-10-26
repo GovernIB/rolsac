@@ -634,7 +634,6 @@ function CDetall() {
 	this.guarda = function() {
 
 
-
 		var paginaCheck;
 		if ($("#item_estat").val() == 1) {
 			paginaCheck = pagCheckPublico;
@@ -685,6 +684,28 @@ function CDetall() {
 	//this._baseGuarda = this.guarda;
 	this.guardaFinal = function (funcion) {
 
+		if (this.checkearInterno &&  $('#item_estat').val() == 2   && !$('#item_pdt_validar').is(':checked') ) {
+			var texto;
+			if (elIdioma == 'es') {
+				texto = 'Deseas enviar el siguiente email al gestor: <br /><br />' + mantieneEstadoInternaESP;
+			} else {
+				texto =  'Desitges enviar el següent email al gestor: <br /><br /> ' + mantieneEstadoInterna;
+			}
+			Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: texto, funcio: function() {
+				//Hacer algo para enviar mensaje.
+				that.guardaFinal2(funcion, true);
+			}, funcioCancelar: function() {
+				//Hacer algo para enviar mensaje.
+				that.guardaFinal2(funcion, false);
+			}
+			});
+
+		} else {
+			this.guardaFinal2(funcion, false);
+
+		}
+	};
+	this.guardaFinal2 = function (funcion, enviarMensaje) {
 		// Si el estado de publicación del procedimiento es distinto a 1 (Pública),
 		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
 		// y que la acción no sea publicar
@@ -695,7 +716,9 @@ function CDetall() {
 			urlParams += "&" + ModulFetsVitals.listaHechosVitales();
 			urlParams += "&" + ModulPublicObjectiu.listaPublics();
 			urlParams += "&" + ModulTramit.listaTramites();
-
+			if (enviarMensaje) {
+				urlParams += "&enviarMensajeInterna=true";
+			}
 			that.guardaGenerico(urlParams, funcion);
 
 		}
@@ -712,7 +735,9 @@ function CDetall() {
 			urlParams += "&" + ModulFetsVitals.listaHechosVitales();
 			urlParams += "&" + ModulPublicObjectiu.listaPublics();
 			urlParams += "&" + ModulTramit.listaTramites();
-
+			if (enviarMensaje) {
+				urlParams += "&enviarMensajeInterna=true";
+			}
 			that.guardaGenerico(urlParams, funcion);
 
 		// Si no hay trámite de inicialización con estado de publicación 1, lanzamos mensaje de error.
@@ -967,6 +992,8 @@ function CDetall() {
 	};
 
 	this.nou = function() {
+
+		this.checkearInterno = false;
 
 		//Ocultar paneles
 		jQuery("#modul_documents, #modul_tramits").hide();
@@ -1411,6 +1438,8 @@ function CDetall() {
 			$("#enviarEmailChat").show();
 		}
 
+
+
 		this.modificado(false);
 
 		//noPermiteEliminar
@@ -1425,6 +1454,9 @@ function CDetall() {
 		} else {
 			$("#filaNoEditable").hide();
 		}
+
+		// Es tipo interna, checkear pendiente y gestor
+		this.checkearInterno = dada_node.checkearInterno;
 	};
 
 	this.actualizarBotonesGuardar = function(permite) {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
@@ -23,11 +24,11 @@ import net.sf.hibernate.Session;
 public interface ProcedimientoDelegateI {
 
 	public abstract Long grabarProcedimiento(ProcedimientoLocal procedimiento, Long idUA,
-			ProcedimientoMensaje procedimientoMensaje) throws DelegateException;
+			ProcedimientoMensaje procedimientoMensaje, final MensajeEmail mensajeEmail) throws DelegateException;
 
 	public abstract Long grabarProcedimientoConTramites(ProcedimientoLocal procedimiento, Long idUA,
 			List listaTramitesParaBorrar, List listaIdsTramitesParaActualizar,
-			final ProcedimientoMensaje procedimientoMensaje) throws DelegateException;
+			final ProcedimientoMensaje procedimientoMensaje, final MensajeEmail mensajeEmail) throws DelegateException;
 
 	public abstract List listarProcedimientos() throws DelegateException;
 

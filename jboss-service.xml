@@ -185,6 +185,10 @@ es.caib.rolsac.subscripcions
 	    es.caib.rolsac.procServ.email.srv.contenido=El supervisor {0} comenta que:\n {1} \n Mas informacion en la url http://www.caib.es/rolsacback/catelegServeis/catalegServeis.do?itemId={2}
 		es.caib.rolsac.procServ.email.proc.titulo=Actualizacion en el procedimiento {0}
 	    es.caib.rolsac.procServ.email.proc.contenido=El supervisor {0} comenta que:\n {1} \n Mas informacion en la url http://www.caib.es/rolsacback/catalegProcediments/catalegProcediments.do?itemId={2}
+
+	    es.caib.rolsac.procServ.mantieneEstadoInterna.es=Se ha mantenido el estado interna
+	    es.caib.rolsac.procServ.mantieneEstadoInterna.ca=S'ha mantingut l'estat interna
+
     </attribute>
 
 </mbean>

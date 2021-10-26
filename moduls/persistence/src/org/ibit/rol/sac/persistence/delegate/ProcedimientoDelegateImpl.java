@@ -12,6 +12,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.MensajeEmail;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoMensaje;
 import org.ibit.rol.sac.model.SolrPendiente;
@@ -51,9 +52,9 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	 */
 	@Override
 	public Long grabarProcedimiento(final ProcedimientoLocal procedimiento, final Long idUA,
-			final ProcedimientoMensaje procMensaje) throws DelegateException {
+			final ProcedimientoMensaje procMensaje, final MensajeEmail mensajeEmail) throws DelegateException {
 		try {
-			return getFacade().grabarProcedimiento(procedimiento, idUA, procMensaje);
+			return getFacade().grabarProcedimiento(procedimiento, idUA, procMensaje, mensajeEmail);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
@@ -62,10 +63,10 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	@Override
 	public Long grabarProcedimientoConTramites(final ProcedimientoLocal procedimiento, final Long idUA,
 			final List listaTramitesParaBorrar, final List listaIdsTramitesParaActualizar,
-			final ProcedimientoMensaje procMensaje) throws DelegateException {
+			final ProcedimientoMensaje procMensaje, final MensajeEmail mensajeEmail) throws DelegateException {
 		try {
 			return getFacade().grabarProcedimientoConTramites(procedimiento, idUA, listaTramitesParaBorrar,
-					listaIdsTramitesParaActualizar, procMensaje);
+					listaIdsTramitesParaActualizar, procMensaje, mensajeEmail);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
