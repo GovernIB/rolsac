@@ -1798,7 +1798,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					to = RolsacPropertiesUtil.getEmailTo();
 					from = RolsacPropertiesUtil.getEmailFrom();
 				} else {
-					final String toUser = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorProc(servicio.getId());
+					final String toUser = DelegateUtil.getMensajeDelegate().obtenerUltimoGestorServ(servicio.getId());
 					if (toUser == null || toUser.isEmpty()) {
 
 						error = messageSource.getMessage("error.permisos", null, request.getLocale());
@@ -1809,7 +1809,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					from = request.getRemoteUser() + "@caib.es";
 				}
 
-				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailProcTitulo(((TraduccionServicio) servicio
+				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailServTitulo(((TraduccionServicio) servicio
 						.getTraduccion(request.getLocale().getLanguage().contains("ca") ? "ca" : "es")).getNombre()));
 				mensajeEmail.setContenido(RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(
 						request.getLocale().getLanguage().contains("ca") ? true : false));
