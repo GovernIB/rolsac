@@ -45,7 +45,7 @@ function abrirMensaje(idDato) {
 		  var leido = data.mensajes[i].leido;
 		  var gestor = data.mensajes[i].gestor;
 		  var  creado = data.mensajes[i].usuarioNombre + " " + data.mensajes[i].usuario;
-		  var  leidomsg = data.mensajes[i].usuarioLectura;
+		  var  leidomsg = data.mensajes[i].usuarioLecturaNombre + " " + data.mensajes[i].usuarioLectura;
 		  var  dataCreado =  new Date(data.mensajes[i].fechaCreacion);
 		  var horaCreado = ((dataCreado.getHours() < 10 ? '0' : '') + dataCreado.getHours());
 		  var minutosCreado = ((dataCreado.getMinutes() < 10 ? '0' : '') + dataCreado.getMinutes());

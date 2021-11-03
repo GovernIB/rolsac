@@ -22,6 +22,26 @@ public class ProcedimientoMensaje implements ValueObject {
 	private boolean leido;
 	private Long idProcedimiento;
 	private String usuarioNombre;
+	private String usuarioLecturaNombre;
+
+	public ProcedimientoMensaje() {
+
+	}
+
+	public ProcedimientoMensaje(final Long id, final String usuario, final String usuarioLectura, final String texto,
+			final Date fechaCreacion, final Date fechaLectura, final boolean gestor, final boolean leido) {
+		this.id = id;
+		this.usuario = usuario;
+		this.usuarioLectura = usuarioLectura;
+		this.texto = texto;
+		this.fechaCreacion = fechaCreacion;
+		this.fechaLectura = fechaLectura;
+		this.gestor = gestor;
+		this.leido = leido;
+		// idProcedimiento = idProcedimiento;
+		this.usuarioNombre = usuarioNombre;
+
+	}
 
 	/**
 	 * @return the id
@@ -171,6 +191,21 @@ public class ProcedimientoMensaje implements ValueObject {
 	 */
 	public void setUsuarioNombre(final String usuarioNombre) {
 		this.usuarioNombre = usuarioNombre;
+	}
+
+	/**
+	 * @return the usuarioLecturaNombre
+	 */
+	public String getUsuarioLecturaNombre() {
+		return usuarioLecturaNombre;
+	}
+
+	/**
+	 * @param usuarioLecturaNombre
+	 *            the usuarioLecturaNombre to set
+	 */
+	public void setUsuarioLecturaNombre(final String usuarioLecturaNombre) {
+		this.usuarioLecturaNombre = usuarioLecturaNombre;
 	}
 
 }

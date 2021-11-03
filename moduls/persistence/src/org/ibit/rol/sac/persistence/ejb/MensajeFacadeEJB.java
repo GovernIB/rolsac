@@ -209,27 +209,42 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 		try {
 			final StringBuffer hql = new StringBuffer();
 
-			hql.append(" select mensaje from ProcedimientoMensaje mensaje");
+			hql.append(" select new ProcedimientoMensaje( mensaje.id, mensaje.usuario, mensaje.usuarioLectura, ");
+			hql.append(" mensaje.texto, mensaje.fechaCreacion, mensaje.fechaLectura, mensaje.gestor, mensaje.leido ) ");
+
 			hql.append("  from ProcedimientoMensaje mensaje");
 			hql.append(" where mensaje.idProcedimiento = " + idProcedimiento);
 			hql.append(" order by mensaje.fechaCreacion desc");
-			final List<ProcedimientoMensaje> mensajes = session.createQuery(hql.toString()).list();
+			final String sql = hql.toString();
+			final List<ProcedimientoMensaje> mensajes = session.createQuery(sql).list();
 			final List<String> idUsuarios = new ArrayList<String>();
 			if (mensajes != null) {
 				for (final ProcedimientoMensaje mensaje : mensajes) {
 					if (mensaje.getUsuario() != null && !idUsuarios.contains(mensaje.getUsuario())) {
 						idUsuarios.add(mensaje.getUsuario());
 					}
+
+					if (mensaje.getUsuarioLectura() != null && !idUsuarios.contains(mensaje.getUsuarioLectura())) {
+						idUsuarios.add(mensaje.getUsuarioLectura());
+					}
 				}
 			}
 
-			final List<org.ibit.rol.sac.model.Usuario> usuarios = getUsuarios(session, idUsuarios);
-			if (usuarios != null && !usuarios.isEmpty()) {
-				for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
-					for (final ProcedimientoMensaje mensaje : mensajes) {
-						if (mensaje.getUsuario() != null && mensaje.getUsuarioNombre() == null
-								&& mensaje.getUsuario().equals(usuario.getUsername())) {
-							mensaje.setUsuarioNombre(usuario.getNombre());
+			if (!idUsuarios.isEmpty()) {
+				final List<org.ibit.rol.sac.model.Usuario> usuarios = getUsuarios(session, idUsuarios);
+				if (usuarios != null && !usuarios.isEmpty()) {
+					for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
+						for (final ProcedimientoMensaje mensaje : mensajes) {
+							if (mensaje.getUsuario() != null && mensaje.getUsuarioNombre() == null
+									&& mensaje.getUsuario() != null
+									&& mensaje.getUsuario().equals(usuario.getUsername())) {
+								mensaje.setUsuarioNombre(usuario.getNombre());
+							}
+
+							if (mensaje.getUsuarioLecturaNombre() == null && mensaje.getUsuarioLectura() != null
+									&& mensaje.getUsuarioLectura().equals(usuario.getUsername())) {
+								mensaje.setUsuarioLecturaNombre(usuario.getNombre());
+							}
 						}
 					}
 				}
@@ -257,8 +272,10 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 		final Session session = getSession();
 		try {
 			final StringBuffer hql = new StringBuffer();
-
-			hql.append(" select mensaje from ServicioMensaje mensaje");
+			hql.append(
+					" select new ServicioMensaje ( mensaje.id, mensaje.usuario, mensaje.usuarioLectura, mensaje.texto, ");
+			hql.append(" mensaje.fechaCreacion, mensaje.fechaLectura, mensaje.gestor, mensaje.leido) ");
+			hql.append(" from ServicioMensaje mensaje");
 			hql.append(" where mensaje.idServicio = " + idServicio);
 			hql.append(" order by mensaje.fechaCreacion desc");
 			final List<ServicioMensaje> mensajes = session.createQuery(hql.toString()).list();
@@ -268,15 +285,27 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 					if (mensaje.getUsuario() != null && !idUsuarios.contains(mensaje.getUsuario())) {
 						idUsuarios.add(mensaje.getUsuario());
 					}
+
+					if (mensaje.getUsuarioLectura() != null && !idUsuarios.contains(mensaje.getUsuarioLectura())) {
+						idUsuarios.add(mensaje.getUsuarioLectura());
+					}
 				}
 			}
 
-			final List<org.ibit.rol.sac.model.Usuario> usuarios = getUsuarios(session, idUsuarios);
-			if (usuarios != null && !usuarios.isEmpty()) {
-				for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
-					for (final ServicioMensaje mensaje : mensajes) {
-						if (mensaje.getUsuarioNombre() == null && mensaje.getUsuario().equals(usuario.getUsername())) {
-							mensaje.setUsuarioNombre(usuario.getNombre());
+			if (!idUsuarios.isEmpty()) {
+				final List<org.ibit.rol.sac.model.Usuario> usuarios = getUsuarios(session, idUsuarios);
+				if (usuarios != null && !usuarios.isEmpty()) {
+					for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
+						for (final ServicioMensaje mensaje : mensajes) {
+							if (mensaje.getUsuarioNombre() == null && mensaje.getUsuario() != null
+									&& mensaje.getUsuario().equals(usuario.getUsername())) {
+								mensaje.setUsuarioNombre(usuario.getNombre());
+							}
+
+							if (mensaje.getUsuarioLecturaNombre() == null && mensaje.getUsuarioLectura() != null
+									&& mensaje.getUsuarioLectura().equals(usuario.getUsername())) {
+								mensaje.setUsuarioLecturaNombre(usuario.getNombre());
+							}
 						}
 					}
 				}
