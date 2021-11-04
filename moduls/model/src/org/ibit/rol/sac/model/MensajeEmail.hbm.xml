@@ -18,7 +18,7 @@
         <property name="from" length="100" column="MAI_FROM"/>
         <property name="to" length="100" column="MAI_TO"/>
         <property name="enviado"   column="MAI_ENVIAD" />
-        <property name="titulo" length="100"  column="MAI_TITUL"/>
+        <property name="titulo" length="356"  column="MAI_TITUL"/>
         <property name="contenido" length="500"  column="MAI_CONTE"/>
         <property name="error" length="500"  column="MAI_ERROR"/>
         <property name="tipo" length="3"  column="MAI_TIPO"/>

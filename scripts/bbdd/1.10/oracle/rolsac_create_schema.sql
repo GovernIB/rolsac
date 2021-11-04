@@ -221,6 +221,7 @@ drop table RSC_AFECTA cascade constraints;
 drop table RSC_FICHUA cascade constraints;
 drop table RSC_TRASIL cascade constraints;
 drop table RSC_FORMUL cascade constraints;
+drop table RSC_MSJMAI cascade constraints;
 drop table RSC_TRAUNM cascade constraints;
 drop table RSC_SOLRPD cascade constraints;
 drop table RSC_TRAUNA cascade constraints;
@@ -327,6 +328,7 @@ drop table RSC_TRATRT cascade constraints;
 drop sequence RSC_SEQSCK;
 drop sequence RSC_SEQSEN;
 drop sequence RSC_SEQSGR;
+drop sequence RSC_SEQ_MAI;
 drop sequence RSC_SEQ_SMN;
 drop sequence RSC_SEQSCR;
 drop sequence RSC_SEQHIS;
@@ -462,6 +464,20 @@ create table RSC_FORMUL (
    FOR_MANUAL number(19,0),
    FOR_CODTRA number(19,0),
    primary key (FOR_CODI)
+);
+create table RSC_MSJMAI (
+   MAI_CODI number(19,0) not null,
+   MAI_FROM varchar2(100),
+   MAI_TO varchar2(100),
+   MAI_ENVIAD number(1,0),
+   MAI_TITUL varchar2(356),
+   MAI_CONTE varchar2(500),
+   MAI_ERROR varchar2(500),
+   MAI_TIPO varchar2(3),
+   MAI_PROSRV number(19,0),
+   MAI_FECCRE date,
+   MAI_FECENV date,
+   primary key (MAI_CODI)
 );
 create table RSC_TRAUNM (
    TRN_CODUNM number(19,0) not null,
@@ -1665,6 +1681,7 @@ alter table RSC_TRATRT add constraint RSC_TTTTRT_FK foreign key (TTT_CODTRT) ref
 create sequence RSC_SEQSCK;
 create sequence RSC_SEQSEN;
 create sequence RSC_SEQSGR;
+create sequence RSC_SEQ_MAI;
 create sequence RSC_SEQ_SMN;
 create sequence RSC_SEQSCR;
 create sequence RSC_SEQHIS;
