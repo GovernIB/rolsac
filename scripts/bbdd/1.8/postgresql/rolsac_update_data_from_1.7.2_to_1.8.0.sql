@@ -1,4 +1,4 @@
-set define off;
+
 INSERT INTO RSC_PLATAF (PLT_CODI , PLT_NOMBRE, PLT_ORDEN) VALUES (1, 'SISTRA1' , 1);
 INSERT INTO RSC_PLATAF (PLT_CODI , PLT_NOMBRE, PLT_ORDEN) VALUES (2, 'SISTRA2' , 2);
 INSERT INTO RSC_TRAPLT (TPT_CODPLT, TPT_CODIDI, TPT_DESCRI, TPT_URL) VALUES (1, 'es', 'Plataforma de tramitación SISTRA1' , 'http://caibter.indra.es/sistrafront/inicio?language=es&modelo=${idTramitePlataforma}&version=${versionTramitePlatorma}${parametros}');

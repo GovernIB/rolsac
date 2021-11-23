@@ -693,8 +693,9 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
 		Integer pageNumber = filtro.getPage();
 		Long id = filtro.getId();
 		String lang = filtro.getLang();
-		Map <String,String> parametros = new HashMap<String,String>();
-					
+		Map <String,Object> parametros = new HashMap<String,Object>();
+		
+		//PARAMETROS
 		String codigoUA = filtro.getValor(FiltroGenerico.FILTRO_SECCIONES_UA);
 		String codigoEstandard = filtro.getValor(FiltroGenerico.FILTRO_SECCIONES_CODIGO_ESTANDAR);		
 		
@@ -710,13 +711,13 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
 			
 			if(id!=null && id>0) {
 				where.append(" AND s.id = :id");
-				parametros.put("id", id.toString());					
+				parametros.put("id", id);					
 			}
 			
 			
 			if(!StringUtils.isEmpty(codigoUA)) {
 				where.append(" AND s.id in (SELECT fua.seccion.id FROM  FichaUA AS fua WHERE fua.unidadAdministrativa.id = :codigoUA ) ");
-				parametros.put("codigoUA", codigoUA);					
+				parametros.put("codigoUA", Long.parseLong(codigoUA));					
 			}				
 							
 			if(!StringUtils.isEmpty(codigoEstandard)) {
@@ -725,7 +726,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
 				parametros.put("codigoEstandard", codigoEstandard);					
 			}	
 	
-			return ApiRestUtils.ejecutaConsultaGenerica(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
+			return ApiRestUtils.ejecutaConsultaGenerica_new(session, pageSize, pageNumber, select.toString(), selectCount.toString(), from.toString(), where.toString(), order.toString(), parametros);
 			
 	
 		} catch (HibernateException he) {
