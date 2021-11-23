@@ -490,10 +490,11 @@
 	</div>
  <hr>
 	<div class="chat-cerrar">
-		<div id="divEnviarEmailChat" style="flot: lef;float: left;left: -280px;position: relative;">
+		<div id="divEnviarEmailChat" style="flot: lef;float: left;left: -130px;position: relative;">
 			<input id="enviarEmailChat" type="checkbox" style="margin-left:10px">
 			<label>Enviar email</label>
 		</div>
+		<button onclick="copiar_mensaje();">Copiar chat</button>
 		<button onclick="ocultarModal();">Cerrar</button>
 	</div>
 

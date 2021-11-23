@@ -1,5 +1,19 @@
 var idDatoSave="";
 
+function copiar_mensaje() {
+
+	var content = document.getElementById('chatmsg').innerText ;
+
+     navigator.clipboard.writeText(content)
+        .then(() => {
+        //console.log("Text copied to clipboard...")
+    })
+        .catch(err => {
+        	Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: "Error", text: "Error copiant"});
+    });
+
+}
+
 function abrirMensaje(idDato) {
 
     idDatoSave=idDato;

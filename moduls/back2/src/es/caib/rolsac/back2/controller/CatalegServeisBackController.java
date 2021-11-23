@@ -892,6 +892,10 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			if (StringUtils.isEmpty(username)) {
 				username = (String) request.getSession().getAttribute("username");
 			}
+			final Usuario usuario = DelegateUtil.getUsuarioDelegate().obtenerUsuariobyUsername(username);
+			if (usuario != null) {
+				username += " - " + usuario.getNombre();
+			}
 
 			MensajeEmail mensajeEmail = null;
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO) && enviarEmail != null
@@ -1812,7 +1816,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailServTitulo(((TraduccionServicio) servicio
 						.getTraduccion(request.getLocale().getLanguage().contains("ca") ? "ca" : "es")).getNombre()));
 				mensajeEmail.setContenido(RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(
-						request.getLocale().getLanguage().contains("ca") ? true : false));
+						request.getLocale().getLanguage().contains("ca") ? true : false) + "\n\n"
+						+ RolsacPropertiesUtil.getUrlServicios(servicio.getId().toString()));
 				mensajeEmail.setTo(to);
 				mensajeEmail.setFrom(from);
 

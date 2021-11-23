@@ -288,4 +288,12 @@ public class RolsacPropertiesUtil {
 		}
 		return res == null ? "" : res;
 	}
+
+	public static String getUrlProcedimientos(final String id) {
+		return getProperty("es.caib.rolsac.procServ.proc.url").replace("{0}", id);
+	}
+
+	public static String getUrlServicios(final String id) {
+		return getProperty("es.caib.rolsac.procServ.serv.url").replace("{0}", id);
+	}
 }

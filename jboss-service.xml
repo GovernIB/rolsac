@@ -189,6 +189,9 @@ es.caib.rolsac.subscripcions
 	    es.caib.rolsac.procServ.mantieneEstadoInterna.es=Se ha mantenido el estado interna
 	    es.caib.rolsac.procServ.mantieneEstadoInterna.ca=S'ha mantingut l'estat interna
 
+ 		es.caib.rolsac.procServ.proc.url=http://www.caib.es/rolsacback/catalegProcediments/catalegProcediments.do?itemId={0}
+	    es.caib.rolsac.procServ.serv.url=http://www.caib.es/rolsacback/catelegServeis/catalegServeis.do?itemId={0}
+
     </attribute>
 
 </mbean>

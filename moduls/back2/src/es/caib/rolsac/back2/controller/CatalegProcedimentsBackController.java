@@ -1261,6 +1261,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (StringUtils.isEmpty(username)) {
 				username = (String) request.getSession().getAttribute("username");
 			}
+			final Usuario usuario = DelegateUtil.getUsuarioDelegate().obtenerUsuariobyUsername(username);
+			if (usuario != null) {
+				username += " - " + usuario.getNombre();
+			}
 
 			MensajeEmail mensajeEmail = null;
 			if (Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO) && enviarEmail != null
@@ -1292,7 +1296,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						RolsacPropertiesUtil.getEmailProcContenido(username, texto, idEntidad.toString()));
 				mensajeEmail.setTo(to);
 				mensajeEmail.setFrom(from);
-
 			}
 
 			DelegateUtil.getMensajeDelegate().enviarMensajeProc(texto, idEntidad, username, gestor, mensajeEmail);
@@ -2028,8 +2031,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						.setTitulo(RolsacPropertiesUtil.getEmailProcTitulo(((TraduccionProcedimientoLocal) procediment
 								.getTraduccion(request.getLocale().getLanguage().contains("ca") ? "ca" : "es"))
 										.getNombre()));
+
 				mensajeEmail.setContenido(RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(
-						request.getLocale().getLanguage().contains("ca") ? true : false));
+						request.getLocale().getLanguage().contains("ca") ? true : false) + "\n\n"
+						+ RolsacPropertiesUtil.getUrlProcedimientos(procediment.getId().toString()));
 				mensajeEmail.setTo(to);
 				mensajeEmail.setFrom(from);
 
