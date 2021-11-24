@@ -1036,8 +1036,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				acciones.add(new IdNomDTO(null, messageSource.getMessage("accion.guardar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
 						messageSource.getMessage("accion.validar", null, request.getLocale())));
-				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
-						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 
 			} else if (proc.getValidacion() == Validacion.RESERVA.intValue()) {
 				// No tiene acciones
@@ -1063,14 +1061,19 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			// PermitirEliminar
 			// No se permitirá eliminar al gestor
-			if (gestor) { // && proc.getValidacion() == Validacion.RESERVA.intValue()) {
-				resultats.put("permiteEliminar", "N");
+			if (gestor) {
+				if (proc.getValidacion() == Validacion.INTERNA.intValue()) {
+					resultats.put("permiteEliminar", "S");
+				} else {
+					resultats.put("permiteEliminar", "N");
+				}
 			} else {
 				resultats.put("permiteEliminar", "S");
 			}
 
 			resultats.put("checkearInterno",
 					!gestor && proc.getValidacion() == Validacion.INTERNA.intValue() && proc.isPendienteValidar());
+			resultats.put("isGestor", gestor ? "S" : "N");
 			// Indica los flags de permisos
 			prepararFlags(resultats);
 

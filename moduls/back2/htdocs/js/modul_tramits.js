@@ -698,7 +698,7 @@ function CEscriptoriTramit() {
                     	//del trámite (estamos editando un trámite existente)
 	                    escriptori_detall_elm.fadeOut(300, function() {
 	                        escriptori_tramits_elm.fadeIn(300, function() {
-	                        	if (data.permiteGuardar == 'S') {//!$("#item_pdt_validar").is(":checked") || $("#item_estat").val() != 3 || 'N' == tienePermisoPublicar) {
+	                        	if (data.permiteGuardar == 'S') {
 	                        		escriptori_tramits_elm.find(".btnEliminar").show();
 	                        	} else {
 	                        		escriptori_tramits_elm.find(".btnEliminar").hide();

@@ -1079,8 +1079,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				acciones.add(new IdNomDTO(null, messageSource.getMessage("accion.guardar", null, request.getLocale())));
 				acciones.add(new IdNomDTO(Validacion.ACCION_PUBLICAR,
 						messageSource.getMessage("accion.validar", null, request.getLocale())));
-				acciones.add(new IdNomDTO(Validacion.ACCION_ELIMINAR,
-						messageSource.getMessage("accion.eliminar", null, request.getLocale())));
 
 			} else if (serv.getValidacion() == Validacion.RESERVA.intValue()) {
 				// No tiene acciones
@@ -1104,8 +1102,12 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			// PermitirEliminar
 			// No se permitirá eliminar al gestor
-			if (gestor) { // && proc.getValidacion() == Validacion.RESERVA.intValue()) {
-				resultats.put("permiteEliminar", "N");
+			if (gestor) {
+				if (serv.getValidacion() == Validacion.INTERNA.intValue()) {
+					resultats.put("permiteEliminar", "S");
+				} else {
+					resultats.put("permiteEliminar", "N");
+				}
 			} else {
 				resultats.put("permiteEliminar", "S");
 			}

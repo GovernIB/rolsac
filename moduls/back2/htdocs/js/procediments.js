@@ -1442,11 +1442,11 @@ function CDetall() {
 
 		this.modificado(false);
 
-		//noPermiteEliminar
-		this.actualizarBotonesEliminar(dada_node.permiteEliminar);
-
 		//noPermiteGuardar
 		this.actualizarBotonesGuardar(dada_node.permiteGuardar);
+
+		//noPermiteEliminar
+		this.actualizarBotonesEliminar(dada_node.permiteEliminar, dada_node.isGestor);
 
 		if (dada_node.permiteGuardar == 'N' && dada_node.item_estat == 2) {
 			$("#filaNoEditable").show();
@@ -1490,13 +1490,15 @@ function CDetall() {
 		}
 	};
 
-	this.actualizarBotonesEliminar = function(permite) {
+	this.actualizarBotonesEliminar = function(permite, isGestor) {
 
 		var disabled = "false";
 		if (permite == 'S') {
 			$("li:has(> a#btnEliminar)").show();
 			$("li:has(> a.btnEliminar)").show();
-
+			if (isGestor == 'S') {
+				$("#liBtnEliminar").css('margin-right','40px');
+			}
 
 		} else {
 			$("li:has(> a#btnEliminar)").hide();
