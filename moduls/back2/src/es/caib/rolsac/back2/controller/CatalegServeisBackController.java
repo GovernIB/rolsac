@@ -1114,6 +1114,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			resultats.put("checkearInterno",
 					!gestor && serv.getValidacion() == Validacion.INTERNA.intValue() && serv.isPendienteValidar());
+			resultats.put("isGestor", gestor ? "S" : "N");
 		} catch (final DelegateException dEx) {
 
 			logException(log, dEx);
