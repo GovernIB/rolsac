@@ -1581,7 +1581,13 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && servicioOld != null
 						&& servicioOld.isPendienteValidar()) {
 
-					if (servicioOld != null && servicioOld.getValidacion().compareTo(validacion) != 0) {
+					if (servicioOld != null && servicioOld.getValidacion().compareTo(validacion) == 0
+							&& validacion.compareTo(Validacion.INTERNA.intValue()) == 0) {
+
+						literal = RolsacPropertiesUtil.getLiteralFlujoActualizadoSupervisorConErrores(
+								request.getLocale().getLanguage().contains("ca"));
+
+					} else if (servicioOld != null && servicioOld.getValidacion().compareTo(validacion) != 0) {
 
 						literal = RolsacPropertiesUtil
 								.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"))

@@ -170,6 +170,8 @@ es.caib.rolsac.subscripcions
 		<!--  Supervisor revisado de proc/servs  -->
 		es.caib.rolsac.procServ.revisado.es=Se ha revisado la informacion
 		es.caib.rolsac.procServ.revisado.ca=S'ha revisat l'informacio
+		es.caib.rolsac.procServ.revisadoConErrores.es=Se ha revisado la informacion i se han detectado incorrecciones a corregir
+		es.caib.rolsac.procServ.revisadoConErrores.ca=S'ha revisat la informacio i s'han detectat incorreccions a corregir
 
 		<!--  Supervisor revisado de proc/servs  -->
 		es.caib.rolsac.procServ.cambioValidacion.es=Se ha actualizado del estado {0} a {1}

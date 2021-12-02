@@ -1756,7 +1756,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				if (!"on".equalsIgnoreCase(request.getParameter("item_pdt_validar")) && procedimentOld != null
 						&& procedimentOld.isPendienteValidar()) {
 
-					if (procedimentOld != null && procedimentOld.getValidacion().compareTo(validacion) != 0) {
+					if (procedimentOld != null && procedimentOld.getValidacion().compareTo(validacion) == 0
+							&& validacion.compareTo(Validacion.INTERNA.intValue()) == 0) {
+
+						literal = RolsacPropertiesUtil.getLiteralFlujoActualizadoSupervisorConErrores(
+								request.getLocale().getLanguage().contains("ca"));
+
+					} else if (procedimentOld != null && procedimentOld.getValidacion().compareTo(validacion) != 0) {
 
 						literal = RolsacPropertiesUtil
 								.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"))
@@ -1773,6 +1779,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 								.getLiteralFlujoActualizadoSupervisor(request.getLocale().getLanguage().contains("ca"));
 
 					}
+
 				} else {
 
 					if (procedimentOld != null && procedimentOld.getValidacion().compareTo(validacion) != 0) {

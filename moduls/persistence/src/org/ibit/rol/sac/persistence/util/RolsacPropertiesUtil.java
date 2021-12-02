@@ -203,6 +203,12 @@ public class RolsacPropertiesUtil {
 		return getProperty("es.caib.rolsac.procServ.revisado." + idioma);
 	}
 
+	/** Devuevle el texto cuando eres supervisor y lo revisas **/
+	public static final String getLiteralFlujoActualizadoSupervisorConErrores(final boolean catalan) {
+		final String idioma = catalan ? "ca" : "es";
+		return getProperty("es.caib.rolsac.procServ.revisadoConErrores." + idioma);
+	}
+
 	public static final String getLiteralValidacionActualizadoSupervisor(final boolean catalan, final String val1,
 			final String val2) {
 		final String idioma = catalan ? "ca" : "es";
