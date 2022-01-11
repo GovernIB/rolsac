@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href='<c:url value="/css/modul_afectacions.css"/>'  media="screen" />
 <link rel="stylesheet" type="text/css" href='<c:url value="/css/modul_documents.css"/>' media="screen" />
 
+<script type="text/javascript" src="<c:url value='/js/validar_serveis.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>

@@ -13,6 +13,7 @@
 <link href="<c:url value="/css/modul_documents.css"/>" rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/jquery-ui-timepicker-addon.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
+<script type="text/javascript" src="<c:url value='/js/validar_serveis.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
