@@ -629,6 +629,15 @@ function CEscriptoriTramit() {
                 $("#item_lloc_tramit_" + idioma).val(printStringFromNull(datos[idioma]["lugar"]));
                 $("#item_url_tramit_" + idioma).val(printStringFromNull(datos[idioma]["urlTramiteExterno"]));
                 //$("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));
+            } else {
+            	//Si es nulo, poner valor nulo.
+            	 $("#item_nom_tramit_" + idioma).val("");
+                 $("#item_descripcio_tramit_" + idioma).val("");
+                 $("#item_requisits_tramit_" + idioma).val("");
+                 $("#item_documentacio_tramit_" + idioma).val("");
+                 $("#item_termini_tramit_" + idioma).val("");
+                 $("#item_lloc_tramit_" + idioma).val("");
+                 $("#item_url_tramit_" + idioma).val("");
             }
 
            // if (datos[idiomaUA] != null) //Quitamos la condicion porque si es nulo debe sobreescribir lo anterior
