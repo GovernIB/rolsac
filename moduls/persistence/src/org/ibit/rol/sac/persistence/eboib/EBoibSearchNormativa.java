@@ -201,7 +201,7 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 
 	/**
 	 * Método que comprueba si la normativa tiene el id tipo correcto.
-	 * 
+	 *
 	 * @param normativa
 	 * @return
 	 * @throws DelegateException
@@ -219,7 +219,9 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 		final Model m = loadRdf(inputFileName);
 
 		// CATALA
-		final Resource res = m.getResource(inputFileName.substring(0, inputFileName.length() - 4));
+		final Resource res = m.getResource(inputFileName);// .substring(0, inputFileName.length() - 4));
+		// #491 No entendemos pq hacía antes lenght-4 --> inputFileName:
+		// https://intranet.caib.es/eboibfront/ca/2021/11496/656333/resolucio-del-director-de-la-fundacio-mallorca-tur/rdf
 
 		normbean.setNumeroboib(rdf.numBoib);
 		normbean.setIdBoletin("1");
@@ -233,7 +235,7 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 		 * codificado en el web.xml con un punto (.) String
 		 * txnombretipo=Configuracion.getPropiedad("norma_"+tipo_sac); txnombretipo =
 		 * txnombretipo.substring(txnombretipo.indexOf(".")+1,txnombretipo.length());
-		 * 
+		 *
 		 * normbean.setNombreTipo(txnombretipo); }else{ normbean.setNombreTipo("Varis");
 		 * normbean.setIdTipo("73508"); }
 		 */
@@ -285,7 +287,7 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 
 	/**
 	 * Obtiene la id del tipo normativa.
-	 * 
+	 *
 	 * @param uri
 	 * @return
 	 */
@@ -352,7 +354,7 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 	 * /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009<br/>
 	 * - buscar por fecha:
 	 * /filtrerss.do?lang=ca&resultados=20&fec_ini=01/01/2009&fec_fin=08/01/2009<br/>
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
