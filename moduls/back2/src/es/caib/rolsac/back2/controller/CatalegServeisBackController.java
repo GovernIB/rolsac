@@ -872,7 +872,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 		if (id == null) {
 			resultats.put("error", "No se ha podido marcar como leido");
 		} else {
-			final String username = request.getRemoteUser();
+			final String username = getUsername(request);
 			DelegateUtil.getMensajeDelegate().marcarMensajeLeidoServ(id, username);
 		}
 		return resultats;
@@ -888,13 +888,11 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			final String permisos = getPermisosUsuario(request);
 			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
-			String username = request.getRemoteUser();
-			if (StringUtils.isEmpty(username)) {
-				username = (String) request.getSession().getAttribute("username");
-			}
-			final Usuario usuario = DelegateUtil.getUsuarioDelegate().obtenerUsuariobyUsername(username);
-			if (usuario != null) {
-				username += " - " + usuario.getNombre();
+			final String username = getUsername(request);
+			String usuario = username;
+			final Usuario husuario = DelegateUtil.getUsuarioDelegate().obtenerUsuariobyUsername(username);
+			if (husuario != null) {
+				usuario += " - " + husuario.getNombre();
 			}
 
 			MensajeEmail mensajeEmail = null;
@@ -923,8 +921,8 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				}
 
 				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailServTitulo(nombreServ));
-				mensajeEmail.setContenido(
-						RolsacPropertiesUtil.getEmailServContenido(username, texto, idEntidad.toString()));
+				mensajeEmail
+						.setContenido(RolsacPropertiesUtil.getEmailServContenido(usuario, texto, idEntidad.toString()));
 				mensajeEmail.setTo(to);
 				mensajeEmail.setFrom(from);
 
@@ -1624,7 +1622,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					servicioMensaje.setFechaCreacion(new Date());
 					servicioMensaje.setGestor(false);
 					servicioMensaje.setLeido(false);
-					servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					servicioMensaje.setUsuario(getUsername(request));
 
 				}
 
@@ -1645,7 +1643,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 						servicioMensaje.setFechaCreacion(new Date());
 						servicioMensaje.setGestor(true);
 						servicioMensaje.setLeido(false);
-						servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+						servicioMensaje.setUsuario(getUsername(request));
 					}
 				} else if (servicioOld != null && servicioOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
 
@@ -1671,7 +1669,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					servicioMensaje.setFechaCreacion(new Date());
 					servicioMensaje.setGestor(true);
 					servicioMensaje.setLeido(false);
-					servicioMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					servicioMensaje.setUsuario(getUsername(request));
 
 				}
 			}
@@ -1819,7 +1817,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 						return result;
 					}
 					to = toUser + "@caib.es";
-					from = request.getRemoteUser() + "@caib.es";
+					from = getUsername(request) + "@caib.es";
 				}
 
 				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailServTitulo(((TraduccionServicio) servicio
@@ -1877,6 +1875,14 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		return result;
 
+	}
+
+	private String getUsername(final HttpServletRequest request) {
+		String username = request.getRemoteUser();
+		if (StringUtils.isEmpty(username)) {
+			username = (String) request.getSession().getAttribute("username");
+		}
+		return username;
 	}
 
 	/**

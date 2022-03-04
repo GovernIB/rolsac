@@ -16,7 +16,7 @@
         </id>
 
 
-        <property name="usuario" length="100" column="PMN_USUARIO"/>
+        <property name="usuario" length="100" column="PMN_USUARIO" />
         <property name="usuarioLectura" length="100" column="PMN_USULEC"/>
         <property name="texto" length="256" column="PMN_TEXTO" />
         <property name="fechaCreacion" column="PMN_FECCRE"/>

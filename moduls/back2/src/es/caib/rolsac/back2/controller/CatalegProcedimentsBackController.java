@@ -1244,10 +1244,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (id == null) {
 			resultats.put("error", "No se ha podido marcar como leido");
 		} else {
-			final String username = request.getRemoteUser();
+			final String username = getUsername(request);
 			DelegateUtil.getMensajeDelegate().marcarMensajeLeidoProc(id, username);
 		}
 		return resultats;
+	}
+
+	private String getUsername(final HttpServletRequest request) {
+		String username = request.getRemoteUser();
+		if (StringUtils.isEmpty(username)) {
+			username = (String) request.getSession().getAttribute("username");
+		}
+		return username;
 	}
 
 	@RequestMapping(value = "/enviarMensaje.do")
@@ -1260,13 +1268,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			final String permisos = getPermisosUsuario(request);
 			final boolean gestor = !Usuario.tienePermiso(permisos, Usuario.PERMISO_PUBLICAR_INVENTARIO);
-			String username = request.getRemoteUser();
-			if (StringUtils.isEmpty(username)) {
-				username = (String) request.getSession().getAttribute("username");
-			}
-			final Usuario usuario = DelegateUtil.getUsuarioDelegate().obtenerUsuariobyUsername(username);
-			if (usuario != null) {
-				username += " - " + usuario.getNombre();
+			final String username = getUsername(request);
+			String usuario = username;
+			final Usuario husuario = DelegateUtil.getUsuarioDelegate().obtenerUsuariobyUsername(username);
+			if (husuario != null) {
+				usuario += " - " + husuario.getNombre();
 			}
 
 			MensajeEmail mensajeEmail = null;
@@ -1295,8 +1301,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				}
 
 				mensajeEmail.setTitulo(RolsacPropertiesUtil.getEmailProcTitulo(nombreProc));
-				mensajeEmail.setContenido(
-						RolsacPropertiesUtil.getEmailProcContenido(username, texto, idEntidad.toString()));
+				mensajeEmail
+						.setContenido(RolsacPropertiesUtil.getEmailProcContenido(usuario, texto, idEntidad.toString()));
 				mensajeEmail.setTo(to);
 				mensajeEmail.setFrom(from);
 			}
@@ -1800,7 +1806,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					procedimientoMensaje.setFechaCreacion(new Date());
 					procedimientoMensaje.setGestor(false);
 					procedimientoMensaje.setLeido(false);
-					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					procedimientoMensaje.setUsuario(getUsername(request));
 
 				}
 
@@ -1820,7 +1826,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						procedimientoMensaje.setFechaCreacion(new Date());
 						procedimientoMensaje.setGestor(true);
 						procedimientoMensaje.setLeido(false);
-						procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+						procedimientoMensaje.setUsuario(getUsername(request));
 					}
 				} else if (procedimentOld != null
 						&& procedimentOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
@@ -1847,7 +1853,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					procedimientoMensaje.setFechaCreacion(new Date());
 					procedimientoMensaje.setGestor(true);
 					procedimientoMensaje.setLeido(false);
-					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					procedimientoMensaje.setUsuario(getUsername(request));
 				}
 			}
 
@@ -2155,7 +2161,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procedimientoMensaje.setGestor(gestor);
 				procedimientoMensaje.setIdProcedimiento(procedimiento.getId());
 				procedimientoMensaje.setLeido(false);
-				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+				procedimientoMensaje.setUsuario(getUsername(request));
 
 				procedimiento.setPendienteValidar(true);
 			}
@@ -3040,7 +3046,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procedimientoMensaje.setLeido(false);
 				procedimientoMensaje
 						.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
-				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+				procedimientoMensaje.setUsuario(getUsername(request));
 				procedimiento.setPendienteValidar(true);
 			}
 
@@ -3201,7 +3207,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procedimientoMensaje.setLeido(false);
 				procedimientoMensaje
 						.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
-				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+				procedimientoMensaje.setUsuario(getUsername(request));
 
 				procedimiento.setPendienteValidar(true);
 			}
@@ -3284,7 +3290,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procedimientoMensaje.setLeido(false);
 				procedimientoMensaje
 						.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
-				procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+				procedimientoMensaje.setUsuario(getUsername(request));
 
 				procedimiento.setPendienteValidar(true);
 			}
@@ -3366,7 +3372,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					procedimientoMensaje.setLeido(false);
 					procedimientoMensaje
 							.setTexto(RolsacPropertiesUtil.getLiteralFlujoAccion(Validacion.ACCION_REPUBLICAR, true));
-					procedimientoMensaje.setUsuario((String) request.getSession().getAttribute("username"));
+					procedimientoMensaje.setUsuario(getUsername(request));
 
 					procedimiento.setPendienteValidar(true);
 				}

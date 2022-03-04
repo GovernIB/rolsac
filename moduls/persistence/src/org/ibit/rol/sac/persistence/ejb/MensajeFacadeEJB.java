@@ -220,7 +220,9 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			final List<String> idUsuarios = new ArrayList<String>();
 			if (mensajes != null) {
 				for (final ProcedimientoMensaje mensaje : mensajes) {
-					if (mensaje.getUsuario() != null && !idUsuarios.contains(mensaje.getUsuario())) {
+					if (mensaje.getUsuario() != null && !mensaje.getUsuario().equals("Desconocido")
+							&& !mensaje.getUsuario().equals("Desconegut")
+							&& !idUsuarios.contains(mensaje.getUsuario())) {
 						idUsuarios.add(mensaje.getUsuario());
 					}
 
@@ -236,13 +238,16 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 					for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
 						for (final ProcedimientoMensaje mensaje : mensajes) {
 							if (mensaje.getUsuario() != null && mensaje.getUsuarioNombre() == null
-									&& mensaje.getUsuario() != null
-									&& mensaje.getUsuario().equals(usuario.getUsername())) {
+									&& !mensaje.getUsuario().equals("Desconocido")
+									&& !mensaje.getUsuario().equals("Desconegut") && mensaje.getUsuario() != null
+									&& mensaje.getUsuario().equals(usuario.getUsername())
+									&& !usuario.getNombre().equals("null")) {
 								mensaje.setUsuarioNombre(usuario.getNombre());
 							}
 
 							if (mensaje.getUsuarioLecturaNombre() == null && mensaje.getUsuarioLectura() != null
-									&& mensaje.getUsuarioLectura().equals(usuario.getUsername())) {
+									&& mensaje.getUsuarioLectura().equals(usuario.getUsername())
+									&& !usuario.getNombre().equals("null")) {
 								mensaje.setUsuarioLecturaNombre(usuario.getNombre());
 							}
 						}
@@ -282,7 +287,9 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 			final List<String> idUsuarios = new ArrayList<String>();
 			if (mensajes != null) {
 				for (final ServicioMensaje mensaje : mensajes) {
-					if (mensaje.getUsuario() != null && !idUsuarios.contains(mensaje.getUsuario())) {
+					if (mensaje.getUsuario() != null && !mensaje.getUsuario().equals("Desconocido")
+							&& !mensaje.getUsuario().equals("Desconegut")
+							&& !idUsuarios.contains(mensaje.getUsuario())) {
 						idUsuarios.add(mensaje.getUsuario());
 					}
 
@@ -298,12 +305,16 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 					for (final org.ibit.rol.sac.model.Usuario usuario : usuarios) {
 						for (final ServicioMensaje mensaje : mensajes) {
 							if (mensaje.getUsuarioNombre() == null && mensaje.getUsuario() != null
-									&& mensaje.getUsuario().equals(usuario.getUsername())) {
+									&& !mensaje.getUsuario().equals("Desconocido")
+									&& !mensaje.getUsuario().equals("Desconegut")
+									&& mensaje.getUsuario().equals(usuario.getUsername())
+									&& !usuario.getNombre().equals("null")) {
 								mensaje.setUsuarioNombre(usuario.getNombre());
 							}
 
 							if (mensaje.getUsuarioLecturaNombre() == null && mensaje.getUsuarioLectura() != null
-									&& mensaje.getUsuarioLectura().equals(usuario.getUsername())) {
+									&& mensaje.getUsuarioLectura().equals(usuario.getUsername())
+									&& !usuario.getNombre().equals("null")) {
 								mensaje.setUsuarioLecturaNombre(usuario.getNombre());
 							}
 						}
@@ -414,7 +425,9 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 
 			hql.append(" select max(mensaje.id) from ProcedimientoMensaje mensaje");
 			hql.append(" where mensaje.idProcedimiento = " + idEntidad);
-			hql.append("  and mensaje.gestor = 1 ");
+			hql.append("   and mensaje.usuario not like 'Desconocido'");
+			hql.append("   and mensaje.usuario not like 'Desconegut'");
+			hql.append("   and mensaje.gestor = 1 ");
 			final Long idMensaje = (Long) session.createQuery(hql.toString()).uniqueResult();
 			String gestor = null;
 			if (idMensaje != null) {
@@ -454,7 +467,9 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 
 			hql.append(" select max(mensaje.id) from ServicioMensaje mensaje");
 			hql.append(" where mensaje.idServicio = " + idEntidad);
-			hql.append("  and mensaje.gestor = 1 ");
+			hql.append("   and mensaje.usuario not like 'Desconocido'");
+			hql.append("   and mensaje.usuario not like 'Desconegut'");
+			hql.append("   and mensaje.gestor = 1 ");
 			final Long idMensaje = (Long) session.createQuery(hql.toString()).uniqueResult();
 			String gestor = null;
 			if (idMensaje != null) {
