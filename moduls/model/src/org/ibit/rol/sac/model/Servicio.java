@@ -104,7 +104,9 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 
 	/** Plataforma. **/
 	private Plataforma plataforma;
-	/** Parametros si es un tramtie telematico y necesita parametros. **/
+	/** Plantilla **/
+	private TramitePlantilla tramitePlantilla;
+	/** Parametros si es un tramite telematico y necesita parametros. **/
 	private String parametros;
 
 	/** Mensajes no leidos **/
@@ -968,6 +970,21 @@ public class Servicio extends Classificable implements Indexable, Validable, Com
 	 */
 	public void setMensajesNoLeidosSupervisor(final boolean mensajesNoLeidosSupervisor) {
 		this.mensajesNoLeidosSupervisor = mensajesNoLeidosSupervisor;
+	}
+
+	/**
+	 * @return the tramitePlantilla
+	 */
+	public TramitePlantilla getTramitePlantilla() {
+		return tramitePlantilla;
+	}
+
+	/**
+	 * @param tramitePlantilla
+	 *            the tramitePlantilla to set
+	 */
+	public void setTramitePlantilla(final TramitePlantilla plantilla) {
+		this.tramitePlantilla = plantilla;
 	}
 
 }

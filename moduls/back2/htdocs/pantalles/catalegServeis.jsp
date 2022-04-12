@@ -747,13 +747,13 @@ window.onclick = function(event) {
 
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_plataforma"><spring:message code='camp.cerca_plataforma'/></label>
+                                    <label for="cerca_plantilla"><spring:message code='camp.cerca_plantilla'/></label>
                                 </div>
                                 <div class="control">
-                                    <select id="cerca_plataforma" name="cerca_plataforma">
+                                    <select id="cerca_plantilla" name="cerca_plantilla">
                                         <option value=""><spring:message code='camp.cap'/></option>
-                                        <c:forEach items="${llistaPlataformas}" var="plataforma">
-                                            <option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
+                                        <c:forEach items="${llistaPlantillas}" var="plantilla">
+                                            <option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -1104,6 +1104,23 @@ window.onclick = function(event) {
 								</div>
 							</div>
 						</div>
+
+						<div class="fila">
+								<div class="element t25p">
+		                            <div class="etiqueta">
+		                                <label for="item_plantilla"><spring:message code='camp.plantilla'/></label>
+		                            </div>
+		                            <div class="control">
+		                            	<select id="item_plantilla" name="item_plantilla">
+                                    		<option value=""><spring:message code='camp.tria.opcio'/></option>
+                                        	<c:forEach items="${llistaPlantillas}" var="plantilla">
+                                            	<option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
+                                        	</c:forEach>
+                                        </select>
+		                            </div>
+		                        </div>
+						</div>
+
 						<div class="fila">
 							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
                             	<!-- Camps per cada idioma -->

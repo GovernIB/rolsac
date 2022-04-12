@@ -24,6 +24,7 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	private Boolean soloId = false;
 	private Integer comun;
 	private Long idPlataforma;
+	private Long idTramitePlantilla;
 	private Long pdtValidar;
 	private Long mensajePorLeer;
 	private Long estado;
@@ -239,6 +240,21 @@ public class BuscadorProcedimientoCriteria implements Serializable {
 	 */
 	public void setEstado(final Long estado) {
 		this.estado = estado;
+	}
+
+	/**
+	 * @return the idTramitePlantilla
+	 */
+	public Long getIdTramitePlantilla() {
+		return idTramitePlantilla;
+	}
+
+	/**
+	 * @param idTramitePlantilla
+	 *            the idTramitePlantilla to set
+	 */
+	public void setIdTramitePlantilla(final Long idTramitePlantilla) {
+		this.idTramitePlantilla = idTramitePlantilla;
 	}
 
 }

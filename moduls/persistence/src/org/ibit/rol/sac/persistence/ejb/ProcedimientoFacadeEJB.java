@@ -1457,6 +1457,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						" and procedimiento.id IN ( select tra.procedimiento from Tramite as tra where tra.plataforma.id = :idPlataforma ) ");
 			}
 
+			if (bc.getIdTramitePlantilla() != null) {
+				where.append(" and procedimiento.tramitePlantilla.id = :idTramitePlantilla ");
+			}
+
 			if (bc.getPdtValidar() != null) {
 				where.append(" and procedimiento.pendienteValidar = :pdtValidar ");
 			}
@@ -1645,6 +1649,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			if (bc.getIdPlataforma() != null) {
 				query.setParameter("idPlataforma", bc.getIdPlataforma());
+			}
+
+			if (bc.getIdTramitePlantilla() != null) {
+				query.setParameter("idTramitePlantilla", bc.getIdTramitePlantilla());
 			}
 
 			if (bc.getPdtValidar() != null) {
@@ -3302,7 +3310,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			if (!StringUtils.isEmpty(plataforma)) {
-				where.append(" AND p.plataforma.id = :plataforma");
+				where.append(
+						" AND (p.plataforma.id = :plataforma OR  p.tramitePlantilla in (select plant from TramitePlantilla plant where plant.plataforma.identificador like :plataforma) )");
 				parametros.put("plataforma", plataforma);
 			}
 
@@ -3416,12 +3425,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				from.append(" , p.tramites as tram ");
 
 				if (!StringUtils.isEmpty(tramiteTelematico)) {
-					where.append(" AND tram.idTraTel = :tramiteTelematico ");
+					where.append(
+							" AND ( tram.idTraTel = :tramiteTelematico OR tram.tramitePlantilla in (select plant from TramitePlantilla plant where plant.identificador = :tramiteTelematico) ) ");
 					parametros.put("tramiteTelematico", tramiteTelematico);
 				}
 
 				if (!StringUtils.isEmpty(versionTramiteTelematico)) {
-					where.append(" AND tram.versio = :versionTramiteTelematico ");
+					where.append(
+							" AND (tram.versio = :versionTramiteTelematico OR tram.tramitePlantilla in (select plant from TramitePlantilla plant where plant.version = :versionTramiteTelematico) )");
 					parametros.put("versionTramiteTelematico", versionTramiteTelematico);
 				}
 			}

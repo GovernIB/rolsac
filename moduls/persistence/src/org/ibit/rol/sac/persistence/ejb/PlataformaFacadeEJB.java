@@ -170,6 +170,26 @@ public abstract class PlataformaFacadeEJB extends HibernateEJB implements Plataf
 	}
 
 	/**
+	 * Lista el plataforma
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+	 */
+	@Override
+	public List<Plataforma> listarPlataforma() {
+
+		final Session session = getSession();
+		try {
+			final Criteria criteri = session.createCriteria(Plataforma.class);
+			return criteri.list();
+		} catch (final HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+	/**
 	 * Lista el personal (buscador del nuevo backoffice)
 	 *
 	 * @ejb.interface-method

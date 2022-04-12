@@ -120,6 +120,9 @@
 							<li>
 								<a href="<c:url value="/silenciAdm/silenciAdm.do"/>"><spring:message code="menu.silenci_adm" /></a>
 							</li>
+							<li>
+								<a href="<c:url value="/plantillaTram/plantillaTram.do"/>"><spring:message code="menu.tramite_plantillas" /></a>
+							</li>
 						</ul>
 					</li>
 					<li>

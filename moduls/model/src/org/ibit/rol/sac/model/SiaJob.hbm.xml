@@ -12,10 +12,10 @@
         </id>
         <property name="fechaIni"       column="SIJ_FECINI" />
         <property name="fechaFin"       column="SIJ_FECFIN" />
-        <property name="descBreve"  	column="SIJ_DESBRE" type="text" /> 
+        <property name="descBreve"  	column="SIJ_DESBRE" type="text" />
         <property name="descripcion"    column="SIJ_DESCRI" type="text" />
         <property name="estado"       	column="SIJ_ESTADO" />
         <property name="tipo"       	column="SIJ_TIPO" />
-             
+
     </class>
 </hibernate-mapping>

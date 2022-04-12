@@ -18,6 +18,7 @@ function BuscadorProcedimiento() {
 				"idMateria" : "",
 				"idPublicoObjetivo" : "",
 				"idPlataforma" : "",
+				"idTramiteTelematico" : "",
 				"enPlazo" : null,
 				"telematico" : null,
 				"paginacion" : paginacionJSON,
@@ -85,6 +86,7 @@ function BuscadorProcedimiento() {
 			criteria.idMateria = $("#cerca_materia").val();
 			criteria.idPublicoObjetivo = parseInt( $("#cerca_publicObjectiu").val() );
 			criteria.idPlataforma = parseInt( $("#cerca_plataforma").val() );
+			criteria.idTramiteTelematico = parseInt( $("#cerca_plantilla").val() );
 			criteria.pdtValidar = parseInt( $("#cerca_pdtValidar").val() );
 			criteria.mensajePorLeer = parseInt( $("#cerca_mensajePorLeer").val() );
 			criteria.estado = parseInt( $("#cerca_estado").val() );

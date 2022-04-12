@@ -1,5 +1,6 @@
 package es.caib.rolsac.api.v2.rolsac;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +92,10 @@ import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaDTO;
 import es.caib.rolsac.api.v2.plataforma.PlataformaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.plantilla.PlantillaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
@@ -725,6 +729,22 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
 			return fqsa;
 		} catch (final StrategyException e) {
 			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "plataforma.", e);
+		}
+	}
+
+	@Override
+	public PlantillaQueryServiceAdapter obtenirPlantilla(final PlantillaCriteria plantillaCriteria)
+			throws QueryServiceException {
+		try {
+			final PlantillaDTO dto = rolsacQueryServiceStrategy.obtenirPlantilla(plantillaCriteria);
+			final PlantillaQueryServiceAdapter fqsa = (PlantillaQueryServiceAdapter) BeanUtils.getAdapter("plantilla",
+					getStrategy(), dto);
+			if (rolsacUrl != null && !rolsacUrl.isEmpty() && fqsa != null) {
+				fqsa.setRolsacUrl(rolsacUrl);
+			}
+			return fqsa;
+		} catch (final StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "plantilla.", e);
 		}
 	}
 

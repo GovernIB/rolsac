@@ -95,6 +95,7 @@
    		<mapping resource="org/ibit/rol/sac/model/HechoVitalServicio.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Plataforma.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/LopdLegimitacion.hbm.xml" />
+		<mapping resource="org/ibit/rol/sac/model/TramitePlantilla.hbm.xml" />
 
     </session-factory>
 

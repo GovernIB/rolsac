@@ -46,6 +46,7 @@
 	xmlns:tns55="http://documentoServicio.v2.api.rolsac.caib.es"
 	xmlns:tns56="http://plataforma.v2.api.rolsac.caib.es"
 	xmlns:tns57="http://enllactelematico.v2.api.rolsac.caib.es"
+	xmlns:tns58="http://plantilla.v2.api.rolsac.caib.es"
 
 	targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 
@@ -130,6 +131,8 @@
 	<wsdl:import namespace="urn:tns56" location="dto/PlataformaDTO.wsdl" />
 	<wsdl:import namespace="urn:tns57" location="dto/EnllacTelematicoCriteria.wsdl"/>
 	<wsdl:import namespace="urn:tns57" location="dto/EnllacTelematicoDTO.wsdl"/>
+	<wsdl:import namespace="urn:tns58" location="dto/PlantillaCriteria.wsdl"/>
+	<wsdl:import namespace="urn:tns58" location="dto/PlantillaDTO.wsdl" />
 
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -754,6 +757,9 @@
 	<wsdl:message name="obtenirPlataformaRequest">
 		<wsdl:part name="in0" type="tns56:PlataformaCriteria" />
 	</wsdl:message>
+	<wsdl:message name="obtenirPlantillaRequest">
+		<wsdl:part name="in0" type="tns58:PlantillaCriteria" />
+	</wsdl:message>
 	<wsdl:message name="obtenirFamiliaRequest">
 		<wsdl:part name="in0" type="tns20:FamiliaCriteria" />
 	</wsdl:message>
@@ -799,6 +805,9 @@
 	</wsdl:message>
 	<wsdl:message name="obtenirPlataformaResponse">
 		<wsdl:part name="obtenirPlataformaReturn" type="tns56:PlataformaDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirPlantillaResponse">
+		<wsdl:part name="obtenirPlantillaReturn" type="tns58:PlantillaDTO" />
 	</wsdl:message>
 	<wsdl:message name="obtenirDocumentTramitRequest">
 		<wsdl:part name="in0" type="tns9:DocumentTramitCriteria" />
@@ -1040,6 +1049,10 @@
 		<wsdl:operation name="obtenirPlataforma" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirPlataformaRequest" name="obtenirPlataformaRequest" />
 			<wsdl:output message="intf:obtenirPlataformaResponse" name="obtenirPlataformaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPlantilla" parameterOrder="in0">
+			<wsdl:input message="intf:obtenirPlantillaRequest" name="obtenirPlantillaRequest" />
+			<wsdl:output message="intf:obtenirPlantillaResponse" name="obtenirPlantillaResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarFetsVitals"
 			parameterOrder="in0">
@@ -1583,6 +1596,17 @@
 					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="obtenirPlataformaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPlantilla">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirPlantillaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirPlantillaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>

@@ -138,50 +138,75 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	@Override
 	public String getEnlaceTelematico(final Long idTramit, final String lang) throws DelegateException {
 
-		String res ="";
-		
-		
+		String res = "";
+
 		final Tramite tram = this.obtenerTramite(idTramit);
-		try { 
-			final String idTramite = tram.getIdTraTel();
-			final String numVersion = tram.getVersio().toString();
-			final String idioma = lang;
-			final String parametros;
-			if (tram.getParametros() == null) {
-				parametros = "";
+		try {
+			if (tram.getTramitePlantilla() == null) {
+				final String idTramite = tram.getIdTraTel();
+				final String numVersion = tram.getVersio().toString();
+				final String idioma = lang;
+				final String parametros;
+				if (tram.getParametros() == null) {
+					parametros = "";
+				} else {
+					parametros = tram.getParametros();
+				}
+				final String idTramiteRolsac = idTramite.toString();
+
+				final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getPlataforma().getTraduccion(idioma);
+				String url = trad.getUrlAcceso();
+
+				url = url.replace("${idTramitePlataforma}", idTramite);
+				url = url.replace("${versionTramitePlatorma}", numVersion);
+				url = url.replace("${parametros}", parametros);
+				url = url.replace("${servicio}", String.valueOf(true));
+				url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+
+				res = url;
 			} else {
-				parametros = tram.getParametros();
+
+				final String idTramite = tram.getTramitePlantilla().getIdentificador();
+				final String numVersion = tram.getTramitePlantilla().getVersion().toString();
+				final String idioma = lang;
+				final String parametros;
+				if (tram.getTramitePlantilla().getParametros() == null) {
+					parametros = "";
+				} else {
+					parametros = tram.getTramitePlantilla().getParametros();
+				}
+				final String idTramiteRolsac = idTramite.toString();
+
+				final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getTramitePlantilla().getPlataforma()
+						.getTraduccion(idioma);
+				String url = trad.getUrlAcceso();
+
+				url = url.replace("${idTramitePlataforma}", idTramite);
+				url = url.replace("${versionTramitePlatorma}", numVersion);
+				url = url.replace("${parametros}", parametros);
+				url = url.replace("${servicio}", String.valueOf(true));
+				url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+
+				res = url;
+
 			}
-			final String idTramiteRolsac = idTramite.toString();
-	
-			final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getPlataforma().getTraduccion(idioma);
-			String url = trad.getUrlAcceso();
-	
-			url = url.replace("${idTramitePlataforma}", idTramite);
-			url = url.replace("${versionTramitePlatorma}", numVersion);
-			url = url.replace("${parametros}", parametros);
-			url = url.replace("${servicio}", String.valueOf(true));
-			url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
-	
-			res = url;
-		} catch (Exception e) {
-			
-			//si ocurre un error es porque alguno de los campos de url del trámite no existen. buscamos en la url externa. 
-			//si no existe para el idioma indicado se retorna el idioma por defecto
+		} catch (final Exception e) {
+
+			// si ocurre un error es porque alguno de los campos de url del trámite no
+			// existen. buscamos en la url externa.
+			// si no existe para el idioma indicado se retorna el idioma por defecto
 			TraduccionTramite t = (TraduccionTramite) tram.getTraduccion(lang);
-			if(t==null || t.getUrlTramiteExterno()==null) {
+			if (t == null || t.getUrlTramiteExterno() == null) {
 				t = (TraduccionTramite) tram.getTraduccion();
 			}
-			
-			if(t==null || t.getUrlTramiteExterno()==null) {
-				res="";
-			}else {
-				res= t.getUrlTramiteExterno();
-			}			
+
+			if (t == null || t.getUrlTramiteExterno() == null) {
+				res = "";
+			} else {
+				res = t.getUrlTramiteExterno();
+			}
 		}
-		
-		
-		
+
 		return res;
 	}
 
@@ -1647,12 +1672,14 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			}
 
 			if (!StringUtils.isEmpty(tramiteTelematico)) {
-				where.append(" AND t.idTraTel = :tramiteTelematico ");
+				where.append(
+						" AND (t.idTraTel = :tramiteTelematico OR t.tramitePlantilla in (Select plant from TramitePlantilla plant where plant.identificador like :tramiteTelematico) ) ");
 				parametros.put("tramiteTelematico", tramiteTelematico);
 			}
 
 			if (!StringUtils.isEmpty(versionTramiteTelematico)) {
-				where.append(" AND t.versio = :versionTramiteTelematico ");
+				where.append(
+						" AND ( t.versio = :versionTramiteTelematico OR t.tramitePlantilla in (Select plant from TramitePlantilla plant where plant.version like :versionTramiteTelematico)  ) ");
 				parametros.put("versionTramiteTelematico", versionTramiteTelematico);
 			}
 
@@ -1662,12 +1689,14 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 			}
 
 			if (plataforma != null && !plataforma.isEmpty()) {
-				where.append(" AND t.plataforma.identificador like :plataforma");
+				where.append(
+						" AND ( t.plataforma in (select plat from Plataforma plat where plat.identificador like :plataforma) OR t.tramitePlantilla in (select plant from TramitePlantilla plant where plant.plataforma.identificador like :plataforma )  ) ");
 				parametros.put("plataforma", plataforma);
 			}
 
 			if (codigoPlataforma != null && !codigoPlataforma.isEmpty()) {
-				where.append(" AND t.plataforma.id = :codigoPlataforma");
+				where.append(
+						" AND (t.plataforma  (select pla from Plataforma plat where plat.id = :codigoPlataforma)  OR t.tramitePlantilla  in (select plant from TramitePlantilla plant where plant.plataforma.id = :codigoPlataforma )  )  ");
 				parametros.put("codigoPlataforma", codigoPlataforma);
 			}
 

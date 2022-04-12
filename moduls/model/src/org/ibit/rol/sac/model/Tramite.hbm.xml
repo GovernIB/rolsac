@@ -54,6 +54,7 @@
         <property name="parametros" column="TRA_PARAMS"/>
 
         <many-to-one name="plataforma" cascade="none" column="TRA_CODPLT" foreign-key="RSC_TRAMPLT_FK"/>
+		<many-to-one name="tramitePlantilla" cascade="none" column="TRA_CODPLN" foreign-key="RSC_TRAMPLN_FK"/>
 
         <many-to-one name="organCompetent" column="TRA_ORGCOMP" foreign-key="RSC_ORGCOMP_FK"/>
 

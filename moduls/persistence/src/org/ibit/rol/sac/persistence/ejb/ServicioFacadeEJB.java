@@ -1036,6 +1036,12 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			if (bc.getEstado() != null) {
 				where.append(" and servicio.validacion = :estado ");
 			}
+			if (bc.getIdPlataforma() != null) {
+				where.append(" and servicio.plataforma.id = :idPlataforma ");
+			}
+			if (bc.getIdTramitePlantilla() != null) {
+				where.append(" and servicio.tramitePlantilla.id = :idTramitePlantilla ");
+			}
 
 			if (bc.getIdMateria() != null) {
 				if (bc.getIdMateria() == -1) {
@@ -1157,6 +1163,14 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 
 			if (bc.getServicio() != null && StringUtils.isNotEmpty(bc.getServicio().getCodigoSIA())) {
 				query.setParameter("codSIA", "%" + bc.getServicio().getCodigoSIA() + "%");
+			}
+
+			if (bc.getIdPlataforma() != null) {
+				query.setParameter("idPlataforma", bc.getIdPlataforma());
+			}
+
+			if (bc.getIdTramitePlantilla() != null) {
+				query.setParameter("idTramitePlantilla", bc.getIdTramitePlantilla());
 			}
 
 			if (bc.getServicio() != null && StringUtils.isNotEmpty(bc.getServicio().getEstadoSIA())
@@ -2611,12 +2625,14 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			}
 
 			if (!StringUtils.isEmpty(plataforma)) {
-				where.append(" AND s.plataforma.identificador like  :plataforma");
+				where.append(
+						" AND ( s.plataforma in (select plat from Plataforma plat where plat.identificador like  :plataforma) OR s.tramitePlantilla in (select plant from TramitePlantilla plant where plant.plataforma.identificador like :plataforma) ) ");
 				parametros.put("plataforma", plataforma);
 			}
 
 			if (!StringUtils.isEmpty(codigoPlataforma)) {
-				where.append(" AND s.plataforma.id = :codigoPlataforma");
+				where.append(
+						" AND (s.plataforma in (select plat from Plataforma where plat.id = :codigoPlataforma) OR s.tramitePlantilla in (select plant from TramitePlantilla plant where plant.plataforma.id = :codigoPlataforma ) ");
 				parametros.put("codigoPlataforma", codigoPlataforma);
 			}
 
@@ -2688,12 +2704,14 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			}
 
 			if (!StringUtils.isEmpty(tramiteTelematico)) {
-				where.append(" AND s.tramiteId = :tramiteTelematico");
+				where.append(
+						" AND ( s.tramiteId = :tramiteTelematico OR s.tramitePlantilla in (select plant from TramitePlantilla plant where plant.identificador = :tramiteTelematico) )");
 				parametros.put("tramiteTelematico", tramiteTelematico);
 			}
 
 			if (!StringUtils.isEmpty(versionTramiteTelematico)) {
-				where.append(" AND s.tramiteVersion = :versionTramiteTelematico");
+				where.append(
+						" AND (s.tramiteVersion = :versionTramiteTelematico or s.tramitePlantilla in (select plant from TramitePlantilla plant where plant.version = :versionTramiteTelematico) ) ");
 				parametros.put("versionTramiteTelematico", versionTramiteTelematico);
 			}
 

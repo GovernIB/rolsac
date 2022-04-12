@@ -60,6 +60,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaDTO;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -289,6 +291,17 @@ public class RolsacQueryServiceDelegate {
 		try {
 			final RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
 			return ejb.obtenirPlataforma(plataformaCriteria);
+		} catch (final LocatorException e) {
+			throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+		} catch (final RemoteException e) {
+			throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+		}
+	}
+
+	public PlantillaDTO obtenirPlantilla(final PlantillaCriteria plantillaCriteria) throws DelegateException {
+		try {
+			final RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+			return ejb.obtenirPlantilla(plantillaCriteria);
 		} catch (final LocatorException e) {
 			throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
 		} catch (final RemoteException e) {

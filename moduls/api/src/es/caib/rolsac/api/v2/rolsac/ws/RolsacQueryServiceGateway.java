@@ -65,6 +65,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaDTO;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -278,6 +280,15 @@ public class RolsacQueryServiceGateway {
 		plataformaDTO = stub.obtenirPlataforma(plataformaCriteria);
 
 		return plataformaDTO;
+	}
+
+	public PlantillaDTO obtenirPlantilla(final PlantillaCriteria plantillaCriteria)
+			throws QueryServiceException, RemoteException {
+
+		PlantillaDTO plantillaDTO = new PlantillaDTO();
+		plantillaDTO = stub.obtenirPlantilla(plantillaCriteria);
+
+		return plantillaDTO;
 	}
 
 	public FetVitalDTO obtenirFetVital(final FetVitalCriteria fetVitalCriteria)

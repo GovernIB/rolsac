@@ -60,6 +60,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -152,6 +154,8 @@ public interface RolsacQueryServiceStrategy {
 	List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws StrategyException;
 
 	PlataformaDTO obtenirPlataforma(PlataformaCriteria plataformaCriteria) throws StrategyException;
+
+	PlantillaDTO obtenirPlantilla(PlantillaCriteria plantillaCriteria) throws StrategyException;
 
 	FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws StrategyException;
 

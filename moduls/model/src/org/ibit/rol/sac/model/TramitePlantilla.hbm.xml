@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.TramitePlantilla" table="RSC_TRAMPL">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="TPA_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="identificador" 	length="256" column="TPA_IDENTI" />
+        <property name="version" 		length="3" column="TPA_VERSION" />
+        <property name="parametros" 	column="TPA_PARAMS" 	type="text" />
+		<many-to-one name="plataforma" 	cascade="none" column="TPA_CODPLT" foreign-key="RSC_TPAPLT_FK"/>
+		 <map name="traducciones" cascade="all" table="RSC_TRATPA">
+            <cache usage="read-write"/>
+            <key column="TTP_CODPLT" foreign-key="RSC_TRATTP_FK"/>
+            <index column="TTP_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionTramitePlantilla">
+                <property name="nombre" 		length="256" column="TTP_NOMBRE"/>
+            </composite-element>
+        </map>
+
+    </class>
+</hibernate-mapping>

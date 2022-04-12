@@ -125,18 +125,47 @@ function CModulTramit() {
 				jQuery("#item_version_tramit").prop('disabled', false);
 				jQuery("#item_plataforma").prop('disabled', false);
 				jQuery("#item_parametros").prop('disabled', false);
+				jQuery("#formTramits #item_plantilla").prop('disabled', false);
 			}else{
 				jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 				jQuery("#item_tramite_tramit").prop('disabled', true);
 				jQuery("#item_version_tramit").prop('disabled', true);
 				jQuery("#item_plataforma").prop('disabled', true);
 				jQuery("#item_parametros").prop('disabled', true);
+				jQuery("#formTramits #item_plantilla").prop('disabled', true);
 			}
 		});
 
+        //anyadimos comportamiento al checkbox de telematico
+        jQuery("#formTramits #item_plantilla").change(function(){
+        	if($(this).val() == ""){
+				//si no es telemático se deshabilitan los inputs relacionados
+				jQuery("[id^=item_url_tramit_]").prop('disabled', false);
+				jQuery("#item_tramite_tramit").prop('disabled', false);
+				jQuery("#item_version_tramit").prop('disabled', false);
+				jQuery("#item_plataforma").prop('disabled', false);
+				jQuery("#item_parametros").prop('disabled', false);
+			}else{
+				jQuery("[id^=item_url_tramit_]").prop('disabled', true);
+				jQuery("#item_tramite_tramit").prop('disabled', true);
+				jQuery("#item_version_tramit").prop('disabled', true);
+				jQuery("#item_plataforma").prop('disabled', true);
+				jQuery("#item_parametros").prop('disabled', true);
+
+				//Seteamos a nulo para quitar valores antiguos
+				jQuery("[id^=item_url_tramit_]").val('');
+				jQuery("#item_tramite_tramit").val('');
+				jQuery("#item_version_tramit").val('');
+				jQuery("#item_plataforma").val('');
+				jQuery("#item_parametros").val('');
+
+			}
+		});
+
+        jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 		jQuery("#item_version_tramit").prop('disabled', true);
 		jQuery("#item_tramite_tramit").prop('disabled', true);
-		jQuery("[id^=item_url_tramit_]").prop('disabled', true);
+		jQuery("#formTramits #item_plantilla").prop('disabled', false);
 		jQuery("#item_plataforma").prop('disabled', true);
 		jQuery("#item_parametros").prop('disabled', true);
 
@@ -520,6 +549,8 @@ function CEscriptoriTramit() {
 		$("#item_version_tramit").val("");
 		$("#item_parametros").val("");
 		$("[id^=item_url_tramit_]").val("");
+		$("#formTramits #item_plantilla").val('');
+
     };
 
     this.contaSeleccionats = function() {
@@ -571,8 +602,7 @@ function CEscriptoriTramit() {
 
         $("#item_tramite_tramit").val(datos.item_tramite_tramit);
         $("#item_parametros").val(datos.item_parametros_tramit );
-        $("#item_version_tramit").val( datos.item_version_tramit != 0 ? datos.item_version_tramit : 0);
-
+        $("#item_version_tramit").val( datos.item_version_tramit);
         $("#item_codivuds_tramit").val( datos.item_codivuds_tramit );
         $("#tramit_item_data_vuds").val( datos.tramit_item_data_vuds );
         $("#item_moment_tramit").val( datos.item_moment_tramit );
@@ -595,9 +625,11 @@ function CEscriptoriTramit() {
 			jQuery("#item_version_tramit").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#item_tramite_tramit").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("[id^=item_url_tramit_]").prop('disabled', !datos.item_check_tramit_telematico);
-			jQuery("#item_plataforma").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#item_parametros").prop('disabled', !datos.item_check_tramit_telematico);
+			jQuery("#item_plataforma").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#item_plataforma").val(datos.item_plataforma_tramit);
+			jQuery("#formTramits #item_plantilla").prop('disabled', !datos.item_check_tramit_telematico);
+			jQuery("#formTramits #item_plantilla").val(datos.item_plantilla_tramit);
 
 		} else {
 			jQuery("#item_check_tramit_telematico").prop('checked', false);
@@ -606,8 +638,11 @@ function CEscriptoriTramit() {
 			jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 			jQuery("#item_plataforma").prop('disabled', true);
 			jQuery("#item_parametros").prop('disabled', true);
+			jQuery("#formTramits #item_plantilla").prop('disabled', true);
 			jQuery("#item_plataforma").val('');
 			jQuery("#item_parametros").val('');
+			jQuery("#formTramits #item_plantilla").val('');
+
 		}
 
 

@@ -34,11 +34,12 @@ public class Tramite extends Ordenable implements Comparator {
 
 	String idTraTel;
 	Integer versio; // NUMBER(2)
-//	String urlExterna; // VARCHAR2(1024 CHAR)
+	// String urlExterna; // VARCHAR2(1024 CHAR)
 	/** Parametros si es un tramtie telematico y necesita parametros. **/
 	private String parametros;
 	/** Plataforma. **/
 	private Plataforma plataforma;
+	private TramitePlantilla tramitePlantilla;
 
 	// campos para la ventanilla unica
 
@@ -185,7 +186,7 @@ public class Tramite extends Ordenable implements Comparator {
 
 	/**
 	 * L'ordre es refren el TramiteFacadebEJB
-	 * 
+	 *
 	 * @param doc
 	 */
 	public void removeDocument(final Document doc) {
@@ -253,19 +254,20 @@ public class Tramite extends Ordenable implements Comparator {
 	}
 
 	public String getUrlExterna() {
-		//return urlExterna;
-			
+		// return urlExterna;
+
 		final TraduccionTramite traduccion = (TraduccionTramite) getTraduccion();
 		if (null == traduccion) {
 			return null;
 		} else {
 			return traduccion.getUrlTramiteExterno();
-		}		
+		}
 	}
 
-	/*public void setUrlExterna(final String urlExterna) {
-		this.urlExterna = urlExterna;
-	}*/
+	/*
+	 * public void setUrlExterna(final String urlExterna) { this.urlExterna =
+	 * urlExterna; }
+	 */
 
 	public Operativa getOperativa() {
 		return operativa;
@@ -425,9 +427,10 @@ public class Tramite extends Ordenable implements Comparator {
 	}
 
 	/**
-	 * @param parametros the parametros to set
+	 * @param parametros
+	 *            the parametros to set
 	 */
-	public void setParametros(String parametros) {
+	public void setParametros(final String parametros) {
 		this.parametros = parametros;
 	}
 
@@ -439,9 +442,25 @@ public class Tramite extends Ordenable implements Comparator {
 	}
 
 	/**
-	 * @param plataforma the plataforma to set
+	 * @param plataforma
+	 *            the plataforma to set
 	 */
-	public void setPlataforma(Plataforma plataforma) {
+	public void setPlataforma(final Plataforma plataforma) {
 		this.plataforma = plataforma;
+	}
+
+	/**
+	 * @return the tramitePlantilla
+	 */
+	public TramitePlantilla getTramitePlantilla() {
+		return tramitePlantilla;
+	}
+
+	/**
+	 * @param tramitePlantilla
+	 *            the tramitePlantilla to set
+	 */
+	public void setTramitePlantilla(final TramitePlantilla tramitePlantilla) {
+		this.tramitePlantilla = tramitePlantilla;
 	}
 }

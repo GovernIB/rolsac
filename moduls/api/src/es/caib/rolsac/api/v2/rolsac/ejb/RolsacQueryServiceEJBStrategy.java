@@ -1,5 +1,6 @@
 package es.caib.rolsac.api.v2.rolsac.ejb;
 
+
 import java.util.List;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
@@ -60,6 +61,8 @@ import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -342,6 +345,15 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
 	public PlataformaDTO obtenirPlataforma(final PlataformaCriteria plataformaCriteria) throws StrategyException {
 		try {
 			return rolsacQueryServiceDelegate.obtenirPlataforma(plataformaCriteria);
+		} catch (final DelegateException e) {
+			throw new StrategyException(e);
+		}
+	}
+
+	@Override
+	public PlantillaDTO obtenirPlantilla(final PlantillaCriteria plantillaCriteria) throws StrategyException {
+		try {
+			return rolsacQueryServiceDelegate.obtenirPlantilla(plantillaCriteria);
 		} catch (final DelegateException e) {
 			throw new StrategyException(e);
 		}

@@ -114,6 +114,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaDTO;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -210,6 +212,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 	private static final String HQL_FET_VITAL_ALIAS = "fv";
 	private static final String HQL_PLATAFORMA_CLASS = "Plataforma";
 	private static final String HQL_PLATAFORMA_ALIAS = "pt";
+	private static final String HQL_PLANTILLA_CLASS = "TramitePlantilla";
+	private static final String HQL_PLANTILLA_ALIAS = "plant";
 	private static final String HQL_ENLLAC_CLASS = "Enlace";
 	private static final String HQL_ENLLAC_ALIAS = "en";
 	private static final String HQL_ESPAI_TERRITORIAL_CLASS = "EspacioTerritorial";
@@ -1365,6 +1369,88 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		}
 
 		return plataformaDTO;
+	}
+
+	/**
+	 * Obtiene una plantilla.
+	 *
+	 * @param plantillaCriteria
+	 * @return PlantillaDTO
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public PlantillaDTO obtenirPlantilla(final PlantillaCriteria plantillaCriteria) {
+		final List<CriteriaObject> criteris;
+		PlantillaDTO plantillaDTO = null;
+		Session session = null;
+
+		try {
+			// criteris = BasicUtils.parseCriterias(PlantillaCriteria.class,
+			// HQL_PLANTILLA_ALIAS, HQL_TRADUCCIONES_ALIAS,
+			// plantillaCriteria);
+			//
+			// final List<FromClause> entities = new ArrayList<FromClause>();
+			// entities.add(new FromClause(HQL_PLANTILLA_CLASS, HQL_PLANTILLA_ALIAS));
+			//
+			// final QueryBuilder qb = new QueryBuilder(HQL_PLANTILLA_ALIAS, entities,
+			// plantillaCriteria.getIdioma(),
+			// HQL_TRADUCCIONES_ALIAS);
+			// qb.extendCriteriaObjects(criteris);
+			//
+			// session = getSession();
+			// final Query query = qb.createQuery(session);
+			// final TramitePlantilla plantilla = (TramitePlantilla) query.uniqueResult();
+			// if (plantilla != null) {
+			// plantillaDTO = (PlantillaDTO) BasicUtils.entityToDTO(PlantillaDTO.class,
+			// plantilla,
+			// plantillaCriteria.getIdioma());
+			//
+			// final TraduccionTramitePlantilla traPlt = (TraduccionTramitePlantilla)
+			// plantilla
+			// .getTraduccion(plantillaCriteria.getIdioma());
+			//
+			// if (traPlt.getNombre() != null) {
+			// plantillaDTO.setNombre(traPlt.getNombre());
+			// }
+			// }
+
+			session = getSession();
+			// final StringBuilder consulta = new StringBuilder("SELECT DISTINCT plant.id,
+			// plant.identificador, plant.version, plant.parametros FROM TramitePlantilla AS
+			// plant, plant.traducciones AS trad WHERE INDEX(trad) = :idioma AND plant.id =
+			// :codigo ");
+			final StringBuilder consulta = new StringBuilder(
+					"SELECT DISTINCT plant.id, plant.identificador, plant.version, plant.plataforma.id FROM TramitePlantilla AS plant, plant.traducciones AS trad WHERE INDEX(trad) = :idioma AND plant.id = :codigo  ");
+
+			final Query query = session.createQuery(consulta.toString());
+
+			query.setParameter("idioma", plantillaCriteria.getIdioma());
+			query.setParameter("codigo", Long.valueOf(plantillaCriteria.getId()));
+
+			final Object[] oplantilla = (Object[]) query.uniqueResult();
+			if (oplantilla != null) {
+				plantillaDTO = new PlantillaDTO();
+				plantillaDTO.setId((Long) oplantilla[0]);
+				plantillaDTO.setIdentificador((String) oplantilla[1]);
+				plantillaDTO.setVersion((String) oplantilla[2]);
+				plantillaDTO.setPlataforma((Long) oplantilla[3]);
+				plantillaDTO.setParametros("");
+			}
+		} catch (final HibernateException e) {
+			log.error(e);
+			throw new EJBException(e);
+			// } catch (final CriteriaObjectParseException e) {
+			// log.error(e);
+			// throw new EJBException(e);
+			// } catch (final QueryBuilderException e) {
+			// log.error(e);
+			// throw new EJBException(e);
+		} finally {
+			close(session);
+		}
+
+		return plantillaDTO;
 	}
 
 	/**
@@ -2856,6 +2942,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 		String numVersion = "";
 		final String idioma = enllacCriteria.getIdioma();
 		final Long idplataforma;
+		final Long idplantilla;
 		String parametros = "";
 		final String idTramiteRolsac = String.valueOf(enllacCriteria.getIdentificador());
 
@@ -2867,6 +2954,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			idTramite = servicio.getTramiteId();
 			numVersion = servicio.getTramiteVersion();
 			idplataforma = servicio.getPlataforma();
+			idplantilla = null;
 			parametros = servicio.getParametros();
 		} else {
 
@@ -2877,29 +2965,54 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			idTramite = tramit.getIdTraTel();
 			numVersion = String.valueOf(tramit.getVersio());
 			idplataforma = tramit.getPlataforma();
+			idplantilla = tramit.getTramitePlantilla();
 			parametros = tramit.getParametros();
 		}
 
-		if (idplataforma == null) {
-			log.error(" Error obteniendo la plataforma con  idTramiteRolsac:" + idTramiteRolsac + " idioma:" + idioma
-					+ " numversion:" + numVersion);
-			throw new EJBException("El idplataforma es nulo con idTramite: " + idTramiteRolsac);
-		}
-		final PlataformaCriteria plataformaCriteria = new PlataformaCriteria();
-		plataformaCriteria.setIdioma(idioma);
-		plataformaCriteria.setId(idplataforma.toString());
-		final PlataformaDTO plataforma = obtenirPlataforma(plataformaCriteria);
-		String url = plataforma.getUrlAcceso();
+		String url;
+		if (idplantilla == null) {
 
-		url = url.replace("${idTramitePlataforma}", idTramite);
-		url = url.replace("${versionTramitePlatorma}", numVersion);
-		if (parametros == null) {
-			parametros = "";
-		}
-		url = url.replace("${parametros}", parametros);
-		url = url.replace("${servicio}", String.valueOf(enllacCriteria.isServicio()));
-		url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+			if (idplataforma == null) {
+				log.error(" Error obteniendo la plataforma con  idTramiteRolsac:" + idTramiteRolsac + " idioma:"
+						+ idioma + " numversion:" + numVersion);
+				throw new EJBException("El idplataforma es nulo con idTramite: " + idTramiteRolsac);
+			}
 
+			final PlataformaCriteria plataformaCriteria = new PlataformaCriteria();
+			plataformaCriteria.setIdioma(idioma);
+			plataformaCriteria.setId(idplataforma.toString());
+			final PlataformaDTO plataforma = obtenirPlataforma(plataformaCriteria);
+			url = plataforma.getUrlAcceso();
+
+			url = url.replace("${idTramitePlataforma}", idTramite);
+			url = url.replace("${versionTramitePlatorma}", numVersion);
+			if (parametros == null) {
+				parametros = "";
+			}
+			url = url.replace("${parametros}", parametros);
+			url = url.replace("${servicio}", String.valueOf(enllacCriteria.isServicio()));
+			url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+		} else {
+			final PlantillaCriteria plantillaCriteria = new PlantillaCriteria();
+			plantillaCriteria.setIdioma(idioma);
+			plantillaCriteria.setId(idplantilla.toString());
+			final PlantillaDTO plantilla = obtenirPlantilla(plantillaCriteria);
+
+			final PlataformaCriteria plataformaCriteria = new PlataformaCriteria();
+			plataformaCriteria.setIdioma(idioma);
+			plataformaCriteria.setId(plantilla.getPlataforma().toString());
+			final PlataformaDTO plataforma = obtenirPlataforma(plataformaCriteria);
+			url = plataforma.getUrlAcceso();
+
+			url = url.replace("${idTramitePlataforma}", plantilla.getIdentificador());
+			url = url.replace("${versionTramitePlatorma}", plantilla.getVersion());
+			if (parametros == null) {
+				parametros = "";
+			}
+			url = url.replace("${parametros}", plantilla.getParametros());
+			url = url.replace("${servicio}", String.valueOf(enllacCriteria.isServicio()));
+			url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
+		}
 		enllacDTO.setEnlace(url);
 		return enllacDTO;
 	}

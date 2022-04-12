@@ -279,6 +279,14 @@ public final class DelegateUtil {
 		return del;
 	}
 
+	public static TramitePlantillaDelegate getTramitePlantillaDelegate() {
+		final TramitePlantillaDelegateI impl = (TramitePlantillaDelegateImpl) DelegateFactory
+				.getDelegate(TramitePlantillaDelegateImpl.class);
+		final TramitePlantillaDelegate del = new TramitePlantillaDelegate();
+		del.setImpl(impl);
+		return del;
+	}
+
 	public static SiaPendienteProcesoDelegate getSiaPendienteProcesoDelegate() {
 		return (SiaPendienteProcesoDelegate) DelegateFactory.getDelegate(SiaPendienteProcesoDelegate.class);
 	}

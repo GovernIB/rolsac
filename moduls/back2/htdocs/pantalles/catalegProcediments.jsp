@@ -1035,7 +1035,7 @@ window.onclick = function(event) {
                                 </div>
                             </div>
 
-							<div class="element t12">
+							<div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_plataforma"><spring:message code='camp.cerca_plataforma'/></label>
                                 </div>
@@ -1097,6 +1097,20 @@ window.onclick = function(event) {
 
                         <div class="fila">
 
+                        	  <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_plantilla"><spring:message code='camp.cerca_plantilla'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_plantilla" name="cerca_plantilla">
+                                        <option value=""><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${llistaPlantillas}" var="plantilla">
+                                            <option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+
                         	 <div id="divComun" class="element t25">
                             	<c:if test="${comunes}">
 	                                <div class="etiqueta">
@@ -1111,6 +1125,8 @@ window.onclick = function(event) {
 	                                </div>
                                 </c:if>
                             </div>
+
+
 
                         </div>
 
@@ -2696,6 +2712,24 @@ window.onclick = function(event) {
 		                	</div>
 						</div>
 
+						<div class="modul_continguts mostrar">
+							<div class="fila">
+								<div class="element t25p">
+		                            <div class="etiqueta">
+		                                <label for="item_plantilla"><spring:message code='camp.plantilla'/></label>
+		                            </div>
+		                            <div class="control">
+		                            	<select id="item_plantilla" name="item_plantilla" onchange="onChangePlantilla()">
+                                    		<option value=""><spring:message code='camp.tria.opcio'/></option>
+                                        	<c:forEach items="${llistaPlantillas}" var="plantilla">
+                                            	<option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
+                                        	</c:forEach>
+                                        </select>
+		                            </div>
+		                        </div>
+							</div>
+						</div>
+
 						<div class="fila">
 							<div class="element t99p elementoMultiidiomaIndividual">
 								<c:forEach items="${idiomes_aplicacio}" var="lang">
@@ -2710,6 +2744,7 @@ window.onclick = function(event) {
 								</c:forEach>
 							</div>
 						</div>
+
 
 						<div class="modul_continguts mostrar">
 		                    <div class="fila">

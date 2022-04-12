@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.Plataforma;
@@ -36,5 +37,8 @@ public interface PlataformaDelegateI {
 
 	/** Obtiene la consutla por restapi. **/
 	public ResultadoBusqueda consultaPlataformas(FiltroGenerico filtro) throws DelegateException;
+
+	/** Obtiene las plataformas para el combobox. **/
+	public List<Plataforma> listarPlataforma() throws DelegateException;
 
 }

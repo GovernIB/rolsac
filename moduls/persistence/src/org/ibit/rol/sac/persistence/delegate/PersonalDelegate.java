@@ -26,68 +26,70 @@ public class PersonalDelegate implements StatelessDelegate {
 	/* ======================== MÉTODOS DE NEGOCIO ============= */
 	/* ========================================================= */
 
-	public Long grabarPersonal(Personal personal, Long idUA) throws DelegateException {
+	public Long grabarPersonal(final Personal personal, final Long idUA) throws DelegateException {
 		try {
 			return getFacade().grabarPersonal(personal, idUA);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
 
-	public Personal obtenerPersonal(Long id) throws DelegateException {
+	public Personal obtenerPersonal(final Long id) throws DelegateException {
 		try {
 			return getFacade().obtenerPersonal(id);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
 
-	public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultados, boolean uaFilles, boolean uaMeves, boolean soloIds) throws DelegateException {
+	public ResultadoBusqueda buscadorListarPersonal(final Map parametros, final int pagina, final int resultados,
+			final boolean uaFilles, final boolean uaMeves, final boolean soloIds) throws DelegateException {
 		try {
 			return getFacade().buscadorListarPersonal(parametros, pagina, resultados, uaFilles, uaMeves, soloIds);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
 
 	/**
-	 * @deprecated	Se usa desde el back antiguo.
-	 * */
+	 * @deprecated Se usa desde el back antiguo.
+	 */
 	@Deprecated
-	public Set listarPersonalUA(Long unidadAdmin_id) throws DelegateException {
+	public Set listarPersonalUA(final Long unidadAdmin_id) throws DelegateException {
 		try {
 			return getFacade().listarPersonalUA(unidadAdmin_id);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
 
-	public void borrarPersonal(Long id) throws DelegateException {
+	public void borrarPersonal(final Long id) throws DelegateException {
 		try {
 			getFacade().borrarPersonal(id);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
 
-	public ResultadoBusqueda buscadorListarPersonal(Personal personal, Long idUA, boolean uaHijas, boolean uaPropias, PaginacionCriteria paginacion) throws DelegateException {
+	public ResultadoBusqueda buscadorListarPersonal(final Personal personal, final Long idUA, final boolean uaHijas,
+			final boolean uaPropias, final PaginacionCriteria paginacion) throws DelegateException {
 		try {
 			return getFacade().buscadorListarPersonal(personal, idUA, uaHijas, uaPropias, paginacion);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
-	
-	public ResultadoBusqueda consultaPersonal(FiltroGenerico filtro) throws DelegateException {
+
+	public ResultadoBusqueda consultaPersonal(final FiltroGenerico filtro) throws DelegateException {
 		try {
 			return getFacade().consultaPersonal(filtro);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
 
 	/* ========================================================= */
-	/* ======================== REFERENCIA AL FACADE  ========== */
+	/* ======================== REFERENCIA AL FACADE ========== */
 	/* ========================================================= */
 
 	private Handle facadeHandle;
@@ -98,18 +100,16 @@ public class PersonalDelegate implements StatelessDelegate {
 
 	protected PersonalDelegate() throws DelegateException {
 		try {
-			PersonalFacadeHome home = PersonalFacadeUtil.getHome();
-			PersonalFacade remote = home.create();
+			final PersonalFacadeHome home = PersonalFacadeUtil.getHome();
+			final PersonalFacade remote = home.create();
 			facadeHandle = remote.getHandle();
-		} catch (NamingException e) {
+		} catch (final NamingException e) {
 			throw new DelegateException(e);
-		} catch (CreateException e) {
+		} catch (final CreateException e) {
 			throw new DelegateException(e);
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}
-
-
 
 }

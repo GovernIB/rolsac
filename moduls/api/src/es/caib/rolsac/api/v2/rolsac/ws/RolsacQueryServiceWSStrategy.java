@@ -60,6 +60,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaDTO;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -442,6 +444,20 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 		}
 
 		return plataformaDTO;
+	}
+
+	@Override
+	public PlantillaDTO obtenirPlantilla(final PlantillaCriteria plantillaCriteria) throws StrategyException {
+		PlantillaDTO plantillaDTO = new PlantillaDTO();
+		try {
+			plantillaDTO = gateway.obtenirPlantilla(plantillaCriteria);
+		} catch (final QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (final RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+
+		return plantillaDTO;
 	}
 
 	@Override

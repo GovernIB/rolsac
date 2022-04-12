@@ -57,6 +57,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.plantilla.PlantillaCriteria;
+import es.caib.rolsac.api.v2.plantilla.PlantillaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.plataforma.PlataformaCriteria;
 import es.caib.rolsac.api.v2.plataforma.PlataformaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -153,6 +155,8 @@ public interface RolsacQueryService {
 	FetVitalQueryServiceAdapter obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws QueryServiceException;
 
 	PlataformaQueryServiceAdapter obtenirPlataforma(PlataformaCriteria plataformaCriteria) throws QueryServiceException;
+
+	PlantillaQueryServiceAdapter obtenirPlantilla(PlantillaCriteria plantillaCriteria) throws QueryServiceException;
 
 	List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws QueryServiceException;
 

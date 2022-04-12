@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.CreateException;
@@ -111,6 +112,16 @@ public class PlataformaDelegateImpl extends PlataformaDelegate implements Statel
 		try {
 			return getFacade().consultaPlataformas(filtro);
 		} catch (final Exception e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	/** Lista plataforma. **/
+	@Override
+	public List<Plataforma> listarPlataforma() throws DelegateException {
+		try {
+			return getFacade().listarPlataforma();
+		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}
 	}

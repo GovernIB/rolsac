@@ -157,6 +157,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(lang));
 			// Plataforma.
 			model.put("llistaPlataformas", getListaPlataformasDTO());
+			// Plantillas.
+			model.put("llistaPlantillas", getListaPlantillasDTO(lang));
 
 			// Lopd Legitimacion (como hay que sacar también el por defecto, se tiene que
 			// hacer desde aqui).
@@ -1149,9 +1151,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
-		final Map parametros = new HashMap();
+
 		final int pagina = 0;
 		final int resultats = 100;
+		final Map parametros = new HashMap();
 		final ResultadoBusqueda resultado = DelegateUtil.getPlataformaDelegate().buscadorListarPlataforma(parametros,
 				pagina, resultats, true, true);
 		final List<IdNomDTO> listaPlataformasDTO = new ArrayList<IdNomDTO>();
@@ -1164,6 +1167,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 
 		return listaPlataformasDTO;
+	}
+
+	private List<IdNomDTO> getListaPlantillasDTO(final String idioma) throws DelegateException {
+		final int pagina = 0;
+		final int resultats = 100;
+		final ResultadoBusqueda resultado = DelegateUtil.getTramitePlantillaDelegate().listarTramitePlantilla(pagina,
+				resultats, idioma);
+		final List<IdNomDTO> listaPlantillasDTO = new ArrayList<IdNomDTO>();
+		if (resultado.getListaResultados() != null) {
+			for (final Object oplantilla : resultado.getListaResultados()) {
+				final Object[] plantilla = (Object[]) oplantilla;
+				final IdNomDTO plat = new IdNomDTO((Long) plantilla[0], plantilla[1].toString());
+				listaPlantillasDTO.add(plat);
+			}
+		}
+
+		return listaPlantillasDTO;
 	}
 
 	private List<IdNomDTO> getListaBoletinesDTO() throws DelegateException {

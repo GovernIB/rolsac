@@ -17,6 +17,8 @@ function BuscadorServicio() {
 				"idHechoVital" : "",
 				"idMateria" : "",
 				"idPublicoObjetivo" : "",
+				"idPlataforma" : "",
+				"idTramiteTelematico" : "",
 				"enPlazo" : null,
 				"telematico" : null,
 				"paginacion" : paginacionJSON,
@@ -87,6 +89,8 @@ function BuscadorServicio() {
 			criteria.idHechoVital = $("#cerca_fet_vital").val();
 			criteria.idMateria = $("#cerca_materia").val();
 			criteria.idPublicoObjetivo = parseInt( $("#cerca_publicObjectiu").val() );
+			criteria.idPlataforma = parseInt( $("#cerca_plataforma").val() );
+			criteria.idTramiteTelematico = parseInt( $("#cerca_plantilla").val() );
 
 			switch ( $("#enPlazo").val() ) {
 

@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.util.List;
 import java.util.Map;
 
 import org.ibit.rol.sac.model.Plataforma;
@@ -55,5 +56,14 @@ public class PlataformaDelegate implements StatelessDelegate {
 	/** Consulta por restapi **/
 	public ResultadoBusqueda consultaPlataformas(final FiltroGenerico filtro) throws DelegateException {
 		return impl.consultaPlataformas(filtro);
+	}
+
+	/**
+	 * Lista plataforma.
+	 * 
+	 * @throws DelegateException
+	 **/
+	public List<Plataforma> listarPlataforma() throws DelegateException {
+		return impl.listarPlataforma();
 	}
 }
