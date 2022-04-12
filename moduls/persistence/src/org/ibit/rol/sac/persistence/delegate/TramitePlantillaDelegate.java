@@ -3,6 +3,7 @@ package org.ibit.rol.sac.persistence.delegate;
 import java.util.List;
 
 import org.ibit.rol.sac.model.TramitePlantilla;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -45,6 +46,10 @@ public class TramitePlantillaDelegate {
 
 	public int cuantosProcedimientosConTramitePlantilla(final Long id) throws DelegateException {
 		return impl.cuantosProcedimientosConTramitePlantilla(id);
+	}
+
+	public ResultadoBusqueda consultaPlantillas(final FiltroGenerico filtro) throws DelegateException {
+		return impl.consultaPlantillas(filtro);
 	}
 
 }

@@ -1421,7 +1421,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			// plant, plant.traducciones AS trad WHERE INDEX(trad) = :idioma AND plant.id =
 			// :codigo ");
 			final StringBuilder consulta = new StringBuilder(
-					"SELECT DISTINCT plant.id, plant.identificador, plant.version, plant.plataforma.id FROM TramitePlantilla AS plant, plant.traducciones AS trad WHERE INDEX(trad) = :idioma AND plant.id = :codigo  ");
+					"SELECT DISTINCT plant.id, plant.identificador, plant.version, plant.plataforma.id, plant.parametros FROM TramitePlantilla AS plant, plant.traducciones AS trad WHERE INDEX(trad) = :idioma AND plant.id = :codigo  ");
 
 			final Query query = session.createQuery(consulta.toString());
 
@@ -1435,7 +1435,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 				plantillaDTO.setIdentificador((String) oplantilla[1]);
 				plantillaDTO.setVersion((String) oplantilla[2]);
 				plantillaDTO.setPlataforma((Long) oplantilla[3]);
-				plantillaDTO.setParametros("");
+				plantillaDTO.setParametros((String) oplantilla[4]);
 			}
 		} catch (final HibernateException e) {
 			log.error(e);

@@ -120,6 +120,13 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_PLATAFORMAS_URL_ACCESO = "urlAcceso";
 	public static final String FILTRO_PLATAFORMAS_DESCRIPCION = "descripcion";
 
+	public static final String FILTRO_PLANTILLAS_CODIGO = "codigo";
+	public static final String FILTRO_PLANTILLAS_IDENTIFICADOR = "identificador";
+	public static final String FILTRO_PLANTILLAS_URL_ACCESO = "urlAcceso";
+	public static final String FILTRO_PLANTILLAS_NOMBRE = "nombre";
+	public static final String FILTRO_PLANTILLAS_PLATAFORMA = "plataforma";
+	public static final String FILTRO_PLANTILLAS_VERSION = "version";
+
 	public static final String FILTRO_SERVICIOS_UA = "codigoUA";
 	public static final String FILTRO_SERVICIOS_UA_DIR3 = "codigoUADir3";
 	public static final String FILTRO_SERVICIOS_UA_DESCENDIENTES = "buscarEnDescendientesUA";

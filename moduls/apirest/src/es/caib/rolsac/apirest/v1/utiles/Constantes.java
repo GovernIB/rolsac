@@ -153,6 +153,9 @@ public class Constantes {
 	public static final String ENTIDAD_PLATAFORMAS = "plataformas";
 	public static final String URL_PLATAFORMAS = ENTIDAD_PLATAFORMAS + "/{0}";
 
+	public static final String ENTIDAD_PLANTILLAS = "plantillas";
+	public static final String URL_PLANTILLAS = ENTIDAD_PLANTILLAS + "/{0}";
+
 	public static final String ENTIDAD_LOPD_LEGITIMACION = "lopdLegitimacion";
 	public static final String URL_LOPD_LEGITIMACION = ENTIDAD_LOPD_LEGITIMACION + "/{0}";
 

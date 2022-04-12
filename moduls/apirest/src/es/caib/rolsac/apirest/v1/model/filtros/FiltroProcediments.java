@@ -133,7 +133,7 @@ public class FiltroProcediments {
 	private String versionTramiteTelematico;
 
 	/** codigoPlataforma. **/
-	@ApiModelProperty(value = "codigoPlataforma", required = false)
+	@ApiModelProperty(value = "plataforma", required = false)
 	private String codigoPlataforma;
 
 	public FiltroGenerico toFiltroGenerico() {

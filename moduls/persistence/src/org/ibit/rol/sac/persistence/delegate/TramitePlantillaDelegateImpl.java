@@ -8,6 +8,7 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import org.ibit.rol.sac.model.TramitePlantilla;
+import org.ibit.rol.sac.model.filtro.FiltroGenerico;
 import org.ibit.rol.sac.persistence.intf.TramitePlantillaFacade;
 import org.ibit.rol.sac.persistence.intf.TramitePlantillaFacadeHome;
 import org.ibit.rol.sac.persistence.util.TramitePlantillaFacadeUtil;
@@ -129,6 +130,15 @@ public class TramitePlantillaDelegateImpl implements StatelessDelegate, TramiteP
 	public int cuantosProcedimientosConTramitePlantilla(final Long id) throws DelegateException {
 		try {
 			return getFacade().cuantosProcedimientosConTramitePlantilla(id);
+		} catch (final RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+
+	@Override
+	public ResultadoBusqueda consultaPlantillas(final FiltroGenerico filtro) throws DelegateException {
+		try {
+			return getFacade().consultaPlantillas(filtro);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}

@@ -84,7 +84,7 @@ public class Tramits extends EntidadBase {
 
 	@ApiModelProperty(value = "urlExterna", required = false)
 	private java.lang.String urlExterna;
-	
+
 	@ApiModelProperty(value = "urlTramiteExterno", required = false)
 	private java.lang.String urlTramiteExterno;
 
@@ -105,6 +105,9 @@ public class Tramits extends EntidadBase {
 
 	@ApiModelProperty(value = "plataforma", required = false)
 	private Plataformas plataforma;
+
+	@ApiModelProperty(value = "plantilla", required = false)
+	private Plantillas plantilla;
 
 	@ApiModelProperty(value = "parametros", required = false)
 	private java.lang.String parametros;
@@ -145,6 +148,14 @@ public class Tramits extends EntidadBase {
 		// copiamos los datos que no tienen la misma estructura:
 		if (elem.getPlataforma() != null) {
 			this.plataforma = new Plataformas(elem.getPlataforma(), urlBase, idioma, hateoasEnabled);
+		}
+
+		if (elem.getPlataforma() != null) {
+			this.plataforma = new Plataformas(elem.getPlataforma(), urlBase, idioma, hateoasEnabled);
+		}
+
+		if (elem.getTramitePlantilla() != null) {
+			this.plantilla = new Plantillas(elem.getTramitePlantilla(), urlBase, idioma, hateoasEnabled);
 		}
 	}
 
@@ -657,10 +668,26 @@ public class Tramits extends EntidadBase {
 	}
 
 	/**
-	 * @param urlTramiteExterno the urlTramiteExterno to set
+	 * @param urlTramiteExterno
+	 *            the urlTramiteExterno to set
 	 */
-	public void setUrlTramiteExterno(java.lang.String urlTramiteExterno) {
+	public void setUrlTramiteExterno(final java.lang.String urlTramiteExterno) {
 		this.urlTramiteExterno = urlTramiteExterno;
+	}
+
+	/**
+	 * @return the plantilla
+	 */
+	public Plantillas getPlantilla() {
+		return plantilla;
+	}
+
+	/**
+	 * @param plantilla
+	 *            the plantilla to set
+	 */
+	public void setPlantilla(final Plantillas plantilla) {
+		this.plantilla = plantilla;
 	}
 
 }
