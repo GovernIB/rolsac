@@ -162,6 +162,11 @@ function enviarChat() {
 		console.error("Texto del mensaje a enviar vacío");
 		return;
 	}
+
+	while (texto.indexOf("??") >= 0) {
+		texto = texto.replace("??","?");
+	}
+
 	var id = $('#modalID').val();
 	var enviarEmail = "N";
 	if ($('#enviarEmailChat').is(':checked')) {
