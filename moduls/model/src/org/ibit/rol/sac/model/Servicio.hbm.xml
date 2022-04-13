@@ -40,7 +40,6 @@
         <many-to-one name="organoInstructor" 	cascade="none" column="SER_INSTRU" foreign-key="RSC_SER_INSTRU_FK"/>
         <many-to-one name="servicioResponsable" cascade="none" column="SER_SERRSP" foreign-key="RSC_SET_SERRSP_FK"/>
 		<many-to-one name="plataforma" 			cascade="none" column="SER_CODPLT" foreign-key="RSC_SERPLT_FK"/>
-		<many-to-one name="tramitePlantilla" 			cascade="none" column="SER_CODPLN" foreign-key="RSC_SERPLN_FK"/>
 		<many-to-one name="lopdLegitimacion"    cascade="none" column="SER_CODLEG" foreign-key="RSC_SER_CODLEG_FK" class="org.ibit.rol.sac.model.LopdLegitimacion" />
 
         <map name="traducciones" cascade="all" table="RSC_TRASER">

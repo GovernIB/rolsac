@@ -631,6 +631,22 @@ function CEscriptoriTramit() {
 			jQuery("#formTramits #item_plantilla").prop('disabled', !datos.item_check_tramit_telematico);
 			jQuery("#formTramits #item_plantilla").val(datos.item_plantilla_tramit);
 
+
+			if (datos.item_plantilla_tramit != undefined && datos.item_plantilla_tramit != '' && datos.item_plantilla_tramit != null) {
+				//Seteamos a nulo y ponemos disabled si esta activo la plantilla tramite
+				jQuery("[id^=item_url_tramit_]").val('');
+				jQuery("#item_tramite_tramit").val('');
+				jQuery("#item_version_tramit").val('');
+				jQuery("#item_plataforma").val('');
+				jQuery("#item_parametros").val('');
+
+				jQuery("[id^=item_url_tramit_]").prop('disabled', true);
+				jQuery("#item_tramite_tramit").prop('disabled', true);
+				jQuery("#item_version_tramit").prop('disabled', true);
+				jQuery("#item_plataforma").prop('disabled', true);
+				jQuery("#item_parametros").prop('disabled', true);
+			}
+
 		} else {
 			jQuery("#item_check_tramit_telematico").prop('checked', false);
 			jQuery("#item_version_tramit").prop('disabled', true);

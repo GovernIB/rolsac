@@ -3004,12 +3004,14 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 			final PlataformaDTO plataforma = obtenirPlataforma(plataformaCriteria);
 			url = plataforma.getUrlAcceso();
 
-			url = url.replace("${idTramitePlataforma}", plantilla.getIdentificador());
-			url = url.replace("${versionTramitePlatorma}", plantilla.getVersion());
+			url = url.replace("${idTramitePlataforma}",
+					plantilla.getIdentificador() == null ? "" : plantilla.getIdentificador());
+			url = url.replace("${versionTramitePlatorma}",
+					plantilla.getVersion() == null ? "" : plantilla.getVersion());
 			if (parametros == null) {
 				parametros = "";
 			}
-			url = url.replace("${parametros}", plantilla.getParametros());
+			url = url.replace("${parametros}", plantilla.getParametros() == null ? "" : plantilla.getParametros());
 			url = url.replace("${servicio}", String.valueOf(enllacCriteria.isServicio()));
 			url = url.replace("${idTramiteRolsac}", idTramiteRolsac);
 		}
