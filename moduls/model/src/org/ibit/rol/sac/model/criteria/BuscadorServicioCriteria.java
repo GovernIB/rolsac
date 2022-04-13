@@ -33,7 +33,6 @@ public class BuscadorServicioCriteria implements Serializable {
 	private Long mensajePorLeer;
 	private Long estado;
 	private Long idPlataforma;
-	private Long idTramitePlantilla;
 
 	public BuscadorServicioCriteria() {
 		// Constructor vacio
@@ -245,21 +244,6 @@ public class BuscadorServicioCriteria implements Serializable {
 	 */
 	public void setIdPlataforma(final Long idPlataforma) {
 		this.idPlataforma = idPlataforma;
-	}
-
-	/**
-	 * @return the idTramitePlantilla
-	 */
-	public Long getIdTramitePlantilla() {
-		return idTramitePlantilla;
-	}
-
-	/**
-	 * @param idTramitePlantilla
-	 *            the idTramitePlantilla to set
-	 */
-	public void setIdTramitePlantilla(final Long idTramitePlantilla) {
-		this.idTramitePlantilla = idTramitePlantilla;
 	}
 
 }
