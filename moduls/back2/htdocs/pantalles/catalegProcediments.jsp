@@ -2714,13 +2714,13 @@ window.onclick = function(event) {
 
 						<div class="modul_continguts mostrar">
 							<div class="fila">
-								<div class="element t25p">
+								<div class="element t40p">
 		                            <div class="etiqueta">
 		                                <label for="item_plantilla"><spring:message code='camp.plantilla'/></label>
 		                            </div>
 		                            <div class="control">
 		                            	<select id="item_plantilla" name="item_plantilla" onchange="onChangePlantilla()">
-                                    		<option value=""><spring:message code='camp.tria.opcio'/></option>
+                                    		<option value=""><spring:message code='camp.tria.opcioPlantilla'/></option>
                                         	<c:forEach items="${llistaPlantillas}" var="plantilla">
                                             	<option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
                                         	</c:forEach>

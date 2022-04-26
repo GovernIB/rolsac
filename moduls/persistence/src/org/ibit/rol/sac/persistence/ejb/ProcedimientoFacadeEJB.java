@@ -1396,6 +1396,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			final StringBuilder from = new StringBuilder(
 					" from  ProcedimientoLocal as procedimiento,  procedimiento.traducciones as trad");
+			if (bc.getIdTramitePlantilla() != null) {
+				from.append(", procedimiento.tramites as tram ");
+			}
 			final StringBuilder where = new StringBuilder("where index(trad) = :idioma ");
 			StringBuilder consulta;
 			if (bc.getSoloId()) {
@@ -1458,7 +1461,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			if (bc.getIdTramitePlantilla() != null) {
-				where.append(" and procedimiento.tramitePlantilla.id = :idTramitePlantilla ");
+				where.append(" and tram.tramitePlantilla.id = :idTramitePlantilla ");
 			}
 
 			if (bc.getPdtValidar() != null) {
@@ -1710,32 +1713,35 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				try {
 					final StringBuilder idProced = new StringBuilder();
-					for (final Object proc : resultadoBusqueda.getListaResultados()) {
-						final Long idProc = ((ProcedimientoLocal) proc).getId();
-						idProced.append(idProc);
-						idProced.append(" , ");
-					}
+					if (resultadoBusqueda.getListaResultados() != null
+							&& resultadoBusqueda.getListaResultados().size() > 0) {
+						for (final Object proc : resultadoBusqueda.getListaResultados()) {
+							final Long idProc = ((ProcedimientoLocal) proc).getId();
+							idProced.append(idProc);
+							idProced.append(" , ");
+						}
 
-					String idProcedimientos = idProced.toString();
-					idProcedimientos = idProcedimientos.substring(0, idProcedimientos.length() - 2);
+						String idProcedimientos = idProced.toString();
+						idProcedimientos = idProcedimientos.substring(0, idProcedimientos.length() - 2);
 
-					final String hql = "select proMensa.idProcedimiento, proMensa.gestor from ProcedimientoMensaje proMensa where proMensa.leido = false and proMensa.idProcedimiento in ("
-							+ idProcedimientos + ")";
-					final Query queryMensas = session.createQuery(hql);
-					// queryMensas.setParameterList("idProcs", idProcs);
-					final List<Object[]> resultados = queryMensas.list();
-					if (resultados != null) {
-						for (final Object[] resultado : resultados) {
-							for (final Object proc : resultadoBusqueda.getListaResultados()) {
-								final String idProc = ((ProcedimientoLocal) proc).getId().toString();
-								if (resultado[0].toString().equals(idProc)) {
-									final boolean gestor = Boolean.valueOf(resultado[1].toString());
-									if (gestor) {
-										((ProcedimientoLocal) proc).setMensajesNoLeidosGestor(true);
-									} else {
-										((ProcedimientoLocal) proc).setMensajesNoLeidosSupervisor(true);
+						final String hql = "select proMensa.idProcedimiento, proMensa.gestor from ProcedimientoMensaje proMensa where proMensa.leido = false and proMensa.idProcedimiento in ("
+								+ idProcedimientos + ")";
+						final Query queryMensas = session.createQuery(hql);
+						// queryMensas.setParameterList("idProcs", idProcs);
+						final List<Object[]> resultados = queryMensas.list();
+						if (resultados != null) {
+							for (final Object[] resultado : resultados) {
+								for (final Object proc : resultadoBusqueda.getListaResultados()) {
+									final String idProc = ((ProcedimientoLocal) proc).getId().toString();
+									if (resultado[0].toString().equals(idProc)) {
+										final boolean gestor = Boolean.valueOf(resultado[1].toString());
+										if (gestor) {
+											((ProcedimientoLocal) proc).setMensajesNoLeidosGestor(true);
+										} else {
+											((ProcedimientoLocal) proc).setMensajesNoLeidosSupervisor(true);
+										}
+										break;
 									}
-									break;
 								}
 							}
 						}
