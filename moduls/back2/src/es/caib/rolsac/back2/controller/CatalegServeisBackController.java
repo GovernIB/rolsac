@@ -62,7 +62,6 @@ import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionServicio;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
-import org.ibit.rol.sac.model.TramitePlantilla;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
@@ -150,8 +149,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
 			// Plataforma.
 			model.put("llistaPlataformas", getListaPlataformasDTO());
-			// Plantillas.
-			model.put("llistaPlantillas", getListaPlantillasDTO(lang));
 
 			// Lopd Legitimacion (como hay que sacar también el por defecto, se tiene que
 			// hacer desde aqui).
@@ -258,23 +255,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 		return resultats;
 
-	}
-
-	private List<IdNomDTO> getListaPlantillasDTO(final String idioma) throws DelegateException {
-		final int pagina = 0;
-		final int resultats = 100;
-		final ResultadoBusqueda resultado = DelegateUtil.getTramitePlantillaDelegate().listarTramitePlantilla(pagina,
-				resultats, idioma);
-		final List<IdNomDTO> listaPlantillasDTO = new ArrayList<IdNomDTO>();
-		if (resultado.getListaResultados() != null) {
-			for (final Object oplantilla : resultado.getListaResultados()) {
-				final Object[] plantilla = (Object[]) oplantilla;
-				final IdNomDTO plat = new IdNomDTO((Long) plantilla[0], plantilla[1].toString());
-				listaPlantillasDTO.add(plat);
-			}
-		}
-
-		return listaPlantillasDTO;
 	}
 
 	private List<IdNomDTO> getListaPlataformasDTO() throws DelegateException {
@@ -1080,9 +1060,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			if (serv.getPlataforma() != null) {
 				resultats.put("item_plataforma_tramit", serv.getPlataforma().getId());
 			}
-			if (serv.getTramitePlantilla() != null) {
-				resultats.put("item_plantilla_tramit", serv.getTramitePlantilla().getId());
-			}
+
 			resultats.put("item_parametros", serv.getParametros());
 
 			List<IdNomDTO> acciones = new ArrayList<IdNomDTO>();
@@ -1756,22 +1734,6 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				servicio.setPlataforma(plataforma);
 			}
 
-			final String idPlantilla = request.getParameter("item_plantilla") == null ? ""
-					: request.getParameter("item_plantilla");
-			if (idPlantilla.isEmpty()) {
-				servicio.setTramitePlantilla(null);
-			} else {
-				final TramitePlantilla plantilla = DelegateUtil.getTramitePlantillaDelegate()
-						.obtenerTramitePlantilla(Long.valueOf(idPlantilla));
-				if (plantilla != null) {
-					servicio.setTramitePlantilla(plantilla);
-					// Si hay plantilla, borramos valores nulos
-					servicio.setPlataforma(null);
-					servicio.setTramiteId(null);
-					servicio.setTramiteVersion(null);
-					servicio.setParametros(null);
-				}
-			}
 			final String parametros = request.getParameter("item_parametros") == null ? ""
 					: request.getParameter("item_parametros");
 			servicio.setParametros(parametros);
@@ -1798,9 +1760,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 			}
 
 			final boolean isTramiteInterno = !servicio.getTramiteId().equals("") || !version.isEmpty()
-					|| !idPlataforma.isEmpty() || !parametros.isEmpty() || !idPlantilla.isEmpty();
-			final boolean isTramiteInternoTodo = (!servicio.getTramiteId().equals("") && !version.isEmpty()
-					&& !idPlataforma.isEmpty()) || (!idPlantilla.isEmpty());
+					|| !idPlataforma.isEmpty() || !parametros.isEmpty();
+			final boolean isTramiteInternoTodo = !servicio.getTramiteId().equals("") && !version.isEmpty()
+					&& !idPlataforma.isEmpty();
 			;
 
 			// si es telematico debe estar rellenos url o version+id, pero no ambos.

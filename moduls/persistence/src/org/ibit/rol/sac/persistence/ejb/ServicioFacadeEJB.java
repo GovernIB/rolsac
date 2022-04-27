@@ -1190,33 +1190,36 @@ public abstract class ServicioFacadeEJB extends HibernateEJB {
 			if (resultadoBusqueda.getListaResultados() != null) {
 
 				try {
-					final StringBuilder idServs = new StringBuilder();
-					for (final Object serv : resultadoBusqueda.getListaResultados()) {
-						final Long idServ = ((Servicio) serv).getId();
-						idServs.append(idServ);
-						idServs.append(" , ");
-					}
+					if (resultadoBusqueda.getListaResultados() != null
+							&& resultadoBusqueda.getListaResultados().size() > 0) {
+						final StringBuilder idServs = new StringBuilder();
+						for (final Object serv : resultadoBusqueda.getListaResultados()) {
+							final Long idServ = ((Servicio) serv).getId();
+							idServs.append(idServ);
+							idServs.append(" , ");
+						}
 
-					String idServicios = idServs.toString();
-					idServicios = idServicios.substring(0, idServicios.length() - 2);
+						String idServicios = idServs.toString();
+						idServicios = idServicios.substring(0, idServicios.length() - 2);
 
-					final String hql = "select srvMensa.idServicio, srvMensa.gestor from ServicioMensaje srvMensa where srvMensa.leido = false and srvMensa.idServicio in ("
-							+ idServicios + ")";
-					final Query queryMensas = session.createQuery(hql);
-					// queryMensas.setParameterList("idProcs", idProcs);
-					final List<Object[]> resultados = queryMensas.list();
-					if (resultados != null) {
-						for (final Object[] resultado : resultados) {
-							for (final Object serv : resultadoBusqueda.getListaResultados()) {
-								final String idServ = ((Servicio) serv).getId().toString();
-								if (resultado[0].toString().equals(idServ)) {
-									final boolean gestor = Boolean.valueOf(resultado[1].toString());
-									if (gestor) {
-										((Servicio) serv).setMensajesNoLeidosGestor(true);
-									} else {
-										((Servicio) serv).setMensajesNoLeidosSupervisor(true);
+						final String hql = "select srvMensa.idServicio, srvMensa.gestor from ServicioMensaje srvMensa where srvMensa.leido = false and srvMensa.idServicio in ("
+								+ idServicios + ")";
+						final Query queryMensas = session.createQuery(hql);
+						// queryMensas.setParameterList("idProcs", idProcs);
+						final List<Object[]> resultados = queryMensas.list();
+						if (resultados != null) {
+							for (final Object[] resultado : resultados) {
+								for (final Object serv : resultadoBusqueda.getListaResultados()) {
+									final String idServ = ((Servicio) serv).getId().toString();
+									if (resultado[0].toString().equals(idServ)) {
+										final boolean gestor = Boolean.valueOf(resultado[1].toString());
+										if (gestor) {
+											((Servicio) serv).setMensajesNoLeidosGestor(true);
+										} else {
+											((Servicio) serv).setMensajesNoLeidosSupervisor(true);
+										}
+										break;
 									}
-									break;
 								}
 							}
 						}

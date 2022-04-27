@@ -90,7 +90,6 @@ function BuscadorServicio() {
 			criteria.idMateria = $("#cerca_materia").val();
 			criteria.idPublicoObjetivo = parseInt( $("#cerca_publicObjectiu").val() );
 			criteria.idPlataforma = parseInt( $("#cerca_plataforma").val() );
-			criteria.idTramiteTelematico = parseInt( $("#cerca_plantilla").val() );
 
 			switch ( $("#enPlazo").val() ) {
 

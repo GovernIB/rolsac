@@ -145,24 +145,6 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_parametros",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 30000,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "obligatori": "<spring:message code='tramitePlantilla.formulari.parametros.obligatori'/>",
-                    "tipus": "<spring:message code='tramitePlantilla.formulari.parametros.no_nomes_numeros'/>"
-                }
-        },
-        {
-            "modo": "individual",
-            "etiqueta": "id",
             "etiquetaValor": "item_plataforma",
             "obligatori": "si",
             "tipus": "numeric",
