@@ -85,8 +85,9 @@ public abstract class TramitePlantillaFacadeEJB extends HibernateEJB implements 
 	 *         paginado con todos los tramitePlantillas.
 	 */
 	@Override
-	public ResultadoBusqueda listarTramitePlantilla(final int pagina, final int resultats, final String idioma) {
-		return listarTablaMaestraPaginada(pagina, resultats, listarTMTramitePlantilla(idioma));
+	public ResultadoBusqueda listarTramitePlantilla(final int pagina, final int resultats, final String idioma,
+			final Integer fase) {
+		return listarTablaMaestraPaginada(pagina, resultats, listarTMTramitePlantilla(idioma, fase));
 	}
 
 	/**
@@ -146,18 +147,24 @@ public abstract class TramitePlantillaFacadeEJB extends HibernateEJB implements 
 	 *            Indica el idioma en que se realiza la búsqueda.
 	 * @return Devuelve <code>List</code> de todos los tramitePlantillas.
 	 */
-	private List listarTMTramitePlantilla(final String idioma) {
+	private List listarTMTramitePlantilla(final String idioma, final Integer fase) {
 		final Session session = getSession();
 		try {
 
 			final StringBuilder consulta = new StringBuilder("select tramPlant.id, trad.nombre ");
 			consulta.append("from TramitePlantilla as tramPlant, tramPlant.traducciones as trad ");
 			consulta.append("where index(trad) = :idioma ");
+			if (fase != null) {
+				consulta.append(" and tramPlant.fase = :fase ");
+			}
 			consulta.append("order by trad.nombre asc");
 
 			final Query query = session.createQuery(consulta.toString());
 
 			query.setParameter("idioma", idioma);
+			if (fase != null) {
+				query.setParameter("fase", fase);
+			}
 			return query.list();
 
 		} catch (final HibernateException he) {

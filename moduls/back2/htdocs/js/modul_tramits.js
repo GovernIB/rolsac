@@ -162,6 +162,31 @@ function CModulTramit() {
 			}
 		});
 
+        jQuery("#formTramits #item_moment_tramit").change(function(){
+        	if($(this).val() != ""){
+
+        		 dataVars = "fase=" + $(this).val();
+        		 $.ajax({
+                     type: "POST",
+                     url: pagActualizarPlantillas,
+                     data: dataVars,
+                     dataType: 'json',
+                     success: function(data) {
+
+                             $("#item_plantilla option[value!='']").remove();
+                             var i=0;
+                             for(i=0; i< data.plantillas.length;i++) {
+                            	 $("#item_plantilla").append($('<option>', {
+                         		    value: data.plantillas[i].id,
+                         		    text: data.plantillas[i].nom
+                         		}));
+                             }
+                     }
+                 });
+        	}
+        });
+
+
         jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 		jQuery("#item_version_tramit").prop('disabled', true);
 		jQuery("#item_tramite_tramit").prop('disabled', true);
@@ -204,6 +229,10 @@ function CModulTramit() {
                 escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();
             });
         });
+
+        $("#item_plantilla option[value!='']").remove();
+        var $options = $("#item_plantilla_iniciacion > option").clone();
+        $('#item_plantilla').append($options);
 
     };
 
@@ -609,6 +638,16 @@ function CEscriptoriTramit() {
         $("#item_validacio_tramit").val( datos.item_validacio_tramit );
         $("#tramits_item_organ_id").val( datos.tramits_item_organ_id );
 
+        //Cargamos los datos de las plantillas.
+        $("#item_plantilla option[value!='']").remove();
+        if (datos.item_plantillas != undefined || datos.item_plantillas != '') {
+        	for (let i = 0; i < datos.item_plantillas.length; i++) {
+        		$("#item_plantilla").append($('<option>', {
+        		    value: datos.item_plantillas[i].id,
+        		    text: datos.item_plantillas[i].nom
+        		}));
+        	}
+        }
 
     	/////////////////////////
 		// Canal presentación

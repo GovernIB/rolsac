@@ -14,6 +14,7 @@
         <property name="identificador" 	length="256" column="TPA_IDENTI" />
         <property name="version" 		length="3" column="TPA_VERSION" />
         <property name="parametros" 	column="TPA_PARAMS" 	type="text" />
+        <property name="fase" 	        column="TPA_FASE" 	 />
 		<many-to-one name="plataforma" 	cascade="none" column="TPA_CODPLT" foreign-key="RSC_TPAPLT_FK"/>
 		 <map name="traducciones" cascade="all" table="RSC_TRATPA">
             <cache usage="read-write"/>

@@ -23,6 +23,9 @@ public class TramitePlantilla extends Traducible {
 	/** Plataforma. **/
 	private Plataforma plataforma;
 
+	/** Fase **/
+	private int fase;
+
 	/**
 	 * @return the id
 	 */
@@ -96,6 +99,21 @@ public class TramitePlantilla extends Traducible {
 	 */
 	public void setPlataforma(final Plataforma plataforma) {
 		this.plataforma = plataforma;
+	}
+
+	/**
+	 * @return the fase
+	 */
+	public int getFase() {
+		return fase;
+	}
+
+	/**
+	 * @param fase
+	 *            the fase to set
+	 */
+	public void setFase(final int fase) {
+		this.fase = fase;
 	}
 
 }

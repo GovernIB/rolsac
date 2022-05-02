@@ -138,7 +138,7 @@ public class TMTramitePlantillaController extends PantallaBaseController {
 			final String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
 			resultadoBusqueda = tramitePlantillaDelegate.listarTramitePlantilla(Integer.parseInt(pagPag),
-					Integer.parseInt(pagRes), idiomaPorDefecto);
+					Integer.parseInt(pagRes), idiomaPorDefecto, null);
 
 			for (final Object o : resultadoBusqueda.getListaResultados()) {
 
@@ -186,6 +186,7 @@ public class TMTramitePlantillaController extends PantallaBaseController {
 			resultats.put("item_version", tramitePlantilla.getVersion());
 			resultats.put("item_parametros", tramitePlantilla.getParametros());
 			resultats.put("item_plataforma", tramitePlantilla.getPlataforma().getId());
+			resultats.put("item_fase", tramitePlantilla.getFase());
 			omplirCampsTraduibles(resultats, tramitePlantilla);
 
 		} catch (final DelegateException dEx) {
@@ -279,8 +280,9 @@ public class TMTramitePlantillaController extends PantallaBaseController {
 
 			// Fin idiomas
 			tramitePlantilla.setIdentificador(request.getParameter("item_identificador")); // Identificador
-			tramitePlantilla.setParametros(request.getParameter("item_parametros")); // Signatura
-			tramitePlantilla.setVersion(request.getParameter("item_version")); // Signatura
+			tramitePlantilla.setParametros(request.getParameter("item_parametros")); // Parametros
+			tramitePlantilla.setVersion(request.getParameter("item_version")); // Version
+			tramitePlantilla.setFase(Integer.parseInt(request.getParameter("item_fase"))); // Fase
 			final String plata = request.getParameter("item_plataforma");
 			final Plataforma plataforma = DelegateUtil.getPlataformaDelegate().obtenerPlataforma(Long.valueOf(plata));
 			tramitePlantilla.setPlataforma(plataforma);

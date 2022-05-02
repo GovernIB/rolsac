@@ -334,6 +334,9 @@ function CDetall(){
         jQuery("#item_plataforma,#item_plataforma_es,#item_plataforma_en,#item_plataforma_de,#item_plataforma_fr").change(function(){
             jQuery("#item_plataforma,#item_plataforma_es,#item_plataforma_en,#item_plataforma_de,#item_plataforma_fr").val( jQuery(this).val() );
         });
+        jQuery("#item_fase,#item_fase_es,#item_fase_en,#item_fase_de,#item_fase_fr").change(function(){
+            jQuery("#item_fase,#item_fase_es,#item_fase_en,#item_fase_de,#item_fase_fr").val( jQuery(this).val() );
+        });
 
         jQuery("#item_id").change(function(){
             jQuery("#item_id").val( jQuery(this).val() );
@@ -366,11 +369,13 @@ function CDetall(){
 		$("div.es #item_version").val("");
 		$("div.es #item_plataforma").val("");
 		$("div.es #item_parametros").val("");
+		$("div.es #item_fase").val("");
 
 		$("div.ca #item_identificador").val("");
 		$("div.ca #item_version").val("");
 		$("div.ca #item_plataforma").val("");
 		$("div.ca #item_parametros").val("");
+		$("div.es #item_fase").val("");
 
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
@@ -440,11 +445,12 @@ function CDetall(){
 		$("div.es #item_version").val(dades.item_version);
 		$("div.es #item_plataforma").val(dades.item_plataforma);
 		$("div.es #item_parametros").val(dades.item_parametros);
+		$("div.es #item_fase").val(dades.item_fase);
 		$("div.ca #item_identificador").val(dades.item_identificador);
 		$("div.ca #item_version").val(dades.item_version);
 		$("div.ca #item_plataforma").val(dades.item_plataforma);
 		$("div.ca #item_parametros").val(dades.item_parametros);
-
+		$("div.ca #item_fase").val(dades.item_fase);
 
         // mostrem
         $("#modulLateral li.btnEliminar").show();

@@ -147,12 +147,23 @@
             "etiqueta": "id",
             "etiquetaValor": "item_plataforma",
             "obligatori": "si",
-            "tipus": "numeric",
+            "tipus": "alfanumeric",
             "error":
                 {
                     "obligatori": "<spring:message code='tramitePlantilla.formulari.plataforma.obligatori'/>"
                 }
         },
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_fase",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='tramitePlantilla.formulari.fase.obligatori'/>"
+                }
+        }
 
     ];
 </script>
@@ -269,6 +280,21 @@
 		                                			<c:forEach items="${llistaPlataforma}" var="plat">
 		                                    			<option value='<c:out value="${plat.id}" />'><c:out value="${plat.nom}" /></option>
 		                               				 </c:forEach>
+		                           				 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_fase"><spring:message code='camp.fase'/></label>
+                                            </div>
+                                            <div class="control">
+                                            	<select id="item_fase" name="item_fase">
+                                                	<option selected="selected" value="">Cap</option>
+                                                	<option value='1'><spring:message code='txt.moment.inicialitzacio'/></option>
+                                                	<option value='2'><spring:message code='txt.moment.instruccio'/></option>
+                                                	<option value='3'><spring:message code='txt.moment.finalitzacio'/></option>
 		                           				 </select>
                                             </div>
                                         </div>

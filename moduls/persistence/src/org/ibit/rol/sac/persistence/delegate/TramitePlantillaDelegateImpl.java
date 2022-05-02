@@ -48,10 +48,10 @@ public class TramitePlantillaDelegateImpl implements StatelessDelegate, TramiteP
 	 * listarTramitePlantilla()
 	 */
 	@Override
-	public ResultadoBusqueda listarTramitePlantilla(final int pagina, final int resultats, final String idioma)
-			throws DelegateException {
+	public ResultadoBusqueda listarTramitePlantilla(final int pagina, final int resultats, final String idioma,
+			final Integer fase) throws DelegateException {
 		try {
-			return getFacade().listarTramitePlantilla(pagina, resultats, idioma);
+			return getFacade().listarTramitePlantilla(pagina, resultats, idioma, fase);
 		} catch (final RemoteException e) {
 			throw new DelegateException(e);
 		}

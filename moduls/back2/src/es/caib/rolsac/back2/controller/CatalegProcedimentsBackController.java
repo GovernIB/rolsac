@@ -1172,8 +1172,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private List<IdNomDTO> getListaPlantillasDTO(final String idioma) throws DelegateException {
 		final int pagina = 0;
 		final int resultats = 100;
+		final int fase_iniciacion = 1;
 		final ResultadoBusqueda resultado = DelegateUtil.getTramitePlantillaDelegate().listarTramitePlantilla(pagina,
-				resultats, idioma);
+				resultats, idioma, fase_iniciacion);
 		final List<IdNomDTO> listaPlantillasDTO = new ArrayList<IdNomDTO>();
 		if (resultado.getListaResultados() != null) {
 			for (final Object oplantilla : resultado.getListaResultados()) {

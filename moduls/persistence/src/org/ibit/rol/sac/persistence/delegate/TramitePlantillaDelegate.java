@@ -31,9 +31,9 @@ public class TramitePlantillaDelegate {
 		return impl.grabarTramitePlantilla(tramitePlantilla, edicion);
 	}
 
-	public ResultadoBusqueda listarTramitePlantilla(final int pagina, final int resultats, final String idioma)
-			throws DelegateException {
-		return impl.listarTramitePlantilla(pagina, resultats, idioma);
+	public ResultadoBusqueda listarTramitePlantilla(final int pagina, final int resultats, final String idioma,
+			final Integer fase) throws DelegateException {
+		return impl.listarTramitePlantilla(pagina, resultats, idioma, fase);
 	}
 
 	public List<TramitePlantilla> listarTramitePlantilla() throws DelegateException {

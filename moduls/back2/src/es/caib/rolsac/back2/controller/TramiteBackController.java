@@ -57,6 +57,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.DateUtils;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductorTranslatorIB.Traductor;
 
 @Controller
@@ -118,6 +119,7 @@ public class TramiteBackController {
 			if (tramite.getTramitePlantilla() != null) {
 				resultats.put("item_plantilla_tramit", tramite.getTramitePlantilla().getId());
 			}
+			resultats.put("item_plantillas", getPlantillasDTO(tramite.getFase(), idiomaDelegate.lenguajePorDefecto()));
 			resultats.put("tramit_item_data_vuds", tramite.getDataActualitzacioVuds());
 			resultats.put("item_finestreta_unica", procedimiento.getVentanillaUnica());
 			resultats.put("item_taxes", procedimiento.getTaxa());
@@ -190,6 +192,34 @@ public class TramiteBackController {
 
 		return resultats;
 
+	}
+
+	@RequestMapping(value = "/actualizarPlantillas.do", method = POST)
+	public @ResponseBody Map<String, Object> actualizarPlantillas(final HttpSession session,
+			final HttpServletRequest request) throws DelegateException {
+		final Long fase = new Long(request.getParameter("fase"));
+
+		final IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+		final Map<String, Object> resultats = new HashMap<String, Object>();
+		resultats.put("plantillas", getPlantillasDTO(fase.intValue(), idiomaDelegate.lenguajePorDefecto()));
+		return resultats;
+	}
+
+	private List<IdNomDTO> getPlantillasDTO(final int fase, final String idioma) throws DelegateException {
+		final int pagina = 0;
+		final int resultats = 100;
+		final ResultadoBusqueda resultado = DelegateUtil.getTramitePlantillaDelegate().listarTramitePlantilla(pagina,
+				resultats, idioma, fase);
+		final List<IdNomDTO> listaPlantillasDTO = new ArrayList<IdNomDTO>();
+		if (resultado.getListaResultados() != null) {
+			for (final Object oplantilla : resultado.getListaResultados()) {
+				final Object[] plantilla = (Object[]) oplantilla;
+				final IdNomDTO plat = new IdNomDTO((Long) plantilla[0], plantilla[1].toString());
+				listaPlantillasDTO.add(plat);
+			}
+		}
+
+		return listaPlantillasDTO;
 	}
 
 	private String getPermisosUsuario(final HttpServletRequest request) {

@@ -11,8 +11,8 @@ public interface TramitePlantillaDelegateI {
 	public abstract Long grabarTramitePlantilla(TramitePlantilla plantillaTramite, boolean edicion)
 			throws DelegateException;
 
-	public abstract ResultadoBusqueda listarTramitePlantilla(int pagina, int resultats, String idioma)
-			throws DelegateException;
+	public abstract ResultadoBusqueda listarTramitePlantilla(int pagina, int resultats, String idioma,
+			final Integer fase) throws DelegateException;
 
 	public abstract List<TramitePlantilla> listarTramitePlantilla() throws DelegateException;
 
