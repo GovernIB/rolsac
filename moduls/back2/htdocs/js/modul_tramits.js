@@ -181,6 +181,7 @@ function CModulTramit() {
                          		    text: data.plantillas[i].nom
                          		}));
                              }
+                             $("#item_plantilla").trigger("chosen:updated");
                      }
                  });
         	}
@@ -648,6 +649,8 @@ function CEscriptoriTramit() {
         		}));
         	}
         }
+        $("#item_plantilla").val(datos.item_plantilla_tramit);
+        $("#item_plantilla").trigger("chosen:updated");
 
     	/////////////////////////
 		// Canal presentación

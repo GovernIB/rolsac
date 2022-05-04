@@ -9,6 +9,8 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_documents.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_tramits.css"/>" media="screen" />
+<link rel="stylesheet" href="<c:url value='/js/chosen.css'/>">
+<script type="text/javascript" src="<c:url value='/js/chosen.jquery.js'/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 
 <script type="text/javascript" src="<c:url value='/js/validar_serveis.js'/>"></script>
@@ -36,6 +38,15 @@
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_mensajes.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/buscador_procedimientos.js'/>"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#item_plantilla").chosen({no_results_text:'No hi ha resultats per a ', search_contains:true, allow_single_deselect:true});
+    $("#cerca_plantilla").chosen({no_results_text:'No hi ha resultats per a ', search_contains:true, allow_single_deselect:true});
+	$(".chosen-single").width("170px");
+	$(".chosen-drop").width("170px");
+});
+</script>
 
 <script type="text/javascript">
 
@@ -881,7 +892,7 @@ window.onclick = function(event) {
                             </div>
                         </div>
                     </div>
-                    <div class="busquedaAvanzada">
+                    <div class="busquedaAvanzada" style="margin-bottom: 30px;">
                         <h2><spring:message code='txt.CERCADOR_AVANCAT'/></h2>
                         <div class="fila">
                             <div class="element t25">
@@ -1010,7 +1021,7 @@ window.onclick = function(event) {
 
 
                         </div>
-                        <div class="fila">
+                        <div class="fila"  style="overflow: inherit !important; height: 40px;">
                         	<div class="element t25">
                                 <div class="etiqueta">
                                     <label for="enPlazo"><spring:message code='camp.cerca_en_plazo'/></label>
@@ -1036,15 +1047,15 @@ window.onclick = function(event) {
                                 </div>
                             </div>
 
-							<div class="element t25">
+							<div class="element t50" style="overflow: inherit !important; ">
                                 <div class="etiqueta">
-                                    <label for="cerca_plataforma"><spring:message code='camp.cerca_plataforma'/></label>
+                                    <label for="cerca_plantilla"><spring:message code='camp.cerca_plantilla'/></label>
                                 </div>
                                 <div class="control">
-                                    <select id="cerca_plataforma" name="cerca_plataforma">
+                                    <select id="cerca_plantilla" name="cerca_plantilla">
                                         <option value=""><spring:message code='camp.cap'/></option>
-                                        <c:forEach items="${llistaPlataformas}" var="plataforma">
-                                            <option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
+                                        <c:forEach items="${llistaPlantillas}" var="plantilla">
+                                            <option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -1084,8 +1095,8 @@ window.onclick = function(event) {
                                 <div class="etiqueta">
                                     <label for="cerca_estado"><spring:message code='camp.cerca_estado'/></label>
                                 </div>
-                                <div class="control">
-                                    <select id="cerca_estado" name="telematico" class="t8">
+                                <div class="control select">
+                                    <select id="cerca_estado" name="telematico" class="">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                         <option value="1"><spring:message code='txt.validacio.publica'/></option>
                                         <option value="2"><spring:message code='txt.validacio.interna'/></option>
@@ -1098,21 +1109,8 @@ window.onclick = function(event) {
 
                         <div class="fila">
 
-                        	  <div class="element t25">
-                                <div class="etiqueta">
-                                    <label for="cerca_plantilla"><spring:message code='camp.cerca_plantilla'/></label>
-                                </div>
-                                <div class="control">
-                                    <select id="cerca_plantilla" name="cerca_plantilla">
-                                        <option value=""><spring:message code='camp.cap'/></option>
-                                        <c:forEach items="${llistaPlantillas}" var="plantilla">
-                                            <option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
 
-                        	 <div id="divComun" class="element t25">
+                        	 <div id="divComun" class="element t25" >
                             	<c:if test="${comunes}">
 	                                <div class="etiqueta">
 	                                    <label for="cerca_comun"><spring:message code='camp.cerca_comun'/></label>
@@ -1127,11 +1125,23 @@ window.onclick = function(event) {
                                 </c:if>
                             </div>
 
-
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_plataforma"><spring:message code='camp.cerca_plataforma'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_plataforma" name="cerca_plataforma">
+                                        <option value=""><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${llistaPlataformas}" var="plataforma">
+                                            <option value='<c:out value="${plataforma.id}" />'><c:out value="${plataforma.nom}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
 
                         </div>
 
-						<div class="fila">
+						<div class="fila" style="margin-top: 40px;">
                             <div class="botonera noClear">
 								 <div class="boton btnGenerico">
                                   <a id="btnExportar" href="javascript:void(0)" class="btn exportar"><span><span>Exportar</span></span></a>
@@ -2713,14 +2723,13 @@ window.onclick = function(event) {
 		                	</div>
 						</div>
 
-						<div class="modul_continguts mostrar">
-							<div class="fila">
+						<div class="fila" style="overflow: inherit !important; height: 40px;">
 								<div class="element t40p">
 		                            <div class="etiqueta">
 		                                <label for="item_plantilla"><spring:message code='camp.plantilla'/></label>
 		                            </div>
 		                            <div class="control">
-		                            	<select id="item_plantilla" name="item_plantilla" onchange="onChangePlantilla()">
+		                            	<select id="item_plantilla" name="item_plantilla">
                                     		<option value=""><spring:message code='camp.tria.opcioPlantilla'/></option>
                                         	<c:forEach items="${llistaPlantillas}" var="plantilla">
                                             	<option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
@@ -2735,7 +2744,7 @@ window.onclick = function(event) {
 		                            </div>
 		                        </div>
 							</div>
-						</div>
+
 
 						<div class="fila">
 							<div class="element t99p elementoMultiidiomaIndividual">
@@ -2751,6 +2760,7 @@ window.onclick = function(event) {
 								</c:forEach>
 							</div>
 						</div>
+
 
 
 						<div class="modul_continguts mostrar">
@@ -2798,6 +2808,8 @@ window.onclick = function(event) {
 		                            </div>
 		                        </div>
 							</div>
+
+
 		                </div>
 		            </fieldset>
 		        </div>
