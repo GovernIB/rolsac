@@ -2731,7 +2731,7 @@ window.onclick = function(event) {
 		                            <div class="control">
 		                            	<select id="item_plantilla" name="item_plantilla">
                                     		<option value=""><spring:message code='camp.tria.opcioPlantilla'/></option>
-                                        	<c:forEach items="${llistaPlantillas}" var="plantilla">
+                                        	<c:forEach items="${llistaPlantillasIni}" var="plantilla">
                                             	<option value='<c:out value="${plantilla.id}" />'><c:out value="${plantilla.nom}" /></option>
                                         	</c:forEach>
                                         </select>

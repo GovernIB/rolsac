@@ -158,7 +158,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// Plataforma.
 			model.put("llistaPlataformas", getListaPlataformasDTO());
 			// Plantillas.
-			model.put("llistaPlantillas", getListaPlantillasDTO(lang));
+			model.put("llistaPlantillas", getListaPlantillasDTO(lang, null));
+			// Plantillas iniciacion
+			final int fase_iniciacion = 1;
+			model.put("llistaPlantillasIni", getListaPlantillasDTO(lang, fase_iniciacion));
 
 			// Lopd Legitimacion (como hay que sacar también el por defecto, se tiene que
 			// hacer desde aqui).
@@ -1169,12 +1172,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		return listaPlataformasDTO;
 	}
 
-	private List<IdNomDTO> getListaPlantillasDTO(final String idioma) throws DelegateException {
+	private List<IdNomDTO> getListaPlantillasDTO(final String idioma, final Integer fase) throws DelegateException {
 		final int pagina = 0;
 		final int resultats = 100;
-		final int fase_iniciacion = 1;
 		final ResultadoBusqueda resultado = DelegateUtil.getTramitePlantillaDelegate().listarTramitePlantilla(pagina,
-				resultats, idioma, fase_iniciacion);
+				resultats, idioma, fase);
 		final List<IdNomDTO> listaPlantillasDTO = new ArrayList<IdNomDTO>();
 		if (resultado.getListaResultados() != null) {
 			for (final Object oplantilla : resultado.getListaResultados()) {
