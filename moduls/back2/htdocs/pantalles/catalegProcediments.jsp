@@ -43,8 +43,8 @@
 $(document).ready(function(){
     $("#item_plantilla").chosen({no_results_text:'No hi ha resultats per a ', search_contains:true, allow_single_deselect:true});
     $("#cerca_plantilla").chosen({no_results_text:'No hi ha resultats per a ', search_contains:true, allow_single_deselect:true});
-	$(".chosen-single").width("170px");
-	$(".chosen-drop").width("170px");
+	$(".chosen-single").width("350px");
+	$(".chosen-drop").width("350px");
 });
 </script>
 

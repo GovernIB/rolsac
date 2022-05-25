@@ -126,6 +126,7 @@ function CModulTramit() {
 				jQuery("#item_plataforma").prop('disabled', false);
 				jQuery("#item_parametros").prop('disabled', false);
 				jQuery("#formTramits #item_plantilla").prop('disabled', false);
+				jQuery("#item_plantilla").prop('disabled', false).trigger("chosen:updated");
 			}else{
 				jQuery("[id^=item_url_tramit_]").prop('disabled', true);
 				jQuery("#item_tramite_tramit").prop('disabled', true);
@@ -133,6 +134,7 @@ function CModulTramit() {
 				jQuery("#item_plataforma").prop('disabled', true);
 				jQuery("#item_parametros").prop('disabled', true);
 				jQuery("#formTramits #item_plantilla").prop('disabled', true);
+				jQuery("#item_plantilla").prop('disabled', true).trigger("chosen:updated");
 			}
 		});
 
@@ -194,6 +196,7 @@ function CModulTramit() {
 		jQuery("#formTramits #item_plantilla").prop('disabled', false);
 		jQuery("#item_plataforma").prop('disabled', true);
 		jQuery("#item_parametros").prop('disabled', true);
+		jQuery("#item_plantilla").prop('disabled', true).trigger("chosen:updated");
 
     };
 
@@ -234,7 +237,7 @@ function CModulTramit() {
         $("#item_plantilla option[value!='']").remove();
         var $options = $("#item_plantilla_iniciacion > option").clone();
         $('#item_plantilla').append($options);
-
+        jQuery("#item_plantilla").prop('disabled', true).trigger("chosen:updated");
     };
 
     this.inicializarTramites = function( listaTramites ) {
@@ -650,7 +653,7 @@ function CEscriptoriTramit() {
         	}
         }
         $("#item_plantilla").val(datos.item_plantilla_tramit);
-        $("#item_plantilla").trigger("chosen:updated");
+
 
     	/////////////////////////
 		// Canal presentación
@@ -702,6 +705,7 @@ function CEscriptoriTramit() {
 			jQuery("#formTramits #item_plantilla").val('');
 
 		}
+		$("#item_plantilla").trigger("chosen:updated");
 
 
 
