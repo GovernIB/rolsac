@@ -1047,7 +1047,7 @@ window.onclick = function(event) {
                                 </div>
                             </div>
 
-							<div class="element t50" style="overflow: inherit !important; ">
+                            <div class="element t50" style="overflow: inherit !important; ">
                                 <div class="etiqueta">
                                     <label for="cerca_plantilla"><spring:message code='camp.cerca_plantilla'/></label>
                                 </div>
@@ -1060,6 +1060,7 @@ window.onclick = function(event) {
                                     </select>
                                 </div>
                             </div>
+
 
                         </div>
 

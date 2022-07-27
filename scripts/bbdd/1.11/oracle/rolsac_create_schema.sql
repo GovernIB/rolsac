@@ -81,6 +81,7 @@ alter table RSC_HEVISR drop constraint RSC_HVSHEV_FK;
 alter table RSC_HEVISR drop constraint RSC_HVSSER_FK;
 alter table RSC_TRADNR drop constraint RSC_TRADNR_ARCHIV_FK;
 alter table RSC_TRADNR drop constraint RSC_TRADNR_DOCNOR_FK;
+alter table RSC_TRAMPL drop constraint RSC_TPAPLT_FK;
 alter table RSC_TAXA drop constraint RSC_TAXTRA_FK;
 alter table RSC_DOCSER drop constraint DSR_CODSER_FK;
 alter table RSC_PROCED drop constraint RSC_PRRADM_FK;
@@ -118,6 +119,7 @@ alter table RSC_ADMREM drop constraint RSC_ADMESP_FK;
 alter table RSC_ADMREM drop constraint RSC_ADMLOP_FK;
 alter table RSC_SCRGID drop constraint RSC_SGRSGI_FK;
 alter table RSC_ESTADI drop constraint RSC_ESTHIS_FK;
+alter table RSC_TRATPA drop constraint RSC_TRATTP_FK;
 alter table RSC_TRAMAT drop constraint RSC_TMADIS_FK;
 alter table RSC_TRAMAT drop constraint RSC_TMANOR_FK;
 alter table RSC_TRAMAT drop constraint RSC_TMACON_FK;
@@ -130,6 +132,7 @@ alter table RSC_ESPTER drop constraint RSC_ESPESP_FK;
 alter table RSC_PERSON drop constraint RSC_PERUNA_FK;
 alter table RSC_GRPGID drop constraint FK_RSC_GRPG_REFERENCE_RSC_GRPG;
 alter table RSC_TRAMIT drop constraint RSC_ORGCOMP_FK;
+alter table RSC_TRAMIT drop constraint RSC_TRAMPLN_FK;
 alter table RSC_TRAMIT drop constraint RSC_TRRADM_FK;
 alter table RSC_TRAMIT drop constraint RSC_TRAMPLT_FK;
 alter table RSC_TRAMIT drop constraint RSC_TRAPRO_FK;
@@ -258,6 +261,7 @@ drop table RSC_ICOFAM cascade constraints;
 drop table RSC_ARCHIV cascade constraints;
 drop table RSC_HEVISR cascade constraints;
 drop table RSC_TRADNR cascade constraints;
+drop table RSC_TRAMPL cascade constraints;
 drop table RSC_TAXA cascade constraints;
 drop table RSC_DOCSER cascade constraints;
 drop table RSC_PROCED cascade constraints;
@@ -277,6 +281,7 @@ drop table RSC_MATERI cascade constraints;
 drop table RSC_ADMREM cascade constraints;
 drop table RSC_SCRGID cascade constraints;
 drop table RSC_ESTADI cascade constraints;
+drop table RSC_TRATPA cascade constraints;
 drop table RSC_TRAMAT cascade constraints;
 drop table RSC_TRASER cascade constraints;
 drop table RSC_ESPTER cascade constraints;
@@ -332,8 +337,8 @@ drop sequence RSC_SEQ_MAI;
 drop sequence RSC_SEQ_SMN;
 drop sequence RSC_SEQSCR;
 drop sequence RSC_SEQHIS;
-drop sequence RSC_SEQ_ALL;
 drop sequence RSC_SEQ_COM;
+drop sequence RSC_SEQ_ALL;
 drop sequence RSC_SEQGRP;
 drop sequence RSC_SEQ_PMN;
 create table RSC_NORMAT (
@@ -792,6 +797,15 @@ create table RSC_TRADNR (
    TDN_CODIDI varchar2(2) not null,
    primary key (TDN_CODDNR, TDN_CODIDI)
 );
+create table RSC_TRAMPL (
+   TPA_CODI number(19,0) not null,
+   TPA_IDENTI varchar2(256),
+   TPA_VERSION varchar2(3),
+   TPA_PARAMS clob,
+   TPA_FASE number(10,0),
+   TPA_CODPLT number(19,0),
+   primary key (TPA_CODI)
+);
 create table RSC_TAXA (
    TAX_CODI number(19,0) not null,
    TAX_CODTRA number(19,0),
@@ -960,6 +974,12 @@ create table RSC_ESTADI (
    EST_CODHIS number(19,0),
    primary key (EST_CODI)
 );
+create table RSC_TRATPA (
+   TTP_CODPLT number(19,0) not null,
+   TTP_NOMBRE varchar2(256),
+   TTP_CODIDI varchar2(2) not null,
+   primary key (TTP_CODPLT, TTP_CODIDI)
+);
 create table RSC_TRAMAT (
    TMA_CODMAT number(19,0) not null,
    TMA_NOMBRE varchar2(256),
@@ -1038,6 +1058,7 @@ create table RSC_TRAMIT (
    TRA_DATTANCAMENT date,
    TRA_PARAMS varchar2(255),
    TRA_CODPLT number(19,0),
+   TRA_CODPLN number(19,0),
    TRA_ORGCOMP number(19,0),
    TRR_IDEXTE number(19,0),
    TRR_URLREM varchar2(512),
@@ -1554,6 +1575,7 @@ alter table RSC_HEVISR add constraint RSC_HVSHEV_FK foreign key (HVS_CODHEV) ref
 alter table RSC_HEVISR add constraint RSC_HVSSER_FK foreign key (HVS_CODSER) references RSC_SERVIC;
 alter table RSC_TRADNR add constraint RSC_TRADNR_ARCHIV_FK foreign key (TDN_CODARC) references RSC_ARCHIV;
 alter table RSC_TRADNR add constraint RSC_TRADNR_DOCNOR_FK foreign key (TDN_CODDNR) references RSC_DOCNOR;
+alter table RSC_TRAMPL add constraint RSC_TPAPLT_FK foreign key (TPA_CODPLT) references RSC_PLATAF;
 alter table RSC_TAXA add constraint RSC_TAXTRA_FK foreign key (TAX_CODTRA) references RSC_TRAMIT;
 alter table RSC_DOCSER add constraint DSR_CODSER_FK foreign key (DSR_CODSER) references RSC_SERVIC;
 alter table RSC_PROCED add constraint RSC_PRRADM_FK foreign key (PRR_CODADM) references RSC_ADMREM;
@@ -1591,6 +1613,7 @@ alter table RSC_ADMREM add constraint RSC_ADMESP_FK foreign key (ADM_CODESP) ref
 alter table RSC_ADMREM add constraint RSC_ADMLOP_FK foreign key (ADM_LOGOP) references RSC_ARCHIV;
 alter table RSC_SCRGID add constraint RSC_SGRSGI_FK foreign key (SGI_SGRCOD) references RSC_SCRGRP;
 alter table RSC_ESTADI add constraint RSC_ESTHIS_FK foreign key (EST_CODHIS) references RSC_HISTOR;
+alter table RSC_TRATPA add constraint RSC_TRATTP_FK foreign key (TTP_CODPLT) references RSC_TRAMPL;
 alter table RSC_TRAMAT add constraint RSC_TMADIS_FK foreign key (TMA_CODDIS) references RSC_ARCHIV;
 alter table RSC_TRAMAT add constraint RSC_TMANOR_FK foreign key (TMA_NORMAT) references RSC_ARCHIV;
 alter table RSC_TRAMAT add constraint RSC_TMACON_FK foreign key (TMA_CONTEN) references RSC_ARCHIV;
@@ -1603,6 +1626,7 @@ alter table RSC_ESPTER add constraint RSC_ESPESP_FK foreign key (ESP_CODESP) ref
 alter table RSC_PERSON add constraint RSC_PERUNA_FK foreign key (PER_CODUNA) references RSC_UNIADM;
 alter table RSC_GRPGID add constraint FK_RSC_GRPG_REFERENCE_RSC_GRPG foreign key (SGR_GRPCOD) references RSC_GRPGEN;
 alter table RSC_TRAMIT add constraint RSC_ORGCOMP_FK foreign key (TRA_ORGCOMP) references RSC_UNIADM;
+alter table RSC_TRAMIT add constraint RSC_TRAMPLN_FK foreign key (TRA_CODPLN) references RSC_TRAMPL;
 alter table RSC_TRAMIT add constraint RSC_TRRADM_FK foreign key (TRR_CODADM) references RSC_ADMREM;
 alter table RSC_TRAMIT add constraint RSC_TRAMPLT_FK foreign key (TRA_CODPLT) references RSC_PLATAF;
 alter table RSC_TRAMIT add constraint RSC_TRAPRO_FK foreign key (TRA_CODPRO) references RSC_PROCED;
@@ -1685,7 +1709,7 @@ create sequence RSC_SEQ_MAI;
 create sequence RSC_SEQ_SMN;
 create sequence RSC_SEQSCR;
 create sequence RSC_SEQHIS;
-create sequence RSC_SEQ_ALL;
 create sequence RSC_SEQ_COM;
+create sequence RSC_SEQ_ALL;
 create sequence RSC_SEQGRP;
 create sequence RSC_SEQ_PMN;

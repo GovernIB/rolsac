@@ -1196,6 +1196,9 @@ function limpiarCampo(index, input){
 	    	input.checked = false;
 	    } else if (tag == 'select') {
 	    	input.selectedIndex = 0;
+	    	if (input.id == 'cerca_plantilla') {
+	    		jQuery("#cerca_plantilla").trigger("chosen:updated");
+	    	}
     	}
 	}
 }
