@@ -46,8 +46,35 @@ $(document).ready(function() {
     $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").change(function() {
         $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").val( $(this).val() );
     });
+    
 
 });
+
+function actualizaPlantillas(fase){
+	
+	if(fase != ""){
+
+		 dataVars = "fase=" + fase;
+		 $.ajax({
+            type: "POST",
+            url: pagActualizarPlantillas,
+            data: dataVars,
+            dataType: 'json',
+            success: function(data) {
+
+                    $("#item_plantilla option[value!='']").remove();
+                    var i=0;
+                    for(i=0; i< data.plantillas.length;i++) {
+                   	 $("#item_plantilla").append($('<option>', {
+                		    value: data.plantillas[i].id,
+                		    text: data.plantillas[i].nom
+                		}));
+                    }
+                    $("#item_plantilla").trigger("chosen:updated");
+            }
+        });
+	}
+}
 
 
 function CModulTramit() {
@@ -164,29 +191,9 @@ function CModulTramit() {
 			}
 		});
 
-        jQuery("#formTramits #item_moment_tramit").change(function(){
-        	if($(this).val() != ""){
 
-        		 dataVars = "fase=" + $(this).val();
-        		 $.ajax({
-                     type: "POST",
-                     url: pagActualizarPlantillas,
-                     data: dataVars,
-                     dataType: 'json',
-                     success: function(data) {
-
-                             $("#item_plantilla option[value!='']").remove();
-                             var i=0;
-                             for(i=0; i< data.plantillas.length;i++) {
-                            	 $("#item_plantilla").append($('<option>', {
-                         		    value: data.plantillas[i].id,
-                         		    text: data.plantillas[i].nom
-                         		}));
-                             }
-                             $("#item_plantilla").trigger("chosen:updated");
-                     }
-                 });
-        	}
+        jQuery("#formTramits #item_moment_tramit").change(function(){        	
+        	actualizaPlantillas($(this).val());        	
         });
 
 
@@ -583,6 +590,9 @@ function CEscriptoriTramit() {
 		$("#item_parametros").val("");
 		$("[id^=item_url_tramit_]").val("");
 		$("#formTramits #item_plantilla").val('');
+		
+        //por defecto es la fase de inicio (1)
+        actualizaPlantillas(1);
 
     };
 

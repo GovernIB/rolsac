@@ -152,7 +152,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				} else {
 					parametros = tram.getParametros();
 				}
-				final String idTramiteRolsac = idTramite.toString();
+				final String idTramiteRolsac = idTramit.toString();
 
 				final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getPlataforma().getTraduccion(idioma);
 				String url = trad.getUrlAcceso();
@@ -175,7 +175,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				} else {
 					parametros = tram.getTramitePlantilla().getParametros();
 				}
-				final String idTramiteRolsac = idTramite.toString();
+				final String idTramiteRolsac = idTramit.toString();
 
 				final TraduccionPlataforma trad = (TraduccionPlataforma) tram.getTramitePlantilla().getPlataforma()
 						.getTraduccion(idioma);
