@@ -125,7 +125,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 	 *
 	 * @ejb.interface-method
 	 *
-	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper},${role.api.rest}"
 	 *
 	 * @param idTramite
 	 *            Id tramite
