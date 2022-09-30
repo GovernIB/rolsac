@@ -1,6 +1,6 @@
 # ![Logo](https://github.com/GovernIB/maven/raw/binaris/rolsac/projectinfo_Attachments/icon.jpg) Rolsac
-> - Versió Estable: __rolsac-1.11.0.1__ (Tag [rolsac-1.8.0](https://github.com/GovernIB/rolsac/tree/rolsac-1.11.0.1))
-> - Versió Desenvolupament: __rolsac-1.11__ (branca [rolsac-1.8](https://github.com/GovernIB/rolsac/tree/rolsac-1.11))
+> - Versió Estable: __rolsac-1.11.0.1__ (Tag [rolsac-1.11.0.1](https://github.com/GovernIB/rolsac/tree/rolsac-1.11.0.1))
+> - Versió Desenvolupament: __rolsac-1.11__ (branca [rolsac-1.11](https://github.com/GovernIB/rolsac/tree/rolsac-1.11))
 
 **Descripción funcional**
 
