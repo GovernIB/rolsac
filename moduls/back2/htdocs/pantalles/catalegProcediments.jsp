@@ -247,6 +247,9 @@ $(document).ready(function(){
 	var txtNO = "<spring:message code='txt.no'/>";
 	var txtComun = "<spring:message code='camp.tipo.comun'/>";
 	var txtComunTramite = "<spring:message code='camp.tipo.tramite.info'/>";
+	var txtValInterna = 	"<spring:message code='txt.validacio.interna'/>";
+	var txtValreserva = 	"<spring:message code='txt.validacio.reserva'/>";
+	var txtValpublica = 	"<spring:message code='txt.validacio.publica'/>";
 
 	//camps obligatoris
 	var formIncomplet   = "<spring:message code= 'proc.formulari.error'/>";
@@ -1672,11 +1675,15 @@ window.onclick = function(event) {
                                     <select id="item_estat" name="item_estat">
                                         <c:set var="rolSuper"><rol:userIsSuper/></c:set>
                                         <c:choose>
-                                           <c:when test="${rolSuper}" >
-                                               <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                           <c:when test="${rolSuper}" >                                                                                                                       
+		                                    
+		                                    <c:if test="${'S'== permisoPublicar}">
+		                                       <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                                <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
                                                <option value="2"><spring:message code='txt.validacio.interna'/></option>
                                                <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+		                                    </c:if>		                                    		                                   
+                                              
                                            </c:when>
                                            <c:otherwise>
                                                <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>

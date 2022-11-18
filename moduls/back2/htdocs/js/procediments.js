@@ -1412,23 +1412,31 @@ function CDetall() {
 			//$("#lbl_item_accion").show();
 			$("#item_pdt_validar").prop( "disabled", true );
 			$("#enviarEmailChat").hide();
-			$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
-			if (dada_node.item_estat == 1) {
-				$("#item_estat option[value=1]").show();
-				$("#item_estat option[value=2]").hide();
-				$("#item_estat option[value=3]").hide();
+			//se borrar las opciones, hay que cargarlas para editarlas
+			//$("#item_estat option[value=]").hide(); // Opción por defecto, sin valor. La borramos también.
+			
+			var txt = "";
+			if (dada_node.item_estat == 1) {	
+				
+				txt = txtValpublica;
+				//$("#item_estat option[value=1]").show();
+				//$("#item_estat option[value=2]").hide();
+				//$("#item_estat option[value=3]").hide();
+			}else if (dada_node.item_estat == 2) {
+				txt = txtValInterna;
+				
+				//$("#item_estat option[value=1]").hide();
+				//$("#item_estat option[value=2]").show();
+				//$("#item_estat option[value=3]").hide();
+			}else if (dada_node.item_estat == 3) {
+				txt = txtValreserva; 
+				//$("#item_estat option[value=1]").hide();
+				//$("#item_estat option[value=2]").hide();
+				//$("#item_estat option[value=3]").show();
 			}
-
-			if (dada_node.item_estat == 2) {
-				$("#item_estat option[value=1]").hide();
-				$("#item_estat option[value=2]").show();
-				$("#item_estat option[value=3]").hide();
-			}
-			if (dada_node.item_estat == 3) {
-				$("#item_estat option[value=1]").hide();
-				$("#item_estat option[value=2]").hide();
-				$("#item_estat option[value=3]").show();
-			}
+			var optest = new Option(txt, dada_node.item_estat);
+			$(optest).html(txt);
+			$("#item_estat").append(optest);			
 
 
 		} else {
