@@ -494,7 +494,7 @@ public abstract class MensajeFacadeEJB extends HibernateEJB {
 		final Query query = session.createQuery(hql);
 		query.setParameterList("ids", idUsuarios);
 		final List<Object[]> resultados = query.list();
-		final List<Usuario> usuarios = new ArrayList<>();
+		final List<Usuario> usuarios = new ArrayList();
 		if (resultados != null) {
 			for (final Object[] resultado : resultados) {
 				final Usuario usuario = new Usuario();

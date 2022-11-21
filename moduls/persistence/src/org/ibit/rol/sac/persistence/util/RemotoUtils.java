@@ -32,7 +32,7 @@ public class RemotoUtils {
 		query.setLong("idSeccion", idSeccion);
 		query.setLong("idFicha", idFicha);
 		query.setLong("idUnidad", idUnidad);
-		@SuppressWarnings("unchecked")
+		//@SuppressWarnings("unchecked")
 		List<FichaUA> lista = query.list();
 		if(lista==null || lista.isEmpty()) {
 			return null;
