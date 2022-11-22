@@ -1629,6 +1629,18 @@ public class CatalegServeisBackController extends PantallaBaseController {
 
 			} else {
 
+				//si no tiene permisos para publicar no puede modificar el estado. comprobamos que el estado anterior sea el mismo que el actual
+				
+				
+				if (request.getParameter("item_estat") == null ||
+						(servicioOld != null && servicioOld.getValidacion().compareTo(Integer.valueOf(request.getParameter("item_estat").toString())) != 0)) {
+					//si el estado anterior es diferente al actual lanzamos un error					
+					error = messageSource.getMessage("serv.error.estat.incorrecte", null, request.getLocale());
+					throw new NumberFormatException(error);
+				}
+				final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
+				
+				
 				// Opcion 1. Interno y hay una accion
 				if (servicioOld != null && servicioOld.getValidacion().compareTo(Validacion.INTERNA) == 0
 						&& request.getParameter("item_accion") != null
@@ -1648,7 +1660,7 @@ public class CatalegServeisBackController extends PantallaBaseController {
 					}
 				} else if (servicioOld != null && servicioOld.getValidacion().compareTo(Validacion.PUBLICA) == 0) {
 
-					final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
+					//final Integer estado = Integer.valueOf(request.getParameter("item_estat").toString());
 					servicioMensaje = new ServicioMensaje();
 					final String literal;
 					if (request.getParameter("item_accion") == null || request.getParameter("item_accion").isEmpty()) {

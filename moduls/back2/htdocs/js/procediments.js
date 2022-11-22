@@ -1011,7 +1011,14 @@ function CDetall() {
 		$("#item_estat option[value=1]").hide();
 		$("#item_estat option[value=2]").show();
 		$("#item_estat option[value=3]").hide();
-		$("#item_estat option[value=2]").prop('selected', true)
+		$("#item_estat option[value=2]").prop('selected', true)		
+		
+		// si no tiene permisos se añade la opcion directamente (estado interna)
+		if ('N' == tienePermisoPublicar) {							
+			var optest = new Option(txtValInterna, 2);
+			$(optest).html(txtValInterna);
+			$("#item_estat").append(optest);
+		}		
 
 		ModulMateries.nuevo();
 		ModulFetsVitals.nuevo();
