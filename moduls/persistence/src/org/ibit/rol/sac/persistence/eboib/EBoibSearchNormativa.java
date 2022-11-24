@@ -27,6 +27,7 @@ import com.sun.syndication.io.XmlReader;
 public class EBoibSearchNormativa extends SearchNormativaBase implements SearchNormativa {
 
 	private String eboibUrl = null;
+	private boolean eboibUrlHack = false;
 	private int numeroregistros = 0;
 	private Model seccionsCA = null;
 	private Model seccionsES = null;
@@ -41,6 +42,7 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 		this.numeroregistro = numeroregistro;
 		this.fecha = fecha;
 		eboibUrl = System.getProperty("es.caib.rolsac.traspasboib.url");
+		eboibUrlHack = "true".equals(System.getProperty("es.caib.rolsac.traspasboib.urlHack"));
 		if (eboibUrl == null) {
 			throw new IllegalStateException("No se ha configurado es.caib.rolsac.traspasboib.url");
 		}
@@ -259,7 +261,8 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 		normbean.setTra_paginaInicial_c(res.getProperty(RdfProperties.NUM_PAG_INICIAL).getString());
 		normbean.setTra_paginaFinal_c(res.getProperty(RdfProperties.NUM_PAG_FINAL).getString());
 		if (!rdf.historic) {
-			normbean.setTra_enlace_c(res.getURI());
+			//normbean.setTra_enlace_c(res.getURI());
+			normbean.setTra_enlace_c(res.getProperty(RdfProperties.HTML).getResource().getURI());
 		}
 
 		final String inputFileNameEs = inputFileName.replace("/ca/", "/es/");
@@ -277,7 +280,8 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 			normbean.setTra_paginaInicial_v(resEs.getProperty(RdfProperties.NUM_PAG_INICIAL).getString());
 			normbean.setTra_paginaFinal_v(resEs.getProperty(RdfProperties.NUM_PAG_FINAL).getString());
 			if (!rdf.historic) {
-				normbean.setTra_enlace_v(resEs.getURI());
+				//normbean.setTra_enlace_v(resEs.getURI());
+				normbean.setTra_enlace_v(res.getProperty(RdfProperties.HTML).getResource().getURI());
 			}
 		}
 
@@ -304,9 +308,14 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 
 	private Model loadRdf(final String inputFileName) {
 		final Model m = ModelFactory.createDefaultModel();
-		final InputStream in = FileManager.get().open(inputFileName);
+		String url = inputFileName;
+		if(eboibUrlHack) {
+			url= url.replace("intranet.caib.es", "www.caib.es");
+		}
+		
+		final InputStream in = FileManager.get().open(url);
 		if (in == null) {
-			throw new IllegalArgumentException("Rdf: " + inputFileName + " no trobat");
+			throw new IllegalArgumentException("Rdf: " + url + " no trobat");
 		}
 		// read the RDF/XML file
 		m.read(in, "");
@@ -324,6 +333,7 @@ public class EBoibSearchNormativa extends SearchNormativaBase implements SearchN
 	private void populateBoibResult(final BoibResult rdf2) {
 		rdf2.enviaments = new ArrayList<String>();
 		final Model m = loadRdf(rdf2.rdfUrl);
+
 
 		// Obtenemos los datos de num butlletí
 		final Resource but = m.getResource(rdf2.url);

@@ -42,6 +42,7 @@ public class RdfProperties {
 	public static final Property VERSIO_PDF = ResourceFactory.createProperty(ENVNAMESPACE + "versioPdf");
 	public static final Property ORGANISME = ResourceFactory.createProperty(ENVNAMESPACE + "organisme");
 	public static final Property SECCIO = ResourceFactory.createProperty(ENVNAMESPACE + "seccio");
+	public static final Property HTML = ResourceFactory.createProperty(ENVNAMESPACE + "html");
 	public static final Property ANNEXES = ResourceFactory.createProperty(ENVNAMESPACE + "annexes");
 
 	public static final String RENVNAMESPACE = HOST + "rdf/schema/relEnviament/1.0/";
