@@ -1835,11 +1835,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 			} else {
 				
-				//si no tiene permisos para publicar no puede modificar el estado. comprobamos que el estado anterior sea el mismo que el actual
+				//si no tiene permisos para publicar no puede modificar el estado,. comprobamos que el estado anterior sea el mismo que el actual  y si es nuevo debe ser interno (2)
 				
 				
-				if (request.getParameter("item_estat") == null ||
-						(procedimentOld != null && procedimentOld.getValidacion().compareTo(Integer.valueOf(request.getParameter("item_estat").toString())) != 0)) {
+				if (request.getParameter("item_estat") == null 
+						|| (procedimentOld == null && Integer.valueOf(request.getParameter("item_estat").toString()) != 2) 
+						|| (procedimentOld != null && procedimentOld.getValidacion().compareTo(Integer.valueOf(request.getParameter("item_estat").toString())) != 0)) {
 					//si el estado anterior es diferente al actual lanzamos un error					
 					error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
 					throw new NumberFormatException(error);

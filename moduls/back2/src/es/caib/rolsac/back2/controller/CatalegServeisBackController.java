@@ -1632,8 +1632,9 @@ public class CatalegServeisBackController extends PantallaBaseController {
 				//si no tiene permisos para publicar no puede modificar el estado. comprobamos que el estado anterior sea el mismo que el actual
 				
 				
-				if (request.getParameter("item_estat") == null ||
-						(servicioOld != null && servicioOld.getValidacion().compareTo(Integer.valueOf(request.getParameter("item_estat").toString())) != 0)) {
+				if (request.getParameter("item_estat") == null
+						|| (servicioOld == null && Integer.valueOf(request.getParameter("item_estat").toString()) != 2) 
+						|| (servicioOld != null && servicioOld.getValidacion().compareTo(Integer.valueOf(request.getParameter("item_estat").toString())) != 0)) {
 					//si el estado anterior es diferente al actual lanzamos un error					
 					error = messageSource.getMessage("serv.error.estat.incorrecte", null, request.getLocale());
 					throw new NumberFormatException(error);

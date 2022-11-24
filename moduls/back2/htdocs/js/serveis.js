@@ -995,8 +995,9 @@ function CDetall() {
 		$("#item_estat option[value=3]").hide();
 		$("#item_estat option[value=2]").prop('selected', true)
 		
-		// si no tiene permisos se añade la opcion directamente (estado interna)
+		// si no tiene permisos se añade la opcion directamente (estado interna)		
 		if ('N' == tienePermisoPublicar) {							
+			$("#item_estat").empty();
 			var optest = new Option(txtValInterna, 2);
 			$(optest).html(txtValInterna);
 			$("#item_estat").append(optest);
@@ -1454,6 +1455,7 @@ function CDetall() {
 //				$("#item_estat option[value=2]").hide();
 //				$("#item_estat option[value=3]").show();
 			}
+			$("#item_estat").empty();
 			var optest = new Option(txt, dada_node.item_estat);
 			$(optest).html(txt);
 			$("#item_estat").append(optest);
