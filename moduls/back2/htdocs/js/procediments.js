@@ -630,9 +630,33 @@ function CDetall() {
 	this.tipusAuditoria = 'procediment';
 	this.tipusEstadistica = 'procediment';
 
-	//Se comprueba que esta correcto
+	
 	this.guarda = function() {
-
+		//verificamos si el publico objetivo concuerda con el check disponible para apoderado habilitado (si true el po no debe ser interno)
+		var pOApoderavalidacion=false; 
+		var pub_llistat_elm = $("#escriptori_detall  div.ModulPublicObjectiu  div.llistat");	
+		var poIntern = $("#escriptori_detall  div.ModulPublicObjectiu input[name='modul_public_intern']").val();
+		var dispoApoderaHabilita= jQuery('#item_disponibleApoderadoHabilitado').attr('checked')=="checked"; 
+		pub_llistat_elm.find("input[type=checkbox]").each(function() {
+			$this = jQuery(this);
+			if ($this.attr("checked")=="checked") {
+				if(($this.val()==poIntern && dispoApoderaHabilita)|| 	
+				   ($this.val()!=poIntern && !dispoApoderaHabilita)){					
+					pOApoderavalidacion=true;
+				}
+			} 
+		});		
+		
+              //Comprobar y soltar un mensaje
+		if (pOApoderavalidacion) {
+			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtValidacionApoderaHabilitadoTitulo, text: txtValidacionApoderaHabilitado, funcio: that.guarda2});
+		} else {
+			that.guarda2();
+		}
+	};
+	
+	
+	this.guarda2 = function() {
 
 		var paginaCheck;
 		if ($("#item_estat").val() == 1) {
@@ -930,6 +954,15 @@ function CDetall() {
 		jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
 			jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").val( jQuery(this).val());
 		});
+		
+		jQuery("#item_disponibleFuncionarioHabilitado,#item_disponibleFuncionarioHabilitado_es,#item_disponibleFuncionarioHabilitado_en,#item_disponibleFuncionarioHabilitado_de,#item_disponibleFuncionarioHabilitado_fr").change(function(){
+			jQuery("#item_disponibleFuncionarioHabilitado,#item_disponibleFuncionarioHabilitado_es,#item_disponibleFuncionarioHabilitado_en,#item_disponibleFuncionarioHabilitado_de,#item_disponibleFuncionarioHabilitado_fr").val( jQuery(this).val());
+		});
+		
+		jQuery("#item_disponibleApoderadoHabilitado,#item_disponibleApoderadoHabilitado_es,#item_disponibleApoderadoHabilitado_en,#item_disponibleApoderadoHabilitado_de,#item_disponibleApoderadoHabilitado_fr").change(function(){
+			jQuery("#item_disponibleApoderadoHabilitado,#item_disponibleApoderadoHabilitado_es,#item_disponibleApoderadoHabilitado_en,#item_disponibleApoderadoHabilitado_de,#item_disponibleApoderadoHabilitado_fr").attr("checked", jQuery(this).is(":checked"));
+		});
+		
 
 		jQuery("#item_silenci_combo,#item_silenci_combo_es,#item_silenci_combo_en,#item_silenci_combo_de,#item_silenci_combo_fr").change(function(){
 			jQuery("#item_silenci_combo,#item_silenci_combo_es,#item_silenci_combo_en,#item_silenci_combo_de,#item_silenci_combo_fr").val( jQuery(this).val());
@@ -972,6 +1005,8 @@ function CDetall() {
 			jQuery("#formGuardar").find("#item_comun").attr("checked", jQuery(this).is(":checked"));
 			item_comun_change(jQuery(this).is(":checked"));
 		});
+		
+		
 
 		// boton de traducir
 		jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
@@ -1143,6 +1178,8 @@ function CDetall() {
 		$("#item_pdt_validar").prop( "disabled", true );
 		$('#item_pdt_validar').attr('checked', false);
 		$("#filaNoEditable").hide();
+		
+		jQuery('#item_disponibleApoderadoHabilitado').attr('checked', true);
 
 		this.actualizaEventos();
 
@@ -1330,6 +1367,18 @@ function CDetall() {
 		if (dada_node.item_taxa != undefined) {
 			jQuery('#item_taxa').attr('checked', dada_node.item_taxa);
 			jQuery("#item_taxa").change();
+		}
+		
+		if (dada_node.item_disponibleApoderadoHabilitado != undefined) {
+			jQuery('#item_disponibleApoderadoHabilitado').attr('checked', dada_node.item_disponibleApoderadoHabilitado);
+			jQuery("#item_disponibleApoderadoHabilitado").change();
+		}
+		
+		if (dada_node.item_disponibleFuncionarioHabilitado != undefined) {
+			jQuery('#item_disponibleFuncionarioHabilitado').val(dada_node.item_disponibleFuncionarioHabilitado);
+			jQuery("#item_disponibleFuncionarioHabilitado").change();
+		} else {
+			jQuery("#item_disponibleFuncionarioHabilitado").val("");
 		}
 
 		if (dada_node.item_finestreta_unica != undefined) {

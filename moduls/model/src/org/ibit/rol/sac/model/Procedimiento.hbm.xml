@@ -38,7 +38,9 @@
         <property name="estadoSIA" length="1" column="PRO_ESTSIA"/>
         <property name="fechaSIA"  column="PRO_FECSIA"/>
         <property name="comun" 		column="PRO_COMUN" />
-        <property name="pendienteValidar" 		column="PRO_PDTVAL" />
+        <property name="pendienteValidar" 		column="PRO_PDTVAL" /> 		
+ 		<property name="disponibleFuncionarioHabilitado" 	column="PRO_FUNHAB" />
+ 		<property name="disponibleApoderadoHabilitado" 		column="PRO_APOHAB" />
 
 
 		<!--

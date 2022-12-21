@@ -202,6 +202,15 @@ public class Procediments extends EntidadBase {
 
 	@ApiModelProperty(value = "lopdCabecera", required = false)
 	private String lopdCabecera;
+	
+	@ApiModelProperty(value = "disponibleApoderadoHabilitado", required = false)
+	private boolean disponibleApoderadoHabilitado;
+	
+	@ApiModelProperty(value = "disponibleFuncionarioHabilitado", required = false)
+	private boolean disponibleFuncionarioHabilitado;
+	
+
+	
 
 	/**
 	 * Constructor
@@ -1000,6 +1009,34 @@ public class Procediments extends EntidadBase {
 	 */
 	public void setLopdDerechos(final String lopdDerechos) {
 		this.lopdDerechos = lopdDerechos;
+	}
+
+	/**
+	 * @return the disponibleApoderadoHabilitado
+	 */
+	public boolean isDisponibleApoderadoHabilitado() {
+		return disponibleApoderadoHabilitado;
+	}
+
+	/**
+	 * @param disponibleApoderadoHabilitado the disponibleApoderadoHabilitado to set
+	 */
+	public void setDisponibleApoderadoHabilitado(boolean disponibleApoderadoHabilitado) {
+		this.disponibleApoderadoHabilitado = disponibleApoderadoHabilitado;
+	}
+
+	/**
+	 * @return the disponibleFuncionarioHabilitado
+	 */
+	public boolean isDisponibleFuncionarioHabilitado() {
+		return disponibleFuncionarioHabilitado;
+	}
+
+	/**
+	 * @param disponibleFuncionarioHabilitado the disponibleFuncionarioHabilitado to set
+	 */
+	public void setDisponibleFuncionarioHabilitado(boolean disponibleFuncionarioHabilitado) {
+		this.disponibleFuncionarioHabilitado = disponibleFuncionarioHabilitado;
 	}
 
 }

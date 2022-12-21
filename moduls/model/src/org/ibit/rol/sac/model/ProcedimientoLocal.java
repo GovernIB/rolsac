@@ -74,6 +74,12 @@ public class ProcedimientoLocal extends Classificable
 	/** Mensajes no leidos **/
 	private boolean mensajesNoLeidosGestor = false;
 	private boolean mensajesNoLeidosSupervisor = false;
+	
+	
+	private boolean disponibleFuncionarioHabilitado = false;
+	private boolean disponibleApoderadoHabilitado = false;
+	
+	
 
 	// Constructor para búsqueda optimizada
 	public ProcedimientoLocal(final Long id, final String nombreProcedimiento, final Integer validacion,
@@ -805,5 +811,23 @@ public class ProcedimientoLocal extends Classificable
 	public void setMensajesNoLeidosSupervisor(final boolean mensajesNoLeidosSupervisor) {
 		this.mensajesNoLeidosSupervisor = mensajesNoLeidosSupervisor;
 	}
+	
+	
+	public boolean isDisponibleFuncionarioHabilitado() {
+		return disponibleFuncionarioHabilitado;
+	}
+
+	public void setDisponibleFuncionarioHabilitado(boolean disponibleFuncionarioHabilitado) {
+		this.disponibleFuncionarioHabilitado = disponibleFuncionarioHabilitado;
+	}
+
+	public boolean isDisponibleApoderadoHabilitado() {
+		return disponibleApoderadoHabilitado;
+	}
+
+	public void setDisponibleApoderadoHabilitado(boolean disponibleApoderadoHabilitado) {
+		this.disponibleApoderadoHabilitado = disponibleApoderadoHabilitado;
+	}
+
 
 }

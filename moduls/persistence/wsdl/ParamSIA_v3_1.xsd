@@ -53,6 +53,11 @@
 <element maxOccurs="unbounded" minOccurs="0" name="CANALACCESO" type="string"/>
 <element minOccurs="0" name="FORMULARIOS" type="tns:FORMULARIOS"/>
 <element minOccurs="0" name="ENLACEWEB" type="string"/>
+<element minOccurs="0" name="ESRESPONSIVE">
+<simpleType>
+<union memberTypes="tns:booleano tns:emptyString"/>
+</simpleType>
+</element>
 <element minOccurs="0" name="PORTAL" type="string"/>
 <element minOccurs="0" name="REQUISITOSINICIACION" type="string"/>
 <element minOccurs="0" name="PRESENCIALNOADAPTABLE" nillable="true">
@@ -60,12 +65,12 @@
 <union memberTypes="tns:booleano tns:emptyString"/>
 </simpleType>
 </element>
-<element minOccurs="0" name="HABILITABLEREGISTOFUNCIONARIO" nillable="true">
+<element minOccurs="0" name="DISPONIBLEFUNCIONARIOHABILITADO" nillable="true">
 <simpleType>
 <union memberTypes="tns:booleano tns:emptyString"/>
 </simpleType>
 </element>
-<element minOccurs="0" name="DISPONIBLEFUNCIONARIOHABILITADO" nillable="true">
+<element minOccurs="0" name="DISPONIBLEAPODERADOHABILITADO" nillable="true">
 <simpleType>
 <union memberTypes="tns:booleano tns:emptyString"/>
 </simpleType>
@@ -78,6 +83,7 @@
 <element minOccurs="0" name="TIEMPOMEDIORESOLUCION" type="string"/>
 <element minOccurs="0" name="VOLUMENNOTIFICACIONES" type="tns:VOLUMENNOTIFICACIONES"/>
 <element minOccurs="0" name="MATERIAS" type="tns:MATERIAS"/>
+<element minOccurs="0" name="SUBMATERIAS" type="tns:SUBMATERIAS"/>
 <element minOccurs="0" name="CODCLASETRAMITE" type="string"/>
 <element minOccurs="0" name="TRAMITESRELACIONADOS" type="tns:TRAMITESRELACIONADOS"/>
 <element minOccurs="0" name="NOREQUIEREDOCUMENTACION">
@@ -110,7 +116,7 @@
 </element>
 <simpleType name="TIPOTRAMITE">
 <restriction base="string">
-<pattern value="P|S"/>
+<pattern value="P|S|O"/>
 </restriction>
 </simpleType>
 <simpleType name="booleano">
@@ -192,6 +198,17 @@
 <complexType>
 <sequence>
 <element name="CODMATERIA" type="string"/>
+</sequence>
+</complexType>
+</element>
+</sequence>
+</complexType>
+<complexType name="SUBMATERIAS">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="SUBMATERIA">
+<complexType>
+<sequence>
+<element name="CODSUBMATERIA" type="string"/>
 </sequence>
 </complexType>
 </element>

@@ -250,6 +250,9 @@ $(document).ready(function(){
 	var txtValInterna = 	"<spring:message code='txt.validacio.interna'/>";
 	var txtValreserva = 	"<spring:message code='txt.validacio.reserva'/>";
 	var txtValpublica = 	"<spring:message code='txt.validacio.publica'/>";
+	var txtValidacionApoderaHabilitado = "<spring:message code='txt.validacio.ApoderaHabilitado'/>"; 
+	var txtValidacionApoderaHabilitadoTitulo= "<spring:message code='txt.validacio.ApoderaHabilitado.titulo'/>"; 
+	var txtfuncionariopresencial="<spring:message code='txt.validacio.funcionariopresencial'/>";
 
 	//camps obligatoris
 	var formIncomplet   = "<spring:message code= 'proc.formulari.error'/>";
@@ -405,6 +408,19 @@ $(document).ready(function(){
             "error":
                 {
                     "obligatori": "<spring:message code='proc.formulari.error.viaadministrativa.obligatori'/>"
+                }
+        },
+        
+        // disponibleFuncionarioHabilitado
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_disponibleFuncionarioHabilitado",
+            "obligatori": "si",
+            "tipus": "numeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.disponibleFuncionarioHabilitado.obligatori'/>"
                 }
         },
 
@@ -1386,6 +1402,33 @@ window.onclick = function(event) {
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- ************************************************** -->
+                                    <!-- ************************************************** -->
+                                    
+                                     <div class="fila">
+                                        <div class="element checkbox">
+                                            <div class="control">
+                                                <input id="item_disponibleApoderadoHabilitado" name="item_disponibleApoderadoHabilitado" type="checkbox" value="on" class="nou" />
+                                            </div>
+                                            <div class="etiqueta">
+                                                <label for="item_disponibleApoderadoHabilitado"><spring:message code='camp.disponibleApoderadoHabilitado'/></label>
+                                            </div>
+                                        </div>
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_disponibleFuncionarioHabilitado"><spring:message code='camp.disponibleFuncionarioHabilitado'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_disponibleFuncionarioHabilitado" name="item_disponibleFuncionarioHabilitado" class="nou">
+                                                    <option value=""><spring:message code='camp.cap'/></option>
+                                                    <option value="1" ><spring:message code='camp.si'/></option>
+                                                    <option value="0" ><spring:message code='camp.no'/></option>
+                                                </select>
+                                            </div>
+                                        </div>                                                                          
+                                    </div>
+
+                                    
                                     <div class="fila">
                                         <div id="divComun2" class="element checkbox">
                                             <div class="control">

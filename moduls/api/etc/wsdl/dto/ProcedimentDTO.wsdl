@@ -62,6 +62,10 @@
     					<element name="lopdLegitimacionNombre" nillable="true" type="xsd:string" />
     					<element name="lopdLegitimacionIdentificador" nillable="true" type="xsd:string" />
 						<element name="lopdInfoAdicional" nillable="true" type="xsd:long" />
+						
+						<element name="disponibleApoderadoHabilitado" type="xsd:boolean" />
+						<element name="disponibleFuncionarioHabilitado" type="xsd:boolean" />
+					
                     </sequence>
                 </extension>
             </complexContent>

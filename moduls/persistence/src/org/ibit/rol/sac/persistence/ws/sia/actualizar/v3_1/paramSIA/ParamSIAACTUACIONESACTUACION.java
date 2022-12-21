@@ -45,15 +45,17 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
 
     private java.lang.String ENLACEWEB;
 
+    private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONESRESPONSIVE ESRESPONSIVE;
+
     private java.lang.String PORTAL;
 
     private java.lang.String REQUISITOSINICIACION;
 
     private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONPRESENCIALNOADAPTABLE PRESENCIALNOADAPTABLE;
 
-    private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONHABILITABLEREGISTOFUNCIONARIO HABILITABLEREGISTOFUNCIONARIO;
-
     private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO DISPONIBLEFUNCIONARIOHABILITADO;
+
+    private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO DISPONIBLEAPODERADOHABILITADO;
 
     private java.lang.String CODREQUISITOSIDENTPJ;
 
@@ -70,6 +72,8 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
     private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.VOLUMENNOTIFICACIONESVOLUMENNOTIFICACION[] VOLUMENNOTIFICACIONES;
 
     private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.MATERIASMATERIA[] MATERIAS;
+
+    private org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SUBMATERIASSUBMATERIA[] SUBMATERIAS;
 
     private java.lang.String CODCLASETRAMITE;
 
@@ -119,11 +123,12 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
            java.lang.String[] CANALACCESO,
            org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.FORMULARIOSFORMULARIO[] FORMULARIOS,
            java.lang.String ENLACEWEB,
+           org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONESRESPONSIVE ESRESPONSIVE,
            java.lang.String PORTAL,
            java.lang.String REQUISITOSINICIACION,
            org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONPRESENCIALNOADAPTABLE PRESENCIALNOADAPTABLE,
-           org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONHABILITABLEREGISTOFUNCIONARIO HABILITABLEREGISTOFUNCIONARIO,
            org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO DISPONIBLEFUNCIONARIOHABILITADO,
+           org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO DISPONIBLEAPODERADOHABILITADO,
            java.lang.String CODREQUISITOSIDENTPJ,
            java.lang.String CODREQUISITOSIDENTPF,
            java.lang.String IDINTEGRADOCLAVE,
@@ -132,6 +137,7 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
            java.lang.String TIEMPOMEDIORESOLUCION,
            org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.VOLUMENNOTIFICACIONESVOLUMENNOTIFICACION[] VOLUMENNOTIFICACIONES,
            org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.MATERIASMATERIA[] MATERIAS,
+           org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SUBMATERIASSUBMATERIA[] SUBMATERIAS,
            java.lang.String CODCLASETRAMITE,
            org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.TRAMITESRELACIONADOSTRAMITERELACIONADO[] TRAMITESRELACIONADOS,
            org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONNOREQUIEREDOCUMENTACION NOREQUIEREDOCUMENTACION,
@@ -163,11 +169,12 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
            this.CANALACCESO = CANALACCESO;
            this.FORMULARIOS = FORMULARIOS;
            this.ENLACEWEB = ENLACEWEB;
+           this.ESRESPONSIVE = ESRESPONSIVE;
            this.PORTAL = PORTAL;
            this.REQUISITOSINICIACION = REQUISITOSINICIACION;
            this.PRESENCIALNOADAPTABLE = PRESENCIALNOADAPTABLE;
-           this.HABILITABLEREGISTOFUNCIONARIO = HABILITABLEREGISTOFUNCIONARIO;
            this.DISPONIBLEFUNCIONARIOHABILITADO = DISPONIBLEFUNCIONARIOHABILITADO;
+           this.DISPONIBLEAPODERADOHABILITADO = DISPONIBLEAPODERADOHABILITADO;
            this.CODREQUISITOSIDENTPJ = CODREQUISITOSIDENTPJ;
            this.CODREQUISITOSIDENTPF = CODREQUISITOSIDENTPF;
            this.IDINTEGRADOCLAVE = IDINTEGRADOCLAVE;
@@ -176,6 +183,7 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
            this.TIEMPOMEDIORESOLUCION = TIEMPOMEDIORESOLUCION;
            this.VOLUMENNOTIFICACIONES = VOLUMENNOTIFICACIONES;
            this.MATERIAS = MATERIAS;
+           this.SUBMATERIAS = SUBMATERIAS;
            this.CODCLASETRAMITE = CODCLASETRAMITE;
            this.TRAMITESRELACIONADOS = TRAMITESRELACIONADOS;
            this.NOREQUIEREDOCUMENTACION = NOREQUIEREDOCUMENTACION;
@@ -561,6 +569,26 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
 
 
     /**
+     * Gets the ESRESPONSIVE value for this ParamSIAACTUACIONESACTUACION.
+     * 
+     * @return ESRESPONSIVE
+     */
+    public org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONESRESPONSIVE getESRESPONSIVE() {
+        return ESRESPONSIVE;
+    }
+
+
+    /**
+     * Sets the ESRESPONSIVE value for this ParamSIAACTUACIONESACTUACION.
+     * 
+     * @param ESRESPONSIVE
+     */
+    public void setESRESPONSIVE(org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONESRESPONSIVE ESRESPONSIVE) {
+        this.ESRESPONSIVE = ESRESPONSIVE;
+    }
+
+
+    /**
      * Gets the PORTAL value for this ParamSIAACTUACIONESACTUACION.
      * 
      * @return PORTAL
@@ -621,26 +649,6 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
 
 
     /**
-     * Gets the HABILITABLEREGISTOFUNCIONARIO value for this ParamSIAACTUACIONESACTUACION.
-     * 
-     * @return HABILITABLEREGISTOFUNCIONARIO
-     */
-    public org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONHABILITABLEREGISTOFUNCIONARIO getHABILITABLEREGISTOFUNCIONARIO() {
-        return HABILITABLEREGISTOFUNCIONARIO;
-    }
-
-
-    /**
-     * Sets the HABILITABLEREGISTOFUNCIONARIO value for this ParamSIAACTUACIONESACTUACION.
-     * 
-     * @param HABILITABLEREGISTOFUNCIONARIO
-     */
-    public void setHABILITABLEREGISTOFUNCIONARIO(org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONHABILITABLEREGISTOFUNCIONARIO HABILITABLEREGISTOFUNCIONARIO) {
-        this.HABILITABLEREGISTOFUNCIONARIO = HABILITABLEREGISTOFUNCIONARIO;
-    }
-
-
-    /**
      * Gets the DISPONIBLEFUNCIONARIOHABILITADO value for this ParamSIAACTUACIONESACTUACION.
      * 
      * @return DISPONIBLEFUNCIONARIOHABILITADO
@@ -657,6 +665,26 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
      */
     public void setDISPONIBLEFUNCIONARIOHABILITADO(org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO DISPONIBLEFUNCIONARIOHABILITADO) {
         this.DISPONIBLEFUNCIONARIOHABILITADO = DISPONIBLEFUNCIONARIOHABILITADO;
+    }
+
+
+    /**
+     * Gets the DISPONIBLEAPODERADOHABILITADO value for this ParamSIAACTUACIONESACTUACION.
+     * 
+     * @return DISPONIBLEAPODERADOHABILITADO
+     */
+    public org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO getDISPONIBLEAPODERADOHABILITADO() {
+        return DISPONIBLEAPODERADOHABILITADO;
+    }
+
+
+    /**
+     * Sets the DISPONIBLEAPODERADOHABILITADO value for this ParamSIAACTUACIONESACTUACION.
+     * 
+     * @param DISPONIBLEAPODERADOHABILITADO
+     */
+    public void setDISPONIBLEAPODERADOHABILITADO(org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO DISPONIBLEAPODERADOHABILITADO) {
+        this.DISPONIBLEAPODERADOHABILITADO = DISPONIBLEAPODERADOHABILITADO;
     }
 
 
@@ -817,6 +845,26 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
      */
     public void setMATERIAS(org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.MATERIASMATERIA[] MATERIAS) {
         this.MATERIAS = MATERIAS;
+    }
+
+
+    /**
+     * Gets the SUBMATERIAS value for this ParamSIAACTUACIONESACTUACION.
+     * 
+     * @return SUBMATERIAS
+     */
+    public org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SUBMATERIASSUBMATERIA[] getSUBMATERIAS() {
+        return SUBMATERIAS;
+    }
+
+
+    /**
+     * Sets the SUBMATERIAS value for this ParamSIAACTUACIONESACTUACION.
+     * 
+     * @param SUBMATERIAS
+     */
+    public void setSUBMATERIAS(org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SUBMATERIASSUBMATERIA[] SUBMATERIAS) {
+        this.SUBMATERIAS = SUBMATERIAS;
     }
 
 
@@ -1145,6 +1193,9 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
             ((this.ENLACEWEB==null && other.getENLACEWEB()==null) || 
              (this.ENLACEWEB!=null &&
               this.ENLACEWEB.equals(other.getENLACEWEB()))) &&
+            ((this.ESRESPONSIVE==null && other.getESRESPONSIVE()==null) || 
+             (this.ESRESPONSIVE!=null &&
+              this.ESRESPONSIVE.equals(other.getESRESPONSIVE()))) &&
             ((this.PORTAL==null && other.getPORTAL()==null) || 
              (this.PORTAL!=null &&
               this.PORTAL.equals(other.getPORTAL()))) &&
@@ -1154,12 +1205,12 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
             ((this.PRESENCIALNOADAPTABLE==null && other.getPRESENCIALNOADAPTABLE()==null) || 
              (this.PRESENCIALNOADAPTABLE!=null &&
               this.PRESENCIALNOADAPTABLE.equals(other.getPRESENCIALNOADAPTABLE()))) &&
-            ((this.HABILITABLEREGISTOFUNCIONARIO==null && other.getHABILITABLEREGISTOFUNCIONARIO()==null) || 
-             (this.HABILITABLEREGISTOFUNCIONARIO!=null &&
-              this.HABILITABLEREGISTOFUNCIONARIO.equals(other.getHABILITABLEREGISTOFUNCIONARIO()))) &&
             ((this.DISPONIBLEFUNCIONARIOHABILITADO==null && other.getDISPONIBLEFUNCIONARIOHABILITADO()==null) || 
              (this.DISPONIBLEFUNCIONARIOHABILITADO!=null &&
               this.DISPONIBLEFUNCIONARIOHABILITADO.equals(other.getDISPONIBLEFUNCIONARIOHABILITADO()))) &&
+            ((this.DISPONIBLEAPODERADOHABILITADO==null && other.getDISPONIBLEAPODERADOHABILITADO()==null) || 
+             (this.DISPONIBLEAPODERADOHABILITADO!=null &&
+              this.DISPONIBLEAPODERADOHABILITADO.equals(other.getDISPONIBLEAPODERADOHABILITADO()))) &&
             ((this.CODREQUISITOSIDENTPJ==null && other.getCODREQUISITOSIDENTPJ()==null) || 
              (this.CODREQUISITOSIDENTPJ!=null &&
               this.CODREQUISITOSIDENTPJ.equals(other.getCODREQUISITOSIDENTPJ()))) &&
@@ -1184,6 +1235,9 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
             ((this.MATERIAS==null && other.getMATERIAS()==null) || 
              (this.MATERIAS!=null &&
               java.util.Arrays.equals(this.MATERIAS, other.getMATERIAS()))) &&
+            ((this.SUBMATERIAS==null && other.getSUBMATERIAS()==null) || 
+             (this.SUBMATERIAS!=null &&
+              java.util.Arrays.equals(this.SUBMATERIAS, other.getSUBMATERIAS()))) &&
             ((this.CODCLASETRAMITE==null && other.getCODCLASETRAMITE()==null) || 
              (this.CODCLASETRAMITE!=null &&
               this.CODCLASETRAMITE.equals(other.getCODCLASETRAMITE()))) &&
@@ -1328,6 +1382,9 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
         if (getENLACEWEB() != null) {
             _hashCode += getENLACEWEB().hashCode();
         }
+        if (getESRESPONSIVE() != null) {
+            _hashCode += getESRESPONSIVE().hashCode();
+        }
         if (getPORTAL() != null) {
             _hashCode += getPORTAL().hashCode();
         }
@@ -1337,11 +1394,11 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
         if (getPRESENCIALNOADAPTABLE() != null) {
             _hashCode += getPRESENCIALNOADAPTABLE().hashCode();
         }
-        if (getHABILITABLEREGISTOFUNCIONARIO() != null) {
-            _hashCode += getHABILITABLEREGISTOFUNCIONARIO().hashCode();
-        }
         if (getDISPONIBLEFUNCIONARIOHABILITADO() != null) {
             _hashCode += getDISPONIBLEFUNCIONARIOHABILITADO().hashCode();
+        }
+        if (getDISPONIBLEAPODERADOHABILITADO() != null) {
+            _hashCode += getDISPONIBLEAPODERADOHABILITADO().hashCode();
         }
         if (getCODREQUISITOSIDENTPJ() != null) {
             _hashCode += getCODREQUISITOSIDENTPJ().hashCode();
@@ -1385,6 +1442,17 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
                  i<java.lang.reflect.Array.getLength(getMATERIAS());
                  i++) {
                 java.lang.Object obj = java.lang.reflect.Array.get(getMATERIAS(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        if (getSUBMATERIAS() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getSUBMATERIAS());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getSUBMATERIAS(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -1619,6 +1687,13 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ESRESPONSIVE");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "ESRESPONSIVE"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>ESRESPONSIVE"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("PORTAL");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "PORTAL"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -1640,16 +1715,16 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("HABILITABLEREGISTOFUNCIONARIO");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "HABILITABLEREGISTOFUNCIONARIO"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>HABILITABLEREGISTOFUNCIONARIO"));
+        elemField.setFieldName("DISPONIBLEFUNCIONARIOHABILITADO");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "DISPONIBLEFUNCIONARIOHABILITADO"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>DISPONIBLEFUNCIONARIOHABILITADO"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("DISPONIBLEFUNCIONARIOHABILITADO");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "DISPONIBLEFUNCIONARIOHABILITADO"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>DISPONIBLEFUNCIONARIOHABILITADO"));
+        elemField.setFieldName("DISPONIBLEAPODERADOHABILITADO");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "DISPONIBLEAPODERADOHABILITADO"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>DISPONIBLEAPODERADOHABILITADO"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
@@ -1711,6 +1786,14 @@ public class ParamSIAACTUACIONESACTUACION  implements java.io.Serializable {
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "MATERIA"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("SUBMATERIAS");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "SUBMATERIAS"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">SUBMATERIAS>SUBMATERIA"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "SUBMATERIA"));
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("CODCLASETRAMITE");

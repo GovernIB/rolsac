@@ -18,6 +18,8 @@ import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ORGANISMORES
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIA;
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACION;
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONACTIVO;
+import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO;
+import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO;
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONESCOMUN;
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONFINVIA;
 import org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONINTERNO;
@@ -205,6 +207,24 @@ public class SiaWS {
 
 		paramSia.setESCOMUN(comun);
 		paramSia.setINTERNO(interno);
+		
+		final ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO dispoApoderadoHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO();
+		final ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO dispoFuncionarioHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO();
+		if(sia.isDisponibleApoderadoHabilitado()) {
+			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.SI);
+		}else {
+			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.NO);
+		}
+		
+		if(sia.isDisponibleFuncionarioHabilitado()) {
+			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.SI);
+		}else {
+			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.NO);
+		}
+
+		paramSia.setDISPONIBLEAPODERADOHABILITADO(dispoApoderadoHabilitado);
+		paramSia.setDISPONIBLEFUNCIONARIOHABILITADO(dispoFuncionarioHabilitado);
+
 
 		final ParamSIAACTUACIONESACTUACIONTIPOTRAMITE tipoTramite = new ParamSIAACTUACIONESACTUACIONTIPOTRAMITE();
 		tipoTramite.setTIPOTRAMITEValue(sia.getTipoTramite());
@@ -321,6 +341,23 @@ public class SiaWS {
 
 		paramSia.setINTERNO(interno);
 		paramSia.setESCOMUN(comun);
+		
+		final ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO dispoApoderadoHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO();
+		final ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO dispoFuncionarioHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO();
+		if(sia.isDisponibleApoderadoHabilitado()) {
+			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.SI);
+		}else {
+			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.NO);
+		}
+		
+		if(sia.isDisponibleFuncionarioHabilitado()) {
+			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.SI);
+		}else {
+			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.NO);
+		}
+
+		paramSia.setDISPONIBLEAPODERADOHABILITADO(dispoApoderadoHabilitado);
+		paramSia.setDISPONIBLEFUNCIONARIOHABILITADO(dispoFuncionarioHabilitado);
 
 		final ParamSIAACTUACIONESACTUACIONTIPOTRAMITE tipoTramite = new ParamSIAACTUACIONESACTUACIONTIPOTRAMITE();
 		tipoTramite.setTIPOTRAMITEValue(sia.getTipoTramite());

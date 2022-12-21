@@ -397,6 +397,12 @@ function CEscriptoriTramit() {
         	Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCanalObligatori, text: ""});
     		return false;
         }
+        
+        if(!jQuery("#item_check_tramit_presencial").prop('checked') && jQuery('#item_disponibleFuncionarioHabilitado').val()=="1"  ){
+        	//si disponible para funcionario habilitado es true, debe estar marcado el check de presencial 
+        	Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtfuncionariopresencial, text: ""});
+    		return false;
+        }
 
 
         //#391

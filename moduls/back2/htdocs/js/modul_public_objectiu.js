@@ -112,6 +112,7 @@ function CModulPublicObjectiu(){
 		publics_seleccionats_elm.slideUp(300);
 		publics_llistat_elm.slideDown(300);
 	}
+	
 
 	this.finaliza = function(){
 
@@ -131,6 +132,14 @@ function CModulPublicObjectiu(){
 				nombre_llistat++;
 				input_elm.addClass(publicObjectiuDefaultClass);
 
+				if (input_elm.val()==$publicoObjetivoInterno){
+					//Si el publico objetivo es interno marcar a false disponibleApoderadoHabilitado, 
+					//en otro caso debe ser true(tener en cuenta que si pointerno es true, no puede haber otro po, y esto solo aplica a procedimientos )
+					jQuery('#item_disponibleApoderadoHabilitado').attr('checked', false);
+				}else{
+					jQuery('#item_disponibleApoderadoHabilitado').attr('checked', true);
+				}
+				
 			} else {
 
 				input_elm.removeClass(publicObjectiuDefaultClass);

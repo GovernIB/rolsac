@@ -79,6 +79,10 @@ public class Sia implements ValueObject {
 
 	/** Comun. **/
 	private boolean comun;
+	
+	private boolean disponibleFuncionarioHabilitado ;
+	private boolean disponibleApoderadoHabilitado ;
+	
 
 	/**
 	 * @return the idElemento
@@ -393,6 +397,22 @@ public class Sia implements ValueObject {
 	 */
 	public void setComun(final boolean comun) {
 		this.comun = comun;
+	}
+
+	public boolean isDisponibleFuncionarioHabilitado() {
+		return disponibleFuncionarioHabilitado;
+	}
+
+	public void setDisponibleFuncionarioHabilitado(boolean disponibleFuncionarioHabilitado) {
+		this.disponibleFuncionarioHabilitado = disponibleFuncionarioHabilitado;
+	}
+
+	public boolean isDisponibleApoderadoHabilitado() {
+		return disponibleApoderadoHabilitado;
+	}
+
+	public void setDisponibleApoderadoHabilitado(boolean disponibleApoderadoHabilitado) {
+		this.disponibleApoderadoHabilitado = disponibleApoderadoHabilitado;
 	}
 
 }

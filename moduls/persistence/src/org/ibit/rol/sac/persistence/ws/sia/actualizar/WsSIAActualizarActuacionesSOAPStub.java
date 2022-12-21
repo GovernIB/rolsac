@@ -1458,6 +1458,13 @@ public class WsSIAActualizarActuacionesSOAPStub extends org.apache.axis.client.S
             cachedSerFactories.add(org.apache.axis.encoding.ser.BaseSerializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleSerializerFactory.class, cls, qName));
             cachedDeserFactories.add(org.apache.axis.encoding.ser.BaseDeserializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleDeserializerFactory.class, cls, qName));
 
+            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>DISPONIBLEAPODERADOHABILITADO");
+            cachedSerQNames.add(qName);
+            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(org.apache.axis.encoding.ser.BaseSerializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleSerializerFactory.class, cls, qName));
+            cachedDeserFactories.add(org.apache.axis.encoding.ser.BaseDeserializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleDeserializerFactory.class, cls, qName));
+
             qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>DISPONIBLEFUNCIONARIOHABILITADO");
             cachedSerQNames.add(qName);
             cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO.class;
@@ -1472,16 +1479,16 @@ public class WsSIAActualizarActuacionesSOAPStub extends org.apache.axis.client.S
             cachedSerFactories.add(org.apache.axis.encoding.ser.BaseSerializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleSerializerFactory.class, cls, qName));
             cachedDeserFactories.add(org.apache.axis.encoding.ser.BaseDeserializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleDeserializerFactory.class, cls, qName));
 
-            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>FINVIA");
+            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>ESRESPONSIVE");
             cachedSerQNames.add(qName);
-            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONFINVIA.class;
+            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONESRESPONSIVE.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(org.apache.axis.encoding.ser.BaseSerializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleSerializerFactory.class, cls, qName));
             cachedDeserFactories.add(org.apache.axis.encoding.ser.BaseDeserializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleDeserializerFactory.class, cls, qName));
 
-            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>HABILITABLEREGISTOFUNCIONARIO");
+            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">>>>paramSIA>ACTUACIONES>ACTUACION>FINVIA");
             cachedSerQNames.add(qName);
-            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONHABILITABLEREGISTOFUNCIONARIO.class;
+            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.ParamSIAACTUACIONESACTUACIONFINVIA.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(org.apache.axis.encoding.ser.BaseSerializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleSerializerFactory.class, cls, qName));
             cachedDeserFactories.add(org.apache.axis.encoding.ser.BaseDeserializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleDeserializerFactory.class, cls, qName));
@@ -1621,13 +1628,6 @@ public class WsSIAActualizarActuacionesSOAPStub extends org.apache.axis.client.S
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">SISTEMASIDENTIFICACION>SISTEMAIDENTIFICACION");
-            cachedSerQNames.add(qName);
-            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SISTEMASIDENTIFICACIONSISTEMAIDENTIFICACION.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
     }
     private void addBindings2() {
             java.lang.Class cls;
@@ -1643,6 +1643,20 @@ public class WsSIAActualizarActuacionesSOAPStub extends org.apache.axis.client.S
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">SISTEMASIDENTIFICACION>SISTEMAIDENTIFICACION");
+            cachedSerQNames.add(qName);
+            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SISTEMASIDENTIFICACIONSISTEMAIDENTIFICACION.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">SUBMATERIAS>SUBMATERIA");
+            cachedSerQNames.add(qName);
+            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SUBMATERIASSUBMATERIA.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">TRAMITESRELACIONADOS>TRAMITERELACIONADO");
             cachedSerQNames.add(qName);
             cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.TRAMITESRELACIONADOSTRAMITERELACIONADO.class;
@@ -1768,6 +1782,15 @@ public class WsSIAActualizarActuacionesSOAPStub extends org.apache.axis.client.S
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">SISTEMASIDENTIFICACION>SISTEMAIDENTIFICACION");
             qName2 = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "SISTEMAIDENTIFICACION");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "SUBMATERIAS");
+            cachedSerQNames.add(qName);
+            cls = org.ibit.rol.sac.persistence.ws.sia.actualizar.v3_1.paramSIA.SUBMATERIASSUBMATERIA[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", ">SUBMATERIAS>SUBMATERIA");
+            qName2 = new javax.xml.namespace.QName("http://www.map.es/sgca/actualizar/messages/v3_1/ParamSIA", "SUBMATERIA");
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 

@@ -1100,6 +1100,7 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		sia.setEnlaceWeb(SiaUtils.getUrlProcedimiento(esProcSerInterno) + procedimiento.getId().toString());
 
 		sia.setEstado(procedimiento.getEstadoSIA());
+				
 
 		// Obtenemos el tipo de operacion a partir de validar el procedimiento.
 		sia.setOperacion(siaEnviableResultado.getOperacion());
@@ -1116,6 +1117,9 @@ public abstract class SiaPendienteFacadeEJB extends HibernateEJB {
 		sia.setPassword(siaCumpleDatos.getSiaUA().getContrasenya());
 		sia.setTipoTramite("P");
 		sia.setComun(procedimiento.isComun());
+		
+		sia.setDisponibleApoderadoHabilitado(procedimiento.isDisponibleApoderadoHabilitado());
+		sia.setDisponibleFuncionarioHabilitado(procedimiento.isDisponibleFuncionarioHabilitado());
 		return sia;
 	}
 
