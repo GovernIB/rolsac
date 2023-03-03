@@ -193,6 +193,12 @@ es.caib.rolsac.subscripcions
 
  		es.caib.rolsac.procServ.proc.url=http://www.caib.es/rolsacback/catalegProcediments/catalegProcediments.do?itemId={0}
 	    es.caib.rolsac.procServ.serv.url=http://www.caib.es/rolsacback/catelegServeis/catalegServeis.do?itemId={0}
+	    
+	    <!-- identidicador del publico objetivo personas -->
+	    es.caib.rolsac.publico.objetivo.personas=200
+	    
+	    
+	    
 
     </attribute>
 

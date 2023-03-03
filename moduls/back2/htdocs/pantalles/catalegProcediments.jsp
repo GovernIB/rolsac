@@ -74,6 +74,7 @@ $(document).ready(function(){
 	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
 	var tienePermisoPublicar = '<c:out value="${permisoPublicar}"/>';
 	var tienePermisoEdicion = true;
+	var publicObjectiuPersones = '<c:out value="${publicObjectiuPersones}"/>';
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';
@@ -253,6 +254,9 @@ $(document).ready(function(){
 	var txtValidacionApoderaHabilitado = "<spring:message code='txt.validacio.ApoderaHabilitado'/>"; 
 	var txtValidacionApoderaHabilitadoTitulo= "<spring:message code='txt.validacio.ApoderaHabilitado.titulo'/>"; 
 	var txtfuncionariopresencial="<spring:message code='txt.validacio.funcionariopresencial'/>";
+	
+	var txtValidacionFuncionarioHabilitado ="<spring:message code='txt.validacio.FuncionarioHabilitado.titulo'/>";
+	var txtValidacionFuncionarioHabilitadoTitulo ="<spring:message code='txt.validacio.FuncionarioHabilitado'/>";
 
 	//camps obligatoris
 	var formIncomplet   = "<spring:message code= 'proc.formulari.error'/>";

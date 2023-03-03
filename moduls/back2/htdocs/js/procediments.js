@@ -644,16 +644,41 @@ function CDetall() {
 				   ($this.val()!=poIntern && !dispoApoderaHabilita)){					
 					pOApoderavalidacion=true;
 				}
-			} 
+			}		
 		});		
 		
               //Comprobar y soltar un mensaje
 		if (pOApoderavalidacion) {
-			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtValidacionApoderaHabilitadoTitulo, text: txtValidacionApoderaHabilitado, funcio: that.guarda2});
+			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtValidacionApoderaHabilitadoTitulo, text: txtValidacionApoderaHabilitado, funcio: that.guarda1});
 		} else {
-			that.guarda2();
+			that.guarda1();
 		}
 	};
+	
+	
+	this.guarda1 = function() {
+		//verificamos si el de funcionario hablilitado es true tiene que estar dirigido a personas 
+		var pub_llistat_elm = $("#escriptori_detall  div.ModulPublicObjectiu  div.llistat");	
+
+		var dispoFuncionarioHabilita= jQuery("#item_disponibleFuncionarioHabilitado").val()=="1";
+		var hayPOPersonas=false;
+		pub_llistat_elm.find("input[type=checkbox]").each(function() {
+			$this = jQuery(this);
+			if ($this.attr("checked")=="checked") {
+				if($this.val()==publicObjectiuPersones) {					
+					hayPOPersonas=true;
+				}				
+			} 			
+		});		
+		
+		if(!hayPOPersonas && dispoFuncionarioHabilita ){
+			Missatge.llansar({tipus: "alerta", modo: "atencio", titol: txtValidacionFuncionarioHabilitadoTitulo, text: txtValidacionFuncionarioHabilitado, funcio: that.guarda2});
+		}else{
+			that.guarda2();
+		}
+		
+	}
+	
 	
 	
 	this.guarda2 = function() {

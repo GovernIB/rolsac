@@ -216,6 +216,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("mantieneEstadoInterna", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(true));
 		model.put("mantieneEstadoInternaESP", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(false));
 		model.put("elIdioma", request.getLocale().getLanguage().contains("ca") ? "ca" : "es");
+		
+		
 		final UnidadAdministrativa raiz = ua != null ? ua.getRaiz() : null;
 
 		if (raiz != null) {
@@ -267,6 +269,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("excepcions", llistarExcepcionsDocumentacio(lang));
 			model.put("cataleg", llistarCatalegDocuments(lang));
 			model.put("publicObjectiuIntern", POUtils.getPublicoObjetivoInterno());
+			model.put("publicObjectiuPersones", RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.PERSONAS));
+			
+			
 
 		} catch (final DelegateException dEx) {
 
@@ -1762,6 +1767,27 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
 			}
+			
+			
+			///////////////
+			//comprobamos si FUNCIONARIOHabilitado debe tener un tramite Presencial (si hay algun tramite)
+			//Hay tramites presenciales, o no hay ningun tramite
+			boolean hayTramitePresencial=false;
+			boolean unoOMasTramites=false;
+			if (procedimentOld != null && procedimentOld.getTramites()!=null) {					
+				for (Tramite t : procedimentOld.getTramites() ) {
+					unoOMasTramites = true;
+					if(t.isPresencial()) {
+						hayTramitePresencial=true;
+					}
+				}
+			}
+			
+			if(procedimentOld!=null && "1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")) && unoOMasTramites && !hayTramitePresencial) {
+				error = messageSource.getMessage("proc.error.funcionario.habilitado.nopresencial", null, request.getLocale());
+				return result = new IdNomDTO(-3l, error);
+			}
+			////////////
 
 			/***
 			 * Cuando eres gestor, se crea mensaje si:
@@ -1935,7 +1961,19 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} else {
 				procediment.setDisponibleApoderadoHabilitado("on".equalsIgnoreCase(request.getParameter("item_disponibleApoderadoHabilitado")));				
 			}
-			procediment.setDisponibleFuncionarioHabilitado("1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")) ); 
+			
+			boolean hayPOpersonas =false;
+			Long idPersonas= RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.PERSONAS);
+			for(PublicoObjetivo po : procediment.getPublicosObjetivo()) {
+				if(po.getId().equals(idPersonas)) {
+					hayPOpersonas=true;
+				}
+			}
+			
+			//solo puede estar funcionario habilitado a true si hay publico objetivo personas 
+			boolean funHab = hayPOpersonas && "1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")); 				
+			
+			procediment.setDisponibleFuncionarioHabilitado(funHab ); 
 			
 			procediment.setVentanillaUnica(
 					"on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0"); // Ventanilla
