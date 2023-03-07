@@ -635,13 +635,13 @@ function CDetall() {
 		//verificamos si el publico objetivo concuerda con el check disponible para apoderado habilitado (si true el po no debe ser interno)
 		var pOApoderavalidacion=false; 
 		var pub_llistat_elm = $("#escriptori_detall  div.ModulPublicObjectiu  div.llistat");	
-		var poIntern = $("#escriptori_detall  div.ModulPublicObjectiu input[name='modul_public_intern']").val();
+		//var poIntern = $("#escriptori_detall  div.ModulPublicObjectiu input[name='modul_public_intern']").val();
 		var dispoApoderaHabilita= jQuery('#item_disponibleApoderadoHabilitado').attr('checked')=="checked"; 
 		pub_llistat_elm.find("input[type=checkbox]").each(function() {
 			$this = jQuery(this);
 			if ($this.attr("checked")=="checked") {
-				if(($this.val()==poIntern && dispoApoderaHabilita)|| 	
-				   ($this.val()!=poIntern && !dispoApoderaHabilita)){					
+				if(($this.val()==publicObjectiuAdministracio && dispoApoderaHabilita)|| 	
+				   ($this.val()!=publicObjectiuAdministracio && !dispoApoderaHabilita)){					
 					pOApoderavalidacion=true;
 				}
 			}		

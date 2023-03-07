@@ -75,6 +75,7 @@ $(document).ready(function(){
 	var tienePermisoPublicar = '<c:out value="${permisoPublicar}"/>';
 	var tienePermisoEdicion = true;
 	var publicObjectiuPersones = '<c:out value="${publicObjectiuPersones}"/>';
+	var publicObjectiuAdministracio = '<c:out value="${publicObjectiuAdministracio}"/>';
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';

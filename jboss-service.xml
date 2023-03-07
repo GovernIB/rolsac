@@ -196,6 +196,7 @@ es.caib.rolsac.subscripcions
 	    
 	    <!-- identidicador del publico objetivo personas -->
 	    es.caib.rolsac.publico.objetivo.personas=200
+	    es.caib.rolsac.publico.objetivo.personas.administracion=
 	    
 	    
 	    

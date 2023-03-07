@@ -270,6 +270,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("cataleg", llistarCatalegDocuments(lang));
 			model.put("publicObjectiuIntern", POUtils.getPublicoObjetivoInterno());
 			model.put("publicObjectiuPersones", RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.PERSONAS));
+			model.put("publicObjectiuAdministracio", RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.ADMINISTRACION));
 			
 			
 
