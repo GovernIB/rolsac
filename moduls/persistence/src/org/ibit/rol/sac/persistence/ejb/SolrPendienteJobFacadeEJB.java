@@ -401,7 +401,17 @@ public abstract class SolrPendienteJobFacadeEJB extends HibernateEJB {
 			final String index = System.getProperty("es.caib.rolsac.solr.index");
 			final String user = System.getProperty("es.caib.rolsac.solr.user");
 			final String pass = System.getProperty("es.caib.rolsac.solr.pass");
-			final SolrIndexer solrIndexer = SolrFactory.getIndexer(urlSolr, index, EnumAplicacionId.PIDIP, user, pass);
+			final String iactivo = System.getProperty("es.caib.rolsac.solr.activo");
+			final boolean solrActivo = iactivo != null && !"S".equals(iactivo.toUpperCase());
+
+			final String urlElastic = System.getProperty("es.caib.rolsac.elastic.url");
+			final String userElastic = System.getProperty("es.caib.rolsac.elastic.user");
+			final String passElastic = System.getProperty("es.caib.rolsac.elastic.pass");
+			final String iactivoElastic = System.getProperty("es.caib.rolsac.elastic.activo");
+			final boolean elasticActivo = iactivoElastic != null && !"S".equals(iactivoElastic.toUpperCase());
+
+			final SolrIndexer solrIndexer = SolrFactory.getIndexer(urlSolr, index, EnumAplicacionId.ROLSAC, user, pass,
+					urlElastic, userElastic, passElastic, solrActivo, elasticActivo);
 			solrIndexer.indexarContenido(indexData);
 			new SolrPendienteResultado(true);
 		} catch (final Exception exception) {
