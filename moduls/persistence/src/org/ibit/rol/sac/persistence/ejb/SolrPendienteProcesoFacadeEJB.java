@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -60,30 +61,6 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 	public void ejbCreate() throws CreateException {
 
 		super.ejbCreate();
-	}
-
-	/**
-	 * Obtiene los parámetros de configuración del indexer
-	 *
-	 * @return SolrIndexer
-	 *
-	 */
-	private SolrIndexer obtenerParamIndexer() {
-		final String url = System.getProperty("es.caib.rolsac.solr.url");
-		final String index = System.getProperty("es.caib.rolsac.solr.index");
-		final String user = System.getProperty("es.caib.rolsac.solr.user");
-		final String pass = System.getProperty("es.caib.rolsac.solr.pass");
-		final String iactivo = System.getProperty("es.caib.rolsac.solr.activo");
-		final boolean solrActivo = iactivo != null && "S".equals(iactivo.toUpperCase());
-
-		final String urlElastic = System.getProperty("es.caib.rolsac.elastic.url");
-		final String userElastic = System.getProperty("es.caib.rolsac.elastic.user");
-		final String passElastic = System.getProperty("es.caib.rolsac.elastic.pass");
-		final String iactivoElastic = System.getProperty("es.caib.rolsac.elastic.activo");
-		final boolean elasticActivo = iactivoElastic != null && "S".equals(iactivoElastic.toUpperCase());
-		final SolrIndexer solrIndexer = SolrFactory.getIndexer(url, index, EnumAplicacionId.ROLSAC, user, pass,
-				urlElastic, userElastic, passElastic, solrActivo, elasticActivo);
-		return solrIndexer;
 	}
 
 	/**
@@ -643,4 +620,39 @@ public abstract class SolrPendienteProcesoFacadeEJB extends HibernateEJB {
 		}
 	}
 
+	/**
+	 * Obtiene los parámetros de configuración del indexer
+	 *
+	 * @return SolrIndexer
+	 *
+	 */
+	private SolrIndexer obtenerParamIndexer() {
+		final String url = System.getProperty("es.caib.rolsac.solr.url");
+		final String index = System.getProperty("es.caib.rolsac.solr.index");
+		final String user = System.getProperty("es.caib.rolsac.solr.user");
+		final String pass = System.getProperty("es.caib.rolsac.solr.pass");
+		final String iactivo = System.getProperty("es.caib.rolsac.solr.activo");
+		final boolean solrActivo = iactivo != null && "S".equals(iactivo.toUpperCase());
+
+		final String urlElastic = System.getProperty("es.caib.rolsac.elastic.url");
+		final String userElastic = System.getProperty("es.caib.rolsac.elastic.user");
+		final String passElastic = System.getProperty("es.caib.rolsac.elastic.pass");
+		final String iactivoElastic = System.getProperty("es.caib.rolsac.elastic.activo");
+		final boolean elasticActivo = iactivoElastic != null && "S".equals(iactivoElastic.toUpperCase());
+
+		final String elasticCategoriasActivas = System.getProperty("es.caib.rolsac.elastic.categoriasActivas");
+		final List<EnumCategoria> categorias = new ArrayList<>();
+		if (elasticCategoriasActivas != null && !elasticCategoriasActivas.isEmpty()) {
+			for (final String categoria : elasticCategoriasActivas.split(",")) {
+				final EnumCategoria enumCategoria = EnumCategoria.fromString(categoria.trim());
+				if (enumCategoria != null) {
+					categorias.add(enumCategoria);
+				}
+			}
+		}
+
+		final SolrIndexer solrIndexer = SolrFactory.getIndexer(url, index, EnumAplicacionId.ROLSAC, user, pass,
+				urlElastic, userElastic, passElastic, solrActivo, elasticActivo, categorias);
+		return solrIndexer;
+	}
 }
