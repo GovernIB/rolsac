@@ -90,6 +90,7 @@ es.caib.rolsac.subscripcions
 		es.caib.rolsac.elastic.url=http://sdeswebgoibray1:21080/api/v1/indexer/solr/
 		es.caib.rolsac.elastic.user=
 		es.caib.rolsac.elastic.pass=
+		es.caib.rolsac.elastic.categoriasActivas=PRO,UNA,NOR,FCH
 
 	   es.caib.rolsac.sia.tipoActuacion = 1
 	   es.caib.rolsac.sia.tipologiaTramitacion = 4
