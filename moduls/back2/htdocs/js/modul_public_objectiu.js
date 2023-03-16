@@ -131,14 +131,6 @@ function CModulPublicObjectiu(){
 				codi_llistat += "<li><input type=\"hidden\" value=\"" + input_elm.val() + "\" />" + li_elm.find("span").text() + "</li>";
 				nombre_llistat++;
 				input_elm.addClass(publicObjectiuDefaultClass);
-
-				if (input_elm.val()==publicObjectiuAdministracio){
-					//Si el publico objetivo es administracion marcar a false disponibleApoderadoHabilitado, 
-					//en otro caso debe ser true )
-					jQuery('#item_disponibleApoderadoHabilitado').attr('checked', false);
-				}else{
-					jQuery('#item_disponibleApoderadoHabilitado').attr('checked', true);
-				}
 				
 			} else {
 

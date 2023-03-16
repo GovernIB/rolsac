@@ -943,7 +943,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// resultats.put("item_notes", proc.getInfo());
 			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null ? "" : (proc.getIndicador()));
-			resultats.put("item_disponibleApoderadoHabilitado", proc.isDisponibleApoderadoHabilitado()? true : false);
+			resultats.put("item_disponibleApoderadoHabilitado", proc.isDisponibleApoderadoHabilitado()? "1" : "0");
 			resultats.put("item_disponibleFuncionarioHabilitado", proc.isDisponibleFuncionarioHabilitado() ? "1" : "0");
 			resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
 			resultats.put("item_mensajes_gestor", proc.isMensajesNoLeidosGestor() ? "S" : "N");
@@ -1954,14 +1954,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment
 					.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0"); // Indicador
 			
+			procediment.setDisponibleApoderadoHabilitado("1".equals(request.getParameter("item_disponibleApoderadoHabilitado")));
 			
 			
-			
-			if (request.getParameter("item_disponibleApoderadoHabilitado") == null) {
-				procediment.setDisponibleApoderadoHabilitado(false);
-			} else {
-				procediment.setDisponibleApoderadoHabilitado("on".equalsIgnoreCase(request.getParameter("item_disponibleApoderadoHabilitado")));				
-			}
+			 
 			
 			boolean hayPOpersonas =false;
 			Long idPersonas= RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.PERSONAS);

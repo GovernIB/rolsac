@@ -631,32 +631,9 @@ function CDetall() {
 	this.tipusEstadistica = 'procediment';
 
 	
+
+	
 	this.guarda = function() {
-		//verificamos si el publico objetivo concuerda con el check disponible para apoderado habilitado (si true el po no debe ser interno)
-		var pOApoderavalidacion=false; 
-		var pub_llistat_elm = $("#escriptori_detall  div.ModulPublicObjectiu  div.llistat");	
-		//var poIntern = $("#escriptori_detall  div.ModulPublicObjectiu input[name='modul_public_intern']").val();
-		var dispoApoderaHabilita= jQuery('#item_disponibleApoderadoHabilitado').attr('checked')=="checked"; 
-		pub_llistat_elm.find("input[type=checkbox]").each(function() {
-			$this = jQuery(this);
-			if ($this.attr("checked")=="checked") {
-				if(($this.val()==publicObjectiuAdministracio && dispoApoderaHabilita)|| 	
-				   ($this.val()!=publicObjectiuAdministracio && !dispoApoderaHabilita)){					
-					pOApoderavalidacion=true;
-				}
-			}		
-		});		
-		
-              //Comprobar y soltar un mensaje
-		if (pOApoderavalidacion) {
-			Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtValidacionApoderaHabilitadoTitulo, text: txtValidacionApoderaHabilitado, funcio: that.guarda1});
-		} else {
-			that.guarda1();
-		}
-	};
-	
-	
-	this.guarda1 = function() {
 		//verificamos si el de funcionario hablilitado es true tiene que estar dirigido a personas 
 		var pub_llistat_elm = $("#escriptori_detall  div.ModulPublicObjectiu  div.llistat");	
 
@@ -672,16 +649,16 @@ function CDetall() {
 		});		
 		
 		if(!hayPOPersonas && dispoFuncionarioHabilita ){
-			Missatge.llansar({tipus: "alerta", modo: "atencio", titol: txtValidacionFuncionarioHabilitadoTitulo, text: txtValidacionFuncionarioHabilitado, funcio: that.guarda2});
+			Missatge.llansar({tipus: "alerta", modo: "atencio", titol: txtValidacionFuncionarioHabilitadoTitulo, text: txtValidacionFuncionarioHabilitado, funcio: that.guarda1});
 		}else{
-			that.guarda2();
+			that.guarda1();
 		}
 		
 	}
 	
 	
 	
-	this.guarda2 = function() {
+	this.guarda1 = function() {
 
 		var paginaCheck;
 		if ($("#item_estat").val() == 1) {
@@ -1204,7 +1181,7 @@ function CDetall() {
 		$('#item_pdt_validar').attr('checked', false);
 		$("#filaNoEditable").hide();
 		
-		jQuery('#item_disponibleApoderadoHabilitado').attr('checked', true);
+		
 
 		this.actualizaEventos();
 
@@ -1395,8 +1372,10 @@ function CDetall() {
 		}
 		
 		if (dada_node.item_disponibleApoderadoHabilitado != undefined) {
-			jQuery('#item_disponibleApoderadoHabilitado').attr('checked', dada_node.item_disponibleApoderadoHabilitado);
+			jQuery('#item_disponibleApoderadoHabilitado').val(dada_node.item_disponibleApoderadoHabilitado);
 			jQuery("#item_disponibleApoderadoHabilitado").change();
+		} else {
+			jQuery("#item_disponibleApoderadoHabilitado").val("");
 		}
 		
 		if (dada_node.item_disponibleFuncionarioHabilitado != undefined) {
