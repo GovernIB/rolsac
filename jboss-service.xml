@@ -82,11 +82,12 @@ es.caib.rolsac.subscripcions
 	   <!-- Esta representado en MB. -->
 	   es.caib.rolsac.solr.tamanyomaximo=20
 	   es.caib.rolsac.solr.ficheros=doc,docx,xls,xlsx,pdf,pdfx,odt,ods,odp,odf,txt,rtf
-	   es.caib.rolsac.solr.dias = 10 <!--  Marca el numero máximo de días que se puede estar ejecutando. -->
-	   	es.caib.rolsac.solr.activo=S
+	   <!--  Marca el numero máximo de días que se puede estar ejecutando. -->
+	   es.caib.rolsac.solr.dias=10
+	   es.caib.rolsac.solr.activo=S
 
 		<!-- elastic -->
-		es.caib.rolsac.solr.activo=S
+		es.caib.rolsac.elastic.activo=S
 		es.caib.rolsac.elastic.url=http://sdeswebgoibray1:21080/api/v1/indexer/solr/
 		es.caib.rolsac.elastic.user=
 		es.caib.rolsac.elastic.pass=
@@ -201,6 +202,13 @@ es.caib.rolsac.subscripcions
 
  		es.caib.rolsac.procServ.proc.url=http://www.caib.es/rolsacback/catalegProcediments/catalegProcediments.do?itemId={0}
 	    es.caib.rolsac.procServ.serv.url=http://www.caib.es/rolsacback/catelegServeis/catalegServeis.do?itemId={0}
+	    
+	    <!-- identidicador del publico objetivo personas -->
+	    es.caib.rolsac.publico.objetivo.personas=200
+	    es.caib.rolsac.publico.objetivo.personas.administracion=
+	    
+	    
+	    
 
     </attribute>
 

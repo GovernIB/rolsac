@@ -74,6 +74,8 @@ $(document).ready(function(){
 	var lopd_legitimacion_pordefecto =  '<c:out value="${lopdLegitimacionPorDefecto}"/>';
 	var tienePermisoPublicar = '<c:out value="${permisoPublicar}"/>';
 	var tienePermisoEdicion = true;
+	var publicObjectiuPersones = '<c:out value="${publicObjectiuPersones}"/>';
+	var publicObjectiuAdministracio = '<c:out value="${publicObjectiuAdministracio}"/>';
 
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagExportar = '<c:url value="/catalegProcediments/exportar.do" />';
@@ -253,6 +255,9 @@ $(document).ready(function(){
 	var txtValidacionApoderaHabilitado = "<spring:message code='txt.validacio.ApoderaHabilitado'/>"; 
 	var txtValidacionApoderaHabilitadoTitulo= "<spring:message code='txt.validacio.ApoderaHabilitado.titulo'/>"; 
 	var txtfuncionariopresencial="<spring:message code='txt.validacio.funcionariopresencial'/>";
+	
+	var txtValidacionFuncionarioHabilitado ="<spring:message code='txt.validacio.FuncionarioHabilitado.titulo'/>";
+	var txtValidacionFuncionarioHabilitadoTitulo ="<spring:message code='txt.validacio.FuncionarioHabilitado'/>";
 
 	//camps obligatoris
 	var formIncomplet   = "<spring:message code= 'proc.formulari.error'/>";
@@ -411,7 +416,20 @@ $(document).ready(function(){
                 }
         },
         
-        // disponibleFuncionarioHabilitado
+        // item_disponibleApoderadoHabilitado
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_disponibleApoderadoHabilitado",
+            "obligatori": "si",
+            "tipus": "numeric",
+            "error":
+                {
+                    "obligatori": "<spring:message code='proc.formulari.error.disponibleApoderadoHabilitado.obligatori'/>"
+                }
+        },
+        
+     // disponibleFuncionarioHabilitado
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -1406,12 +1424,16 @@ window.onclick = function(event) {
                                     <!-- ************************************************** -->
                                     
                                      <div class="fila">
-                                        <div class="element checkbox">
-                                            <div class="control">
-                                                <input id="item_disponibleApoderadoHabilitado" name="item_disponibleApoderadoHabilitado" type="checkbox" value="on" class="nou" />
-                                            </div>
+                                        <div class="element t50p">                                           
                                             <div class="etiqueta">
                                                 <label for="item_disponibleApoderadoHabilitado"><spring:message code='camp.disponibleApoderadoHabilitado'/></label>
+                                            </div>                                            
+                                             <div class="control select">
+                                                <select id="item_disponibleApoderadoHabilitado" name="item_disponibleApoderadoHabilitado" class="nou">
+                                                    <option value=""><spring:message code='camp.cap'/></option>
+                                                    <option value="1" ><spring:message code='camp.si'/></option>
+                                                    <option value="0" ><spring:message code='camp.no'/></option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="element t50p">

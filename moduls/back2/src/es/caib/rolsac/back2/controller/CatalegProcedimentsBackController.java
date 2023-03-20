@@ -216,6 +216,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("mantieneEstadoInterna", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(true));
 		model.put("mantieneEstadoInternaESP", RolsacPropertiesUtil.getLiteralMantieneEstadoInterna(false));
 		model.put("elIdioma", request.getLocale().getLanguage().contains("ca") ? "ca" : "es");
+		
+		
 		final UnidadAdministrativa raiz = ua != null ? ua.getRaiz() : null;
 
 		if (raiz != null) {
@@ -267,6 +269,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("excepcions", llistarExcepcionsDocumentacio(lang));
 			model.put("cataleg", llistarCatalegDocuments(lang));
 			model.put("publicObjectiuIntern", POUtils.getPublicoObjetivoInterno());
+			model.put("publicObjectiuPersones", RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.PERSONAS));
+			model.put("publicObjectiuAdministracio", RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.ADMINISTRACION));
+			
+			
 
 		} catch (final DelegateException dEx) {
 
@@ -937,7 +943,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// resultats.put("item_notes", proc.getInfo());
 			resultats.put("item_notes", proc.getDirElectronica());
 			resultats.put("item_fi_vida_administrativa", proc.getIndicador() == null ? "" : (proc.getIndicador()));
-			resultats.put("item_disponibleApoderadoHabilitado", proc.isDisponibleApoderadoHabilitado()? true : false);
+			resultats.put("item_disponibleApoderadoHabilitado", proc.isDisponibleApoderadoHabilitado()? "1" : "0");
 			resultats.put("item_disponibleFuncionarioHabilitado", proc.isDisponibleFuncionarioHabilitado() ? "1" : "0");
 			resultats.put("item_taxa", (proc.getTaxa() == null || "0".equals(proc.getTaxa())) ? false : true);
 			resultats.put("item_mensajes_gestor", proc.isMensajesNoLeidosGestor() ? "S" : "N");
@@ -1762,6 +1768,27 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
 			}
+			
+			
+			///////////////
+			//comprobamos si FUNCIONARIOHabilitado debe tener un tramite Presencial (si hay algun tramite)
+			//Hay tramites presenciales, o no hay ningun tramite
+			boolean hayTramitePresencial=false;
+			boolean unoOMasTramites=false;
+			if (procedimentOld != null && procedimentOld.getTramites()!=null) {					
+				for (Tramite t : procedimentOld.getTramites() ) {
+					unoOMasTramites = true;
+					if(t.isPresencial()) {
+						hayTramitePresencial=true;
+					}
+				}
+			}
+			
+			if(procedimentOld!=null && "1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")) && unoOMasTramites && !hayTramitePresencial) {
+				error = messageSource.getMessage("proc.error.funcionario.habilitado.nopresencial", null, request.getLocale());
+				return result = new IdNomDTO(-3l, error);
+			}
+			////////////
 
 			/***
 			 * Cuando eres gestor, se crea mensaje si:
@@ -1927,15 +1954,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment
 					.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0"); // Indicador
 			
+			procediment.setDisponibleApoderadoHabilitado("1".equals(request.getParameter("item_disponibleApoderadoHabilitado")));
 			
 			
+			 
 			
-			if (request.getParameter("item_disponibleApoderadoHabilitado") == null) {
-				procediment.setDisponibleApoderadoHabilitado(false);
-			} else {
-				procediment.setDisponibleApoderadoHabilitado("on".equalsIgnoreCase(request.getParameter("item_disponibleApoderadoHabilitado")));				
+			boolean hayPOpersonas =false;
+			Long idPersonas= RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.PERSONAS);
+			for(PublicoObjetivo po : procediment.getPublicosObjetivo()) {
+				if(po.getId().equals(idPersonas)) {
+					hayPOpersonas=true;
+				}
 			}
-			procediment.setDisponibleFuncionarioHabilitado("1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")) ); 
+			
+			//solo puede estar funcionario habilitado a true si hay publico objetivo personas 
+			boolean funHab = hayPOpersonas && "1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")); 				
+			
+			procediment.setDisponibleFuncionarioHabilitado(funHab ); 
 			
 			procediment.setVentanillaUnica(
 					"on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0"); // Ventanilla

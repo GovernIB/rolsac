@@ -302,4 +302,40 @@ public class RolsacPropertiesUtil {
 	public static String getUrlServicios(final String id) {
 		return getProperty("es.caib.rolsac.procServ.serv.url").replace("{0}", id);
 	}
+	
+	
+	
+	public enum EnumPublicoObjetivo 
+	{
+	    PERSONAS("personas"), 
+	    EMPRESAS("empresas"), 
+	    ADMINISTRACION("administracion"), 
+	    INTERNO("interno");
+	 
+	    private String valor;
+	 
+	    EnumPublicoObjetivo(String valor) {
+	        this.valor = valor;
+	    }
+	 
+	    public String toString() {
+	        return valor;
+	    }
+	}
+	
+	/**
+	 * Funcion que retorna el identificador numerico (id de BBDD) del publico objetivo
+	 * @param publico ('personas','administracion','empresas','interno')
+	 * @return
+	 */
+	public static Long getpublicoObjetivo(final EnumPublicoObjetivo po) {
+		try {
+		return Long.parseLong(getProperty("es.caib.rolsac.publico.objetivo." + po.toString()));
+			
+		} catch (Exception e) {
+			return (long) 0;
+		}
+	}
+	
+	
 }
