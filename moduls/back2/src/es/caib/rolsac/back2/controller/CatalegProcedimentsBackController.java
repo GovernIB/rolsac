@@ -1768,27 +1768,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				error = messageSource.getMessage("proc.error.falta.materia", null, request.getLocale());
 				return result = new IdNomDTO(-4l, error);
 			}
-			
-			
-			///////////////
-			//comprobamos si FUNCIONARIOHabilitado debe tener un tramite Presencial (si hay algun tramite)
-			//Hay tramites presenciales, o no hay ningun tramite
-			boolean hayTramitePresencial=false;
-			boolean unoOMasTramites=false;
-			if (procedimentOld != null && procedimentOld.getTramites()!=null) {					
-				for (Tramite t : procedimentOld.getTramites() ) {
-					unoOMasTramites = true;
-					if(t.isPresencial()) {
-						hayTramitePresencial=true;
-					}
-				}
-			}
-			
-			if(procedimentOld!=null && "1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")) && unoOMasTramites && !hayTramitePresencial) {
-				error = messageSource.getMessage("proc.error.funcionario.habilitado.nopresencial", null, request.getLocale());
-				return result = new IdNomDTO(-3l, error);
-			}
-			////////////
 
 			/***
 			 * Cuando eres gestor, se crea mensaje si:
@@ -1954,21 +1933,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			procediment
 					.setIndicador(Long.parseLong(request.getParameter("item_fi_vida_administrativa")) == 1 ? "1" : "0"); // Indicador
 			
-			procediment.setDisponibleApoderadoHabilitado("1".equals(request.getParameter("item_disponibleApoderadoHabilitado")));
+			procediment.setDisponibleApoderadoHabilitado("1".equals(request.getParameter("item_disponibleApoderadoHabilitado")));		
 			
-			
-			 
-			
-			boolean hayPOpersonas =false;
-			Long idPersonas= RolsacPropertiesUtil.getpublicoObjetivo(RolsacPropertiesUtil.EnumPublicoObjetivo.PERSONAS);
-			for(PublicoObjetivo po : procediment.getPublicosObjetivo()) {
-				if(po.getId().equals(idPersonas)) {
-					hayPOpersonas=true;
-				}
-			}
-			
-			//solo puede estar funcionario habilitado a true si hay publico objetivo personas 
-			boolean funHab = hayPOpersonas && "1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")); 				
+			boolean funHab = "1".equals(request.getParameter("item_disponibleFuncionarioHabilitado")); 
 			
 			procediment.setDisponibleFuncionarioHabilitado(funHab ); 
 			

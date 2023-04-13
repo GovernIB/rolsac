@@ -634,32 +634,6 @@ function CDetall() {
 
 	
 	this.guarda = function() {
-		//verificamos si el de funcionario hablilitado es true tiene que estar dirigido a personas 
-		var pub_llistat_elm = $("#escriptori_detall  div.ModulPublicObjectiu  div.llistat");	
-
-		var dispoFuncionarioHabilita= jQuery("#item_disponibleFuncionarioHabilitado").val()=="1";
-		var hayPOPersonas=false;
-		pub_llistat_elm.find("input[type=checkbox]").each(function() {
-			$this = jQuery(this);
-			if ($this.attr("checked")=="checked") {
-				if($this.val()==publicObjectiuPersones) {					
-					hayPOPersonas=true;
-				}				
-			} 			
-		});		
-		
-		if(!hayPOPersonas && dispoFuncionarioHabilita ){
-			Missatge.llansar({tipus: "alerta", modo: "atencio", titol: txtValidacionFuncionarioHabilitadoTitulo, text: txtValidacionFuncionarioHabilitado, funcio: that.guarda1});
-		}else{
-			that.guarda1();
-		}
-		
-	}
-	
-	
-	
-	this.guarda1 = function() {
-
 		var paginaCheck;
 		if ($("#item_estat").val() == 1) {
 			paginaCheck = pagCheckPublico;
@@ -1182,6 +1156,7 @@ function CDetall() {
 		$("#filaNoEditable").hide();
 		
 		
+		jQuery("#item_disponibleFuncionarioHabilitado").val("0").change();
 
 		this.actualizaEventos();
 
@@ -1214,6 +1189,17 @@ function CDetall() {
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 
 		dada_node = dades;
+
+		if(dada_node.isGestor!='S'){
+			
+			jQuery("#item_disponibleFuncionarioHabilitado").removeAttr('disabled');
+			jQuery("#item_disponibleFuncionarioHabilitado").parent().removeClass('soloLectura');
+			jQuery("#item_disponibleFuncionarioHabilitado").removeClass('soloLectura');
+		}else{				
+			jQuery("#item_disponibleFuncionarioHabilitado").attr('disabled', 'disabled');
+			jQuery("#item_disponibleFuncionarioHabilitado").parent().addClass('soloLectura');
+			jQuery("#item_disponibleFuncionarioHabilitado").addClass('soloLectura');
+		}
 
 		ModulFetsVitals.pintar( dada_node.listadoHechosVitales );
 
@@ -1516,6 +1502,10 @@ function CDetall() {
 		//noPermiteEliminar
 		this.actualizarBotonesEliminar(dada_node.permiteEliminar, dada_node.isGestor, dada_node.permiteGuardar);
 
+		
+		
+		
+		
 		if (dada_node.permiteGuardar == 'N' && dada_node.item_estat == 2) {
 			$("#filaNoEditable").show();
 			//Mostrar solo el mensaje cuando no puede guardar y el estado es interna (valor 2)

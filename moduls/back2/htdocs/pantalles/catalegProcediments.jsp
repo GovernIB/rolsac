@@ -1442,9 +1442,9 @@ window.onclick = function(event) {
                                             </div>
                                             <div class="control select">
                                                 <select id="item_disponibleFuncionarioHabilitado" name="item_disponibleFuncionarioHabilitado" class="nou">
-                                                    <option value=""><spring:message code='camp.cap'/></option>
+                                                    <option value="0" ><spring:message code='camp.no'/></option>                                                    
                                                     <option value="1" ><spring:message code='camp.si'/></option>
-                                                    <option value="0" ><spring:message code='camp.no'/></option>
+                                                    <option value=""><spring:message code='camp.cap'/></option>                                                    
                                                 </select>
                                             </div>
                                         </div>                                                                          
