@@ -1156,8 +1156,20 @@ function CDetall() {
 		$("#filaNoEditable").hide();
 		
 		
+		
+				
+		if(tienePermisoPublicar=='S'){
+			jQuery("#item_disponibleFuncionarioHabilitado").removeAttr('disabled');
+			jQuery("#item_disponibleFuncionarioHabilitado").parent().removeClass('soloLectura');
+			jQuery("#item_disponibleFuncionarioHabilitado").removeClass('soloLectura');
+		}else{				
+			jQuery("#item_disponibleFuncionarioHabilitado").attr('disabled', 'disabled');
+			jQuery("#item_disponibleFuncionarioHabilitado").parent().addClass('soloLectura');
+			jQuery("#item_disponibleFuncionarioHabilitado").addClass('soloLectura');
+		
+		}
 		jQuery("#item_disponibleFuncionarioHabilitado").val("0").change();
-
+		
 		this.actualizaEventos();
 
 		this.modificado(false);
