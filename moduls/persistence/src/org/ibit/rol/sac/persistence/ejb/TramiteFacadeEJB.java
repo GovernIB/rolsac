@@ -41,6 +41,7 @@ import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.saver.TramiteSaver;
 import org.ibit.rol.sac.persistence.util.ApiRestUtils;
 import org.ibit.rol.sac.persistence.util.IndexacionUtil;
+import org.ibit.rol.sac.persistence.util.POUtils;
 import org.ibit.rol.sac.persistence.util.SiaUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
@@ -1319,7 +1320,12 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				indexData.setFechaPlazoFin(tramiteInicio.getDataTancament());
 			}
 
-			indexData.setInterno(false);
+			final boolean esProcSerInterno = POUtils.contienePOInterno(procedimiento.getPublicosObjetivo());
+			if (esProcSerInterno) {
+				indexData.setInterno(true);
+			} else {
+				indexData.setInterno(false);
+			}
 
 			// FamiliaID
 			if (procedimiento.getFamilia() != null) {
@@ -1404,7 +1410,12 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements TramiteDe
 				indexData.setFechaPlazoFin(tramiteInicio.getDataTancament());
 			}
 
-			indexData.setInterno(false);
+			final boolean esProcSerInterno = POUtils.contienePOInterno(procedimiento.getPublicosObjetivo());
+			if (esProcSerInterno) {
+				indexData.setInterno(true);
+			} else {
+				indexData.setInterno(false);
+			}
 
 			// UOs
 			final PathUO pathUO = IndexacionUtil.calcularPathUO(procedimiento.getUnidadAdministrativa());
