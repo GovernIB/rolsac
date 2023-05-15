@@ -1386,9 +1386,7 @@ window.onclick = function(event) {
 		                               				 </c:forEach>
 		                           				 </select>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
+                                        </div>                                   
                                         <div class="element t50p">
                                             <div class="etiqueta">
                                                 <label for="item_fi_vida_administrativa"><spring:message code='camp.fiViaAdministrativa'/></label>
@@ -1402,25 +1400,8 @@ window.onclick = function(event) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="fila">
-                                        <div class="element checkbox">
-                                            <div class="control">
-                                                <input id="item_taxa" name="item_taxa" type="checkbox" value="on" class="nou" />
-                                            </div>
-                                            <div class="etiqueta">
-                                                <label for="item_taxa"><spring:message code='camp.taxa'/></label>
-                                            </div>
-                                        </div>
-                                        <div class="element checkbox" style="display:none;">
-                                            <div class="control">
-                                                <input id="item_finestreta_unica" name="item_finestreta_unica" type="checkbox" class="nou" />
-                                            </div>
-                                            <div class="etiqueta">
-                                                <label for="item_finestreta_unica"><spring:message code='camp.finestretaUnica'/></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- ************************************************** -->
+                                    
+                                     <!-- ************************************************** -->
                                     <!-- ************************************************** -->
                                     
                                      <div class="fila">
@@ -1449,6 +1430,26 @@ window.onclick = function(event) {
                                             </div>
                                         </div>                                                                          
                                     </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element checkbox">
+                                            <div class="control">
+                                                <input id="item_taxa" name="item_taxa" type="checkbox" value="on" class="nou" />
+                                            </div>
+                                            <div class="etiqueta">
+                                                <label for="item_taxa"><spring:message code='camp.taxa'/></label>
+                                            </div>
+                                        </div>
+                                        <div class="element checkbox" style="display:none;">
+                                            <div class="control">
+                                                <input id="item_finestreta_unica" name="item_finestreta_unica" type="checkbox" class="nou" />
+                                            </div>
+                                            <div class="etiqueta">
+                                                <label for="item_finestreta_unica"><spring:message code='camp.finestretaUnica'/></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
 
                                     
                                     <div class="fila">
