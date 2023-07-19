@@ -97,7 +97,7 @@ public class SiaWS {
 			siaResultado.setCorrectos(correctos);
 			siaResultado.setIncorrectos(incorrectos);
 
-		} else {
+		} else if (SiaUtils.isActivoDebug()) {
 			final int aleatorio = (int) (Math.random() * (100));
 			if (aleatorio % 8 == 0) {
 				siaResultado.setMensaje("Error aleatorio, estás en modo prueba!!");
@@ -115,6 +115,11 @@ public class SiaWS {
 					siaResultado.setEstadoSIA(SiaUtils.ESTADO_ALTA);
 				}
 			}
+		} else {
+			siaResultado.setMensaje("No está activo SIA");
+			siaResultado.setCorrectos(0);
+			siaResultado.setIncorrectos(1);
+			siaResultado.setResultado(SiaResultado.RESULTADO_ERROR);
 		}
 		return siaResultado;
 	}
@@ -207,24 +212,23 @@ public class SiaWS {
 
 		paramSia.setESCOMUN(comun);
 		paramSia.setINTERNO(interno);
-		
+
 		final ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO dispoApoderadoHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO();
 		final ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO dispoFuncionarioHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO();
-		if(sia.isDisponibleApoderadoHabilitado()) {
+		if (sia.isDisponibleApoderadoHabilitado()) {
 			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.SI);
-		}else {
+		} else {
 			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.NO);
 		}
-		
-		if(sia.isDisponibleFuncionarioHabilitado()) {
+
+		if (sia.isDisponibleFuncionarioHabilitado()) {
 			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.SI);
-		}else {
+		} else {
 			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.NO);
 		}
 
 		paramSia.setDISPONIBLEAPODERADOHABILITADO(dispoApoderadoHabilitado);
 		paramSia.setDISPONIBLEFUNCIONARIOHABILITADO(dispoFuncionarioHabilitado);
-
 
 		final ParamSIAACTUACIONESACTUACIONTIPOTRAMITE tipoTramite = new ParamSIAACTUACIONESACTUACIONTIPOTRAMITE();
 		tipoTramite.setTIPOTRAMITEValue(sia.getTipoTramite());
@@ -341,18 +345,18 @@ public class SiaWS {
 
 		paramSia.setINTERNO(interno);
 		paramSia.setESCOMUN(comun);
-		
+
 		final ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO dispoApoderadoHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEAPODERADOHABILITADO();
 		final ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO dispoFuncionarioHabilitado = new ParamSIAACTUACIONESACTUACIONDISPONIBLEFUNCIONARIOHABILITADO();
-		if(sia.isDisponibleApoderadoHabilitado()) {
+		if (sia.isDisponibleApoderadoHabilitado()) {
 			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.SI);
-		}else {
+		} else {
 			dispoApoderadoHabilitado.setBooleanoValue(SiaUtils.NO);
 		}
-		
-		if(sia.isDisponibleFuncionarioHabilitado()) {
+
+		if (sia.isDisponibleFuncionarioHabilitado()) {
 			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.SI);
-		}else {
+		} else {
 			dispoFuncionarioHabilitado.setBooleanoValue(SiaUtils.NO);
 		}
 

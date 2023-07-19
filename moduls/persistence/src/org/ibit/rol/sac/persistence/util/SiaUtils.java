@@ -282,6 +282,22 @@ public class SiaUtils {
 	}
 
 	/**
+	 * Comprueba si está activo el envío hacia SIA.
+	 *
+	 * @return
+	 */
+	public static boolean isActivoDebug() {
+		final String activarEnvio = System.getProperty("es.caib.rolsac.sia.activarDebug");
+		boolean activo;
+		if (activarEnvio != null && "S".equals(activarEnvio)) {
+			activo = true;
+		} else {
+			activo = false;
+		}
+		return activo;
+	}
+
+	/**
 	 * Get tipologia envio SIA.
 	 *
 	 * @return
