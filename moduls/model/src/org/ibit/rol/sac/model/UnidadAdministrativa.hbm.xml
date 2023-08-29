@@ -31,8 +31,8 @@
         <property name="numfoto1" column="UNA_NFOTO1"/>
         <property name="numfoto2" column="UNA_NFOTO2"/>
         <property name="numfoto3" column="UNA_NFOTO3"/>
-        <property name="numfoto4" column="UNA_NFOTO4"/> 
-        <property name="codigoDIR3" length="12" column="UNA_CODDR3"/>               
+        <property name="numfoto4" column="UNA_NFOTO4"/>
+        <property name="codigoDIR3" length="12" column="UNA_CODDR3"/>
 	    <many-to-one name="fotop" cascade="all" column="UNA_FOTOP" foreign-key="RSC_UNAFOP_FK"/>
         <many-to-one name="fotog" cascade="all" column="UNA_FOTOG" foreign-key="RSC_UNAFOG_FK"/>
         <many-to-one name="logoh" cascade="all" column="UNA_LOGOH" foreign-key="RSC_UNALOH_FK"/>
@@ -74,7 +74,7 @@
             <key column="SER_SERRSP" foreign-key="RSC_SET_SERRSP_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.Servicio"/>
         </set>
-        
+
 		<set name="tramites" cascade="none" inverse="true" lazy="true">
             <cache usage="read-write"/>
             <key column="TRA_ORGCOMP" foreign-key="RSC_ORGCOMP_FK"/>
@@ -104,7 +104,7 @@
             <key column="UNM_CODUNA" foreign-key="RSC_UNMUNA_FK"/>
             <one-to-many class="org.ibit.rol.sac.model.UnidadMateria"/>
         </set>
-        
+
          <set name="unidadesNormativas" cascade="none" lazy="true" inverse="true">
             <cache usage="read-write" />
             <key column="UNN_CODUNA" foreign-key="RSC_UNNUNA_FK" />
@@ -130,7 +130,7 @@
             <property name="urlRemota" length="512" column="UNR_URLREM"/>
             <many-to-one name="administracionRemota" column="UNR_CODADM" foreign-key="RSC_UNRADM_FK" />
         </subclass>
-        
+
     </class>
 
     <query name="unidades.root">
@@ -144,11 +144,11 @@
     <query name="unidades.byname">
         <![CDATA[select ua from UnidadAdministrativa as ua, trad in ua.traducciones where trad.nombre = :nombre]]>
     </query>
-    
+
 	<query name="fichasBySeccionInUA">
         <![CDATA[select new org.ibit.rol.sac.model.dto.FichaDTO(ficha.id, trad.titulo) from FichaResumenUA as fichaUA, FichaResumen as ficha, ficha.traducciones as trad  where index(trad) = :idioma and fichaUA.idUa = :idUA and fichaUA.idSeccio = :idSeccion and fichaUA.ficha.id = ficha.id and ficha.validacion = :validacion and (ficha.fechaCaducidad > :sysdate or ficha.fechaCaducidad is null) and (ficha.fechaPublicacion <= :sysdate or ficha.fechaPublicacion is null)  order by fichaUA.orden asc, ficha.fechaActualizacion desc]]>
     </query>
-    
+
     	<query name="fichasUABySeccionInUA">
         <![CDATA[select fichaUA from FichaResumenUA as fichaUA, FichaResumen as ficha, ficha.traducciones as trad  where index(trad) = :idioma and fichaUA.idUa = :idUA and fichaUA.idSeccio = :idSeccion and fichaUA.ficha.id = ficha.id and ficha.validacion = :validacion and (ficha.fechaCaducidad > :sysdate or ficha.fechaCaducidad is null) and (ficha.fechaPublicacion <= :sysdate or ficha.fechaPublicacion is null)  order by fichaUA.orden asc, ficha.fechaActualizacion desc]]>
     </query>
