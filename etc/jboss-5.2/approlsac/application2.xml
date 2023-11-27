@@ -5,22 +5,22 @@
 <application>
 	<display-name>ROLSAC</display-name>
   	<description/>
-  			<module><java>solrapi-1.1.2.jar</java></module>
+  			<module><java>solrapi-1.1.4.jar</java></module>
 			<module><java>jericho-html-2.5.jar</java></module>
     		<module><java>extractor.jar</java></module>
     		<module><java>model.jar</java></module>
-    		
+
     		<module>
         		<web>
     	      	<web-uri>integracion.war</web-uri>
         	  	<context-root>integracion</context-root>
         		</web>
     		</module>
-    		
-    		
+
+
     	<!-- 	<module><java>integracion.jar</java></module> -->
-    		
-    		
+
+
     		<module><java>boib.jar</java></module>
     		<module><java>micromodel.jar</java></module>
 
@@ -28,7 +28,7 @@
   			<!-- BACK -->
     		<module><ejb>sac-persistence.jar</ejb></module>
     		<module><ejb>sac-micropersistence.jar</ejb></module>
-    		
+
 			<module>
         		<web>
     	      	<web-uri>sac-ws.war</web-uri>
@@ -42,6 +42,6 @@
     <security-role>
         <description>Administrador del cercador de Resums de premsa</description>
         <role-name>LRP_ADMIN</role-name>
-    </security-role> 
- 
+    </security-role>
+
 </application>
