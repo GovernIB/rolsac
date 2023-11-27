@@ -5,7 +5,7 @@
 <application>
 	<display-name>ROLSAC</display-name>
   	<description/>
-  			<module><java>solrapi-1.1.2.jar</java></module>
+  			<module><java>solrapi-1.1.4.jar</java></module>
 			<module><java>jericho-html-2.5.jar</java></module>
     		<module><java>extractor.jar</java></module>
     		<module><java>model.jar</java></module>

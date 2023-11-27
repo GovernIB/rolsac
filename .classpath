@@ -69,7 +69,7 @@
 	<classpathentry kind="lib" path="lib/webcaib/quartz-1.8.5.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/webcaib/commons-beanutils-1.8.3.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-beanutils-1.8.3.jar" sourcepath="O:/repositorio/commons-beanutils/commons-beanutils/1.8.3/commons-beanutils-1.8.3-sources.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/chartbuilder.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/jcommon-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/org.springframework.aop-3.0.5.RELEASE.jar"/>
