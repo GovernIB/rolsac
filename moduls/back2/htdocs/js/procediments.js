@@ -936,7 +936,7 @@ function CDetall() {
 		});
 		
 		jQuery("#item_disponibleApoderadoHabilitado,#item_disponibleApoderadoHabilitado_es,#item_disponibleApoderadoHabilitado_en,#item_disponibleApoderadoHabilitado_de,#item_disponibleApoderadoHabilitado_fr").change(function(){
-			jQuery("#item_disponibleApoderadoHabilitado,#item_disponibleApoderadoHabilitado_es,#item_disponibleApoderadoHabilitado_en,#item_disponibleApoderadoHabilitado_de,#item_disponibleApoderadoHabilitado_fr").attr("checked", jQuery(this).is(":checked"));
+			jQuery("#item_disponibleApoderadoHabilitado,#item_disponibleApoderadoHabilitado_es,#item_disponibleApoderadoHabilitado_en,#item_disponibleApoderadoHabilitado_de,#item_disponibleApoderadoHabilitado_fr").val( jQuery(this).val());
 		});
 		
 
