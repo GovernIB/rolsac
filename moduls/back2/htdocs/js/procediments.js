@@ -1159,13 +1159,13 @@ function CDetall() {
 		
 				
 		if(tienePermisoPublicar=='S'){
-			jQuery("#item_disponibleFuncionarioHabilitado").removeAttr('disabled');
-			jQuery("#item_disponibleFuncionarioHabilitado").parent().removeClass('soloLectura');
-			jQuery("#item_disponibleFuncionarioHabilitado").removeClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').removeAttr('disabled');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').parent().removeClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').removeClass('soloLectura');
 		}else{				
-			jQuery("#item_disponibleFuncionarioHabilitado").attr('disabled', 'disabled');
-			jQuery("#item_disponibleFuncionarioHabilitado").parent().addClass('soloLectura');
-			jQuery("#item_disponibleFuncionarioHabilitado").addClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').attr('disabled', 'disabled');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').parent().addClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').addClass('soloLectura');
 		
 		}
 		jQuery("#item_disponibleFuncionarioHabilitado").val("0").change();
@@ -1204,13 +1204,13 @@ function CDetall() {
 
 		if(dada_node.isGestor!='S'){
 			
-			jQuery("#item_disponibleFuncionarioHabilitado").removeAttr('disabled');
-			jQuery("#item_disponibleFuncionarioHabilitado").parent().removeClass('soloLectura');
-			jQuery("#item_disponibleFuncionarioHabilitado").removeClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').removeAttr('disabled');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').parent().removeClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').removeClass('soloLectura');
 		}else{				
-			jQuery("#item_disponibleFuncionarioHabilitado").attr('disabled', 'disabled');
-			jQuery("#item_disponibleFuncionarioHabilitado").parent().addClass('soloLectura');
-			jQuery("#item_disponibleFuncionarioHabilitado").addClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').attr('disabled', 'disabled');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').parent().addClass('soloLectura');
+			jQuery('select[name="item_disponibleFuncionarioHabilitado"]').addClass('soloLectura');
 		}
 
 		ModulFetsVitals.pintar( dada_node.listadoHechosVitales );
