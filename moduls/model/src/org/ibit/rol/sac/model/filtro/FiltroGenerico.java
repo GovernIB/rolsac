@@ -114,6 +114,9 @@ public class FiltroGenerico implements Serializable {
 	public static final String FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO = "versionTramiteTelematico";
 	public static final String FILTRO_PROCEDIMIENTO_COMUN = "comun";
 	public static final String FILTRO_PROCEDIMIENTO_PLATAFORMA = "plataforma";
+	public static final String FILTRO_PROCEDIMIENTO_APODERADOHABILITADO = "disponibleApoderadoHabilitado";
+	public static final String FILTRO_PROCEDIMIENTO_FUNCIONARIOHABILITADO = "disponibleFuncionarioHabilitado";
+
 
 	public static final String FILTRO_PLATAFORMAS_CODIGO = "codigo";
 	public static final String FILTRO_PLATAFORMAS_IDENTIFICADOR = "identificador";

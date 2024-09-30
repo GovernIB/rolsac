@@ -3277,6 +3277,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		final String versionTramiteTelematico = filtro
 				.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_VERSION_TRAMITE_TELEMATICO);
 		final String plataforma = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_PLATAFORMA);
+		
+		final String disponibleApoderadoHabilitado = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_APODERADOHABILITADO);
+		final String disponibleFuncionarioHabilitado = filtro.getValor(FiltroGenerico.FILTRO_PROCEDIMIENTO_FUNCIONARIOHABILITADO);
 
 		final StringBuilder select = new StringBuilder("SELECT p ");
 		final StringBuilder selectCount = new StringBuilder("SELECT count(p) ");
@@ -3414,7 +3417,17 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				where.append(" AND p.fechaPublicacion <= :fechaPublicacionHasta");
 				parametros.put("fechaPublicacionHasta", fechaPublicacionHasta);
 			}
-
+			
+			
+			if (!StringUtils.isEmpty(disponibleApoderadoHabilitado) && (disponibleApoderadoHabilitado.equals("1") || disponibleApoderadoHabilitado.equals("0"))) {					
+				where.append(" AND p.disponibleApoderadoHabilitado = " + ApiRestUtils.intToBool(disponibleApoderadoHabilitado) + " ");				
+			}
+			
+			if (!StringUtils.isEmpty(disponibleFuncionarioHabilitado) && (disponibleFuncionarioHabilitado.equals("1") || disponibleFuncionarioHabilitado.equals("0"))) {					
+				where.append(" AND p.disponibleFuncionarioHabilitado = " + ApiRestUtils.intToBool(disponibleFuncionarioHabilitado) + " ");				
+			}
+			
+			
 			if (!StringUtils.isEmpty(codigoMateria)) {
 				from.append(" , p.materias as m ");
 				where.append(" AND m.id = :codigoMateria");

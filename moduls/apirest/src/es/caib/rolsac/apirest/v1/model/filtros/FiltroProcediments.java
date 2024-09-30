@@ -42,7 +42,10 @@ public class FiltroProcediments {
 			+ Constantes.SALTO_LINEA + "\"estadoSia\":\"A/B\", (A=Alta, B=Baja)" + Constantes.SALTO_LINEA
 			+ "\"fechaActualizacionSia\":\"DD/MM/YYYY\"," + Constantes.SALTO_LINEA
 			+ "\"codigoTramiteTelematico\":\"codigo\"," + Constantes.SALTO_LINEA + "\"codigoPlataforma\":\"codigo\","
-			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\"" + "}";
+			+ Constantes.SALTO_LINEA + "\"versionTramiteTelematico\":\"version\""  
+			+ Constantes.SALTO_LINEA + "\"disponibleFuncionarioHabilitado\":\"0/1\", (0/1 filtran por el campo, otro valor no realiza el filtro por el campo)"
+			+ Constantes.SALTO_LINEA + "\"disponibleApoderadoHabilitado\":\"0/1\", (0/1 filtran por el campo, otro valor no realiza el filtro por el campo)"			
+			+"}";
 
 	/** codigoUA. **/
 	@ApiModelProperty(value = "codigoUA", required = false)
@@ -135,6 +138,15 @@ public class FiltroProcediments {
 	/** codigoPlataforma. **/
 	@ApiModelProperty(value = "plataforma", required = false)
 	private String codigoPlataforma;
+	
+	/** comun. **/
+	@ApiModelProperty(value = "disponibleFuncionarioHabilitado", required = false)
+	private Integer disponibleFuncionarioHabilitado;
+	
+	/** comun. **/
+	@ApiModelProperty(value = "disponibleApoderadoHabilitado", required = false)
+	private Integer disponibleApoderadoHabilitado;
+	
 
 	public FiltroGenerico toFiltroGenerico() {
 		final FiltroGenerico fg = new FiltroGenerico();
@@ -232,6 +244,13 @@ public class FiltroProcediments {
 		if (this.codigoPlataforma != null) {
 			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_PLATAFORMA, this.codigoPlataforma + "");
 		}
+		
+		if (this.disponibleApoderadoHabilitado != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_APODERADOHABILITADO, this.disponibleApoderadoHabilitado + "");
+		} 
+		if (this.disponibleFuncionarioHabilitado != null) {
+			fg.addFiltro(FiltroGenerico.FILTRO_PROCEDIMIENTO_FUNCIONARIOHABILITADO, this.disponibleFuncionarioHabilitado + "");
+		} 
 
 		return fg;
 	}
@@ -589,6 +608,48 @@ public class FiltroProcediments {
 	 */
 	public void setComun(final Integer comun) {
 		this.comun = comun;
+	}
+
+	/**
+	 * @return the codigoPlataforma
+	 */
+	public String getCodigoPlataforma() {
+		return codigoPlataforma;
+	}
+
+	/**
+	 * @param codigoPlataforma the codigoPlataforma to set
+	 */
+	public void setCodigoPlataforma(String codigoPlataforma) {
+		this.codigoPlataforma = codigoPlataforma;
+	}
+
+	/**
+	 * @return the disponibleFuncionarioHabilitado
+	 */
+	public Integer getDisponibleFuncionarioHabilitado() {
+		return disponibleFuncionarioHabilitado;
+	}
+
+	/**
+	 * @param disponibleFuncionarioHabilitado the disponibleFuncionarioHabilitado to set
+	 */
+	public void setDisponibleFuncionarioHabilitado(Integer disponibleFuncionarioHabilitado) {
+		this.disponibleFuncionarioHabilitado = disponibleFuncionarioHabilitado;
+	}
+
+	/**
+	 * @return the disponibleApoderadoHabilitado
+	 */
+	public Integer getDisponibleApoderadoHabilitado() {
+		return disponibleApoderadoHabilitado;
+	}
+
+	/**
+	 * @param disponibleApoderadoHabilitado the disponibleApoderadoHabilitado to set
+	 */
+	public void setDisponibleApoderadoHabilitado(Integer disponibleApoderadoHabilitado) {
+		this.disponibleApoderadoHabilitado = disponibleApoderadoHabilitado;
 	}
 
 }
