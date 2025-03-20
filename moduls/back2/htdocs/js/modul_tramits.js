@@ -46,12 +46,12 @@ $(document).ready(function() {
     $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").change(function() {
         $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").val( $(this).val() );
     });
-    
+
 
 });
 
 function actualizaPlantillas(fase){
-	
+
 	if(fase != ""){
 
 		 dataVars = "fase=" + fase;
@@ -192,8 +192,8 @@ function CModulTramit() {
 		});
 
 
-        jQuery("#formTramits #item_moment_tramit").change(function(){        	
-        	actualizaPlantillas($(this).val());        	
+        jQuery("#formTramits #item_moment_tramit").change(function(){
+        	actualizaPlantillas($(this).val());
         });
 
 
@@ -221,12 +221,12 @@ function CModulTramit() {
         $("#id_procediment_tramit").attr("value",  $("#item_id").val() );
         $("#nom_procediment_tramit").text( $("input#item_nom_ca").val());
 
-        $("#tramits_item_organ_id").val($("#item_organ_id").val());
-        $("#tramits_item_organ_ca").val($("#item_organ").val());
-        $("#tramits_item_organ_es").val($("#item_organ").val());
-        $("#tramits_item_organ_en").val($("#item_organ").val());
-        $("#tramits_item_organ_de").val($("#item_organ").val());
-        $("#tramits_item_organ_fr").val($("#item_organ").val());
+        $("#tramits_item_organ_id").val($("#item_organ_responsable_id").val());
+        $("#tramits_item_organ_ca").val($("#item_organ_responsable").val());
+        $("#tramits_item_organ_es").val($("#item_organ_responsable").val());
+        $("#tramits_item_organ_en").val($("#item_organ_responsable").val());
+        $("#tramits_item_organ_de").val($("#item_organ_responsable").val());
+        $("#tramits_item_organ_fr").val($("#item_organ_responsable").val());
 
         // animacio
         escriptori_detall_elm.fadeOut(300, function() {
@@ -397,7 +397,7 @@ function CEscriptoriTramit() {
         	Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCanalObligatori, text: ""});
     		return false;
         }
-        
+
 
 
         //#391
@@ -591,7 +591,7 @@ function CEscriptoriTramit() {
 		$("#item_parametros").val("");
 		$("[id^=item_url_tramit_]").val("");
 		$("#formTramits #item_plantilla").val('');
-		
+
         //por defecto es la fase de inicio (1)
         actualizaPlantillas(1);
 
