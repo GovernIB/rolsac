@@ -479,6 +479,7 @@ function CDetall(soloFicha) {
 	            	            
 	        	$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma].nombre));
 				$("#item_abreviatura_" + idioma).val(printStringFromNull(dada_node[idioma].abreviatura));
+				$("#item_url_" + idioma).val(printStringFromNull(dada_node[idioma].url));
 				
 				// El plugin de JQuery para TinyMCE parece que tiene un bug y a veces y en segun que navegador 
 	            // no carga bien el contenido ni en el textarea ni en el editor.
