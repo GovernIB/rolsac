@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Idioma;
 import org.ibit.rol.sac.model.LopdLegitimacion;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionLopdLegitimacion;
@@ -200,13 +201,18 @@ public class TMLopdController extends PantallaBaseController {
 			}
 
 			final Map<String, Traduccion> traducciones = new HashMap<String, Traduccion>();
-			final TraduccionLopdLegitimacion tradEs = new TraduccionLopdLegitimacion();
-			tradEs.setNombre(request.getParameter("item_nombre_es"));
-			traducciones.put("es", tradEs);
-
-			final TraduccionLopdLegitimacion tradCat = new TraduccionLopdLegitimacion();
-			tradCat.setNombre(request.getParameter("item_nombre_ca"));
-			traducciones.put("ca", tradCat);
+			
+			List<Idioma> idiomas = DelegateUtil.getIdiomaDelegate().listarIdiomas();
+			
+			
+			for(Idioma i: idiomas) {
+				String param = request.getParameter("item_nombre_"+i.getLang());
+				if (param!=null && !param.isEmpty()) {
+					final TraduccionLopdLegitimacion trad = new TraduccionLopdLegitimacion();
+					trad.setNombre(request.getParameter("item_nombre_"+i.getLang()));
+					traducciones.put(i.getLang(), trad);
+				}
+			}
 
 			lopdLegitimacion.setTraducciones(traducciones);
 
