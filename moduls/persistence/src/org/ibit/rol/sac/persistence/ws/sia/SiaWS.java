@@ -3,6 +3,8 @@ package org.ibit.rol.sac.persistence.ws.sia;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Sia;
 import org.ibit.rol.sac.model.ws.SiaResultado;
@@ -245,6 +247,8 @@ public class SiaWS {
 		return actuaciones;
 	}
 
+	private static Log log = LogFactory.getLog(SiaWS.class);
+
 	/**
 	 * @param sia
 	 * @return
@@ -363,9 +367,13 @@ public class SiaWS {
 		paramSia.setDISPONIBLEAPODERADOHABILITADO(dispoApoderadoHabilitado);
 		paramSia.setDISPONIBLEFUNCIONARIOHABILITADO(dispoFuncionarioHabilitado);
 
-		final ParamSIAACTUACIONESACTUACIONTIPOTRAMITE tipoTramite = new ParamSIAACTUACIONESACTUACIONTIPOTRAMITE();
-		tipoTramite.setTIPOTRAMITEValue(sia.getTipoTramite());
-		paramSia.setTIPOTRAMITE(tipoTramite);
+		log.error("Antes de Entra en TIPOTRAMITE. PROC:" + sia.getIdElemento() + " ID_SIA:" + sia.getIdSIA());
+		if (sia.getOperacion() != null && !sia.getOperacion().equals("AC")) {
+			log.error("Entra en TIPOTRAMITE");
+			final ParamSIAACTUACIONESACTUACIONTIPOTRAMITE tipoTramite = new ParamSIAACTUACIONESACTUACIONTIPOTRAMITE();
+			tipoTramite.setTIPOTRAMITEValue(sia.getTipoTramite());
+			paramSia.setTIPOTRAMITE(tipoTramite);
+		}
 
 		paramSia.setUNIDADGESTORATRAMITE(sia.getUaGest());
 
