@@ -367,9 +367,10 @@ public class SiaWS {
 		paramSia.setDISPONIBLEAPODERADOHABILITADO(dispoApoderadoHabilitado);
 		paramSia.setDISPONIBLEFUNCIONARIOHABILITADO(dispoFuncionarioHabilitado);
 
-		log.error("Antes de Entra en TIPOTRAMITE. PROC:" + sia.getIdElemento() + " ID_SIA:" + sia.getIdSIA());
+		// log.error("Antes de Entra en TIPOTRAMITE. PROC:" + sia.getIdElemento() + "
+		// ID_SIA:" + sia.getIdSIA());
 		if (sia.getOperacion() != null && !sia.getOperacion().equals("AC")) {
-			log.error("Entra en TIPOTRAMITE");
+			// log.error("Entra en TIPOTRAMITE");
 			final ParamSIAACTUACIONESACTUACIONTIPOTRAMITE tipoTramite = new ParamSIAACTUACIONESACTUACIONTIPOTRAMITE();
 			tipoTramite.setTIPOTRAMITEValue(sia.getTipoTramite());
 			paramSia.setTIPOTRAMITE(tipoTramite);
